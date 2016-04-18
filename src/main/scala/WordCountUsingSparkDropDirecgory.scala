@@ -1,48 +1,39 @@
 
 
-object SparkFlumeIntegration {
+object WordCountUsingSparkDropDirectory {
 
   import org.apache.spark.SparkConf
   import org.apache.spark.SparkContext
   import org.apache.spark.storage.StorageLevel
-  import org.apache.spark.streaming.flume._
   import org.apache.spark.util.IntParam
   import org.apache.spark.streaming._
   import org.apache.log4j.Logger
   import org.apache.log4j.Level
   import SparkUtil._
 
-  def fetchFlumeEvents(sconf: SparkConf, host: String = "localhost", port: Int = 55555) = {
+  def wordCount(sconf: SparkConf, baseDir:String) = {
 
     /**
-     *  Produces a wordmap from events  received from Flume.
-     *
-     *  This should be used in conjunction with an AvroSink in Flume. It will start
-     *  an Avro server on at the request host:port address and listen for requests.
-     *  Your Flume AvroSink should be pointed to this address.
-     *
-     */
+     *  Streaming example using fileStream.
+     *  Directory where files are dropped is read from sys args*/
 
+    println(s"Reading files from $baseDir")
+    
     // disablinglogging
     disableSparkLogging
-    val batchInterval = Seconds(10)
+    val batchInterval = Seconds(5)
 
     // Create the context and set the batch size
     val ssc = new StreamingContext(sconf, batchInterval)
-
+    // Checkpoint
+    ssc.checkpoint("file:///c:/spoolcheck")
     // Create a flume stream
-    val stream = FlumeUtils.createStream(ssc, host, port, StorageLevel.MEMORY_ONLY_SER_2)
-
+    val stream = ssc.textFileStream("file:///c:/spooldir")
+    
+    println("Stream count is:" + stream.count())
+    
     val initialRDD = ssc.sparkContext.parallelize(List(("hello", 1), ("world", 1)))
-
-    // Print out the count of events received from this server in each batch
-    stream.count().map(cnt => "Received " + cnt + " flume events.").print()
-
-    println("Now checking every event int he stream...")
-
-    val fileRdd = stream.map(event => new String(event.event.getBody.array))
-
-    val wordDStream = fileRdd.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey(_ + _)
+    val wordDStream = stream.flatMap(line => line.split(" ")).map(word => (word, 1)).reduceByKey(_ + _)
 
     wordDStream.print()
     
