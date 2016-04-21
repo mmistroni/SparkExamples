@@ -11,6 +11,11 @@ import org.apache.spark.mllib.linalg.Vector
 import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.rdd.RDD
 
+/**
+ * This example build a decision tree based on old car data
+ * to verify if a car will have a high mpg depending on 
+ * power and weight
+ */
 object DecisionTreeExamples {
   import org.apache.spark.SparkConf
   import org.apache.spark.SparkContext
@@ -88,8 +93,10 @@ object DecisionTreeExamples {
     
   }
 
-  def decisionTreeExample(sconf: SparkConf, horsePowerFromArgs: Int = 90, weightFromArgs: Double = 2500.0): Unit = {
+  def decisionTreeExample(sconf: SparkConf, args:Array[String] ): Unit = {
 
+    val horsePowerFromArgs = 90
+    val weightFromArgs = 2500.0
     SparkUtil.disableSparkLogging
     val sc = new SparkContext(sconf)
     val sqlContext = new org.apache.spark.sql.SQLContext(sc)

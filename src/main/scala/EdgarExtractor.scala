@@ -1,4 +1,5 @@
 import org.apache.spark.SparkContext
+import org.apache.spark.SparkConf
 import org.apache.spark.rdd._
 import org.apache.spark.SparkContext._
 
@@ -9,7 +10,9 @@ object EdgarExtractor {
     lines.filter(filterFunction)
   }
   
-  def extractListingFromFile(sc:SparkContext, fileName:String) = {
+  def extractListingFromFile(conf:SparkConf, args:Array[String]):Unit = {
+    val fileName = args(1)
+    val sc = new SparkContext(conf)
     val listings = sc.textFile(fileName)
     println(s"File has $listings.count() entries")
     println("Removing headerss")

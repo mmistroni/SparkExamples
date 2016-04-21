@@ -11,12 +11,14 @@ object WordCountUsingSparkDropDirectory {
   import org.apache.log4j.Level
   import SparkUtil._
 
-  def wordCount(sconf: SparkConf, baseDir:String) = {
+  def wordCount(sconf: SparkConf, args:Array[String]) = {
 
     /**
      *  Streaming example using fileStream.
      *  Directory where files are dropped is read from sys args*/
 
+    
+    val baseDir = args(1)
     println(s"Reading files from $baseDir")
     
     // disablinglogging
