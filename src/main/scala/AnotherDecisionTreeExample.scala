@@ -22,6 +22,13 @@ import org.apache.spark.sql.SQLImplicits
  * Please note that this code depends on pacakge spark-csv, so make sure when you
  * launch spark-submit you provide --packages com.databricks:spark-csv_2.10:1.4.0
  * 
+ * Test Error without reducing featues is Test Error = 0.18980312973245836
+ * 
+ * Reducing features (by grouping races into 4 values) testError is now 0.16625523012552302.
+ * Need to do better..
+ * 
+ * 
+ * 
  */
 object AnotherDecisionTreeExample {
   import org.apache.spark.SparkConf
@@ -41,10 +48,27 @@ object AnotherDecisionTreeExample {
   }
   
 
+  def getRaceIdentifier(inputSeq:Seq[Double]):Double = {
+    var res = 0.0
+    if (inputSeq(1) > 0) res = 1.0
+    if (inputSeq(2) > 0)  res = 2.0
+    if (inputSeq(3) > 0)  res = 3.0
+    if (inputSeq(4) > 0)  res = 4.0
+    if (inputSeq(5) > 0)  res = 5.0
+    res
+  }
+  
+  
   def createLabeledPoint(row:Seq[Double]) = {
-    val features = row.zipWithIndex.filter{case (seq, idx) => idx !=7}.map(tpl => tpl._1)
+    
+    val features = row.slice(8, row.length)
+    
+    // grouping races into a single feature
+    val raceVal = getRaceIdentifier(row.slice(0, 7))
+    
+    
     val main = row(7)
-    LabeledPoint(main, Vectors.dense(features.toArray))
+    LabeledPoint(main, Vectors.dense((Seq(row(0), row(6), raceVal) ++ features).toArray))
   }
   
   

@@ -1,4 +1,9 @@
 
+/**
+ * WordCount example similar to SparkFlumeIntegration, but instead of reading
+ * a Stream from flume, uses ssc.textFileStream to read files dropped
+ * from a directory on your pc.
+ */
 
 object WordCountUsingSparkDropDirectory {
 
