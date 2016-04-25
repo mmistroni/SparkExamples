@@ -2,7 +2,6 @@
 import org.apache.spark.SparkContext
 import org.apache.spark.SparkContext._
 import org.apache.spark.SparkConf
-import DecisionTreeExamples._
 import DegreeOfSeparations._
 import EdgarExtractor._
 import MachineLearningExamples._

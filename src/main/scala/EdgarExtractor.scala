@@ -3,6 +3,17 @@ import org.apache.spark.SparkConf
 import org.apache.spark.rdd._
 import org.apache.spark.SparkContext._
 
+/**
+ * This application extracts form4 (insider trading) filing from an EdgarIndex file, grouping the result by
+ * company's cik
+ * Run it like this
+ * 
+ * spark-submit   
+ * 						--class EdgarExtractor 
+ * 						target\scala-2.11\sparkexamples.jar 
+ * 						<path to master.20160422.idx>
+ * 
+ */
 object EdgarExtractor {
   
   def filterLines[T](filterFunction:T => Boolean,
@@ -11,7 +22,7 @@ object EdgarExtractor {
   }
   
   def extractListingFromFile(conf:SparkConf, args:Array[String]):Unit = {
-    val fileName = args(1)
+    val fileName = args(0)
     val sc = new SparkContext(conf)
     val listings = sc.textFile(fileName)
     println(s"File has $listings.count() entries")
@@ -23,13 +34,6 @@ object EdgarExtractor {
     val linesWithIndex = filteredLines2.zipWithIndex
     val noHeaderRdd = filterLines(noHeaderLines, linesWithIndex).map(tpl => tpl._1)
     
-    /**
-    val filteredLines = listings.filter(lines => lines.split('|').size > 2)
-                          .zipWithIndex.filter(tpl =>tpl._2 > 0)
-                          .map(tpl => tpl._1)
-    
-    * 
-    */
     println("Splitting lines and extracting form 4")
     val splitted = noHeaderRdd.map(line=> line.split('|'))
                               .map(arr=> (arr(0), arr(2)))
@@ -40,4 +44,14 @@ object EdgarExtractor {
     ordered.foreach(println)
   }
 
+  def main(args:Array[String]) = {
+    if (args.length < 1) {
+      println("Usage  EdgarExtractor <path to edgar file name>")
+      sys.exit()
+    }
+    
+    val conf = new SparkConf().setAppName("Simple Application")
+    extractListingFromFile(conf, args)
+  }
+  
 }

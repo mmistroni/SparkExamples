@@ -3,6 +3,17 @@ import org.apache.spark.mllib.linalg.{ Vector, Vectors }
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.ml.classification._
 
+
+/**
+ * Simple DecisionTree example using Spark
+ * Run it like this
+ * 
+ * 
+* * spark-submit  --class MachineLearningExamples
+ * 								target\scala-2.10\sparkexamples.jar 
+ * 
+ * 
+ */
 object MachineLearningExamples {
   import org.apache.spark.SparkConf
   import org.apache.spark.SparkContext
@@ -21,8 +32,10 @@ object MachineLearningExamples {
     val brittany = LabeledPoint(1.0, Vectors.dense(80.0, 207.0))
     val stacey = LabeledPoint(0.0, Vectors.dense(65.0, 120.0))
 
+    println("Parallelizing collection...")
+    
     val trainingList = List(lebron, tim, brittany, stacey) 
-    val trainingDF = sc.parallelize(trainingList).toDF()
+    val trainingDF = sc.parallelize(trainingList).toDF
 
     val estimator  = new LogisticRegression
     val transformer = estimator.fit(trainingDF)
@@ -41,34 +54,13 @@ object MachineLearningExamples {
     playerDF.foreach(println)
     playerDF.printSchema()
     
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+   
   }
+  
+  def main(args:Array[String]) = {
+    val conf = new SparkConf().setAppName("Simple Application")
+    logisticRegression(conf)  
+  }
+    
+  
 }

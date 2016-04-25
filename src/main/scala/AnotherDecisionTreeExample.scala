@@ -27,6 +27,12 @@ import org.apache.spark.sql.SQLImplicits
  * Reducing features (by grouping races into 4 values) testError is now 0.16625523012552302.
  * Need to do better..
  * 
+ * C:\Users\marco\SparkExamples>spark-submit 
+ * --packages com.databricks:spark-csv_2.10:1.4.0  
+ * --class AnotherDecisionTreeExamples 
+ * target\scala-2.11\sparkexamples.jar 
+ * <path to tree_addhealth.csv>
+ * 
  * 
  * 
  */
@@ -117,8 +123,8 @@ object AnotherDecisionTreeExample {
 
     SparkUtil.disableSparkLogging
     val sc = new SparkContext(sconf)
-    if (args.length < 2) {
-      println("Usage: SparkLauncher AnotherDecisionTreeExample <path to tree_addhealth.csv>")
+    if (args.length < 1) {
+      println("Usage:  AnotherDecisionTreeExample <path to tree_addhealth.csv>")
       sys.exit()
     }
     val df = getDataFrame(sc, args(1))
@@ -137,9 +143,12 @@ object AnotherDecisionTreeExample {
     val data = toLabeledPointsRDD(vectorRdd)
     // create model
     createModel(sc , data)
-    
-    
-    
-    
   }
+  
+  def main(args:Array[String]) = {
+    val conf = new SparkConf().setAppName("Simple Application")
+    generateDecisionTree(conf, args)
+  }
+  
+  
 }

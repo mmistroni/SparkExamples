@@ -20,6 +20,7 @@ object SparkFlumeIntegration {
      *  This should be used in conjunction with an AvroSink in Flume. It will start
      *  an Avro server on at the request host:port address and listen for requests.
      *  Your Flume AvroSink should be pointed to this address.
+     *  src/main/resources contains few samples of flume config files
      *
      */
 
