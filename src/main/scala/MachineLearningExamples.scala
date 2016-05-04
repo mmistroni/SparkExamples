@@ -2,6 +2,8 @@
 import org.apache.spark.mllib.linalg.{ Vector, Vectors }
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.ml.classification._
+import org.apache.spark.SparkConf
+import org.apache.spark.SparkContext
 
 
 /**
@@ -15,9 +17,7 @@ import org.apache.spark.ml.classification._
  * 
  */
 object MachineLearningExamples {
-  import org.apache.spark.SparkConf
-  import org.apache.spark.SparkContext
-
+  
   case class Feature(v:Vector)
   
   def logisticRegression(sconf: SparkConf): Unit = {

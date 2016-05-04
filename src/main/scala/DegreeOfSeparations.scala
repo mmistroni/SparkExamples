@@ -4,12 +4,11 @@ import org.apache.spark.SparkContext._
 import scala.collection.mutable.MutableList
 import scala.util.control.Breaks._
         
-
+/**
+ * Calculates degree of separation between superheroes.
+ * Thsi comes from a Udemy's Spark example
+ */
 object DegreeOfSeparations {
-  
-  
-  
-  
   
   def calculateDegreeOfSeparations(sc:SparkContext):Unit = {
       val startCharacterID = 5306 //SpiderMan
