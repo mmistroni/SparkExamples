@@ -2996,7 +2996,7 @@
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.scala-sbt#apply-macro;0.13.8!apply-macro.jar[0m
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.scala-lang#jline;2.10.4!jline.jar[0m
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.fusesource.jansi#jansi;1.4!jansi.jar[0m
-[0m[[0mdebug[0m] [0m:: resolution report :: resolve 7798ms :: artifacts dl 310ms[0m
+[0m[[0mdebug[0m] [0m:: resolution report :: resolve 8543ms :: artifacts dl 692ms[0m
 [0m[[0mdebug[0m] [0m	report for default#sparkexamples-build;0.1-SNAPSHOT compile produced in C:\Users\marco\SparkExamples\project\target\resolution-cache\reports\default-sparkexamples-build-compile.xml[0m
 [0m[[0mdebug[0m] [0m	report for default#sparkexamples-build;0.1-SNAPSHOT runtime produced in C:\Users\marco\SparkExamples\project\target\resolution-cache\reports\default-sparkexamples-build-runtime.xml[0m
 [0m[[0mdebug[0m] [0m	report for default#sparkexamples-build;0.1-SNAPSHOT test produced in C:\Users\marco\SparkExamples\project\target\resolution-cache\reports\default-sparkexamples-build-test.xml[0m
@@ -3010,5 +3010,5 @@
 [0m[[0mdebug[0m] [0m	report for default#sparkexamples-build;0.1-SNAPSHOT docs produced in C:\Users\marco\SparkExamples\project\target\resolution-cache\reports\default-sparkexamples-build-docs.xml[0m
 [0m[[0mdebug[0m] [0m	report for default#sparkexamples-build;0.1-SNAPSHOT pom produced in C:\Users\marco\SparkExamples\project\target\resolution-cache\reports\default-sparkexamples-build-pom.xml[0m
 [0m[[0mdebug[0m] [0m	report for default#sparkexamples-build;0.1-SNAPSHOT scala-tool produced in C:\Users\marco\SparkExamples\project\target\resolution-cache\reports\default-sparkexamples-build-scala-tool.xml[0m
-[0m[[0mdebug[0m] [0m	resolve done (7798ms resolve - 310ms download)[0m
+[0m[[0mdebug[0m] [0m	resolve done (8543ms resolve - 692ms download)[0m
 [0m[[0minfo[0m] [0mDone updating.[0m
