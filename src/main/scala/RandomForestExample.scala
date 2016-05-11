@@ -41,7 +41,6 @@ object RandomForestExample {
     return sc.textFile("file:///c:/Users/marco/SparkExamples/src/main/resources/covtype.data.gz")
   }
   
-
   def createLabeledPoint(row:Array[Double]) = {
     val expected = row.last -1
     val features = row.init
@@ -65,6 +64,12 @@ object RandomForestExample {
     }
     new MulticlassMetrics(predictionsAndLabels)
 
+  }
+  
+  def classProbabilities(data:RDD[LabeledPoint]) = {
+    val countByCategory = data.map(_.label).countByValue()
+    val counts = countByCategory.toArray.sortBy(_._1).map(_._2)
+    counts.map(_.toDouble / counts.sum)
   }
   
   
@@ -92,6 +97,16 @@ object RandomForestExample {
     val metrics = getMetrics(model, trainingData)
     println(s"ConfusionMatrix:${metrics.confusionMatrix}")
     println(s"Precision:${metrics.precision}")
+    
+    println(s"------------- vs Random guess")
+    val trainProbe = classProbabilities(trainingData)
+    val testProbe  = classProbabilities(testData)
+    val cf = trainProbe.zip(testProbe).map {
+      case (trainProb, testProb) => trainProb * testProb
+    }.sum
+    
+    println(cf)
+    
   }
 
   def generateDecisionTree(sconf: SparkConf, args:Array[String] ): Unit = {
