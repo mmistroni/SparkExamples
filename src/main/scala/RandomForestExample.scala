@@ -86,26 +86,31 @@ object RandomForestExample {
     //  Empty categoricalFeaturesInfo indicates all features are continuous.
     val numClasses = 7
     val categoricalFeaturesInfo = Map[Int, Int]()
-    val impurity = "gini"
-    val maxDepth = 4
-    val maxBins = 100
+    //val impurity = "gini"
+    //val maxDepth = 4
+    //val maxBins = 100
 
-    val model = DecisionTree.trainClassifier(trainingData, numClasses, categoricalFeaturesInfo,
-      impurity, maxDepth, maxBins)
+    val evaluations = 
+        for (impurity <- Array("gini", "entropy");
+              depth <- Array(1,20);
+              bins <-Array(10,300)) yield {
+              
+          val model = DecisionTree.trainClassifier(trainingData, numClasses, categoricalFeaturesInfo,
+                impurity, depth, bins)
 
-    println("--- Printing metrics------\n")
-    val metrics = getMetrics(model, trainingData)
-    println(s"ConfusionMatrix:${metrics.confusionMatrix}")
-    println(s"Precision:${metrics.precision}")
-    
-    println(s"------------- vs Random guess")
-    val trainProbe = classProbabilities(trainingData)
-    val testProbe  = classProbabilities(testData)
-    val cf = trainProbe.zip(testProbe).map {
-      case (trainProb, testProb) => trainProb * testProb
-    }.sum
-    
-    println(cf)
+          val accuracy = getMetrics(model, testData).precision
+          ((impurity, depth, bins), accuracy)
+          /**  
+          println(s"------------- vs Random guess")
+          val trainProbe = classProbabilities(trainingData)
+          val testProbe  = classProbabilities(testData)
+          val cf = trainProbe.zip(testProbe).map {
+              case (trainProb, testProb) => trainProb * testProb
+            }.sum
+    			println(cf)
+    			* */
+        }
+        evaluations.sortBy(_._2).reverse.foreach(println)
     
   }
 
@@ -120,8 +125,7 @@ object RandomForestExample {
     val rdd = getRDD(sc, args(0))
 
     println("InputData:" + rdd.count())
-    rdd.take(10).foreach(println)
-
+    
     println("Creating labeled points")
     
     // ccrete labeled points. rmeember above we only have tuples
