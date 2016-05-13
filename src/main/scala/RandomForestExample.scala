@@ -42,10 +42,14 @@ object RandomForestExample {
   }
   
   def createLabeledPoint(row:Array[Double]) = {
-    val expected = row.last -1
-    val features = row.init
+    //val expected = row.last -1
+    //val features = row.init
+    val wilderness = row.slice(10,14).indexOf(1.0).toDouble
+    val soil = row.slice(14,54).indexOf(1.0).toDouble
     
-    LabeledPoint(expected, Vectors.dense(features))
+    val vector = Vectors.dense(row.slice(0,10) :+ wilderness :+ soil) 
+    
+    LabeledPoint(row.last - 1, vector)
     
   }
   
@@ -85,15 +89,12 @@ object RandomForestExample {
     // Train a DecisionTree model.
     //  Empty categoricalFeaturesInfo indicates all features are continuous.
     val numClasses = 7
-    val categoricalFeaturesInfo = Map[Int, Int]()
-    //val impurity = "gini"
-    //val maxDepth = 4
-    //val maxBins = 100
-
+    val categoricalFeaturesInfo = Map[Int, Int](10->4, 11->40)
+    
     val evaluations = 
         for (impurity <- Array("gini", "entropy");
               depth <- Array(1,20);
-              bins <-Array(10,300)) yield {
+              bins <-Array(40,300)) yield {
               
           val model = DecisionTree.trainClassifier(trainingData, numClasses, categoricalFeaturesInfo,
                 impurity, depth, bins)
