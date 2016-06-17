@@ -1,0 +1,1 @@
+spark-submit --packages com.databricks:spark-csv_2.10:1.4.0   --class EuroQualifierDecisionTree target\scala-2.10\sparkexamples_2.10-1.0.jar file:///c:/Users/marco/SparkExamples/src/main/resources/Euro2008.csv  file:///c:/Users/marco/SparkExamples/src/main/resources/Euro2016.csv

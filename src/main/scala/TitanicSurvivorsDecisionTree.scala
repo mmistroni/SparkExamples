@@ -19,6 +19,7 @@ import org.apache.spark.sql.functions._
 import org.apache.spark.mllib.tree.RandomForest
 import org.apache.spark.mllib.tree.model.RandomForestModel
 import SparkUtil._
+import GetCheckpointDirectory._
 
 /**
  * THis example has been ported from the original

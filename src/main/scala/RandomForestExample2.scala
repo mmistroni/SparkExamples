@@ -33,7 +33,7 @@ import org.apache.spark.sql.SQLImplicits
  * 
  * 
  */
-object RandomForestExample {
+object RandomForestExample2 {
   import org.apache.spark.SparkConf
   import org.apache.spark.SparkContext
 
@@ -83,32 +83,38 @@ object RandomForestExample {
     // splitting
     println("Splitting training and test")
     val splits = data.randomSplit(Array(0.9, 0.1))
-    val (trainingData, testData) = (splits(0), splits(1))
+    val (trainData, testData) = (splits(0), splits(1))
 
-    trainingData.cache()
+    trainData.cache()
     
     // Train a DecisionTree model.
     //  Empty categoricalFeaturesInfo indicates all features are continuous.
     val numClasses = 7
     val categoricalFeaturesInfo = Map[Int, Int](10->4, 11->40)
-    val impurity = "entropy"
-    val depth = 30
-    val bins = 300
-    val model = RandomForest.trainClassifier(trainingData, numClasses, categoricalFeaturesInfo,
-          5, // num of tree to build 
-          "auto",
-          "entropy", 
-          30, // how deep is the tree 
-          300)  // how many diff values to consider
-
-    val accuracy = getMetrics(model, testData).precision
-    ((impurity, depth, bins), accuracy)
     
-    println(s"Precision:$accuracy")
+    
+    
+    val evaluations =
+  for (impurity <- Array("gini", "entropy");
+       depth    <- Array(1, 20);
+       bins     <- Array(10, 300)) 
+    yield {
+      val model = DecisionTree.trainClassifier(
+        trainData, 7, Map[Int,Int](), impurity, depth, bins)
+      val predictionsAndLabels = testData.map(example =>
+        (model.predict(example.features), example.label)
+      )
+      val accuracy =
+        new MulticlassMetrics(predictionsAndLabels).precision
+      ((impurity, depth, bins), accuracy)
+    }
+
+    evaluations.sortBy(_._2).reverse.foreach(println)    
+    //println(s"Precision:$accuracy")
     
     
     println(s"------------- vs Random guess")
-    val trainProbe = classProbabilities(trainingData)
+    val trainProbe = classProbabilities(trainData)
     val testProbe  = classProbabilities(testData)
     val cf = trainProbe.zip(testProbe).map {
                                   case (trainProb, testProb) => trainProb * testProb
