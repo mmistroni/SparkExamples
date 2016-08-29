@@ -30,13 +30,13 @@ RUN apt-get install -y oracle-java7-installer
 RUN echo "Installing AWSCLI..."
 RUN pip install awscli
 # Scala
-#RUN echo "Installing Scala 2.10...."
-#RUN wget http://www.scala-lang.org/files/archive/scala-2.10.4.tgz
-#RUN mkdir /usr/local/src/scala
-#RUN tar xvf scala-2.10.4.tgz -C /usr/local/src/scala/
-#RUN echo "Exporting Scala paths..."
-#ENV SCALA_HOME="/usr/local/src/scala/scala-2.10.4"
-#ENV PATH="$SCALA_HOME/bin:${PATH}"
+RUN echo "Installing Scala 2.11...."
+RUN wget http://www.scala-lang.org/files/archive/scala-2.11.8.tgz
+RUN mkdir /usr/local/src/scala
+RUN tar xvf scala-2.11.8.tgz -C /usr/local/src/scala/
+RUN echo "Exporting Scala paths..."
+ENV SCALA_HOME="/usr/local/src/scala/scala-2.11.8"
+ENV PATH="$SCALA_HOME/bin:${PATH}"
 # Git
 RUN echo "Installing git...."
 RUN apt-get install -y git
@@ -45,8 +45,8 @@ RUN echo "Installing Apache spark 2.0"
 RUN git clone git://github.com/apache/spark.git
 WORKDIR /spark
 # adding permissions to ssh
-RUN ./dev/change-scala-version.sh 2.10
-RUN ./build/mvn -Pyarn -Phadoop-2.4 -Dscala-2.10 -DskipTests clean package
+#RUN ./dev/change-scala-version.sh 2.10
+RUN ./build/mvn -X -Pyarn -Phadoop-2.4  -DskipTests clean package
 ENV SPARK_HOME="/spark"
 ENV PATH="$SPARK_HOME/bin:${PATH}"
 

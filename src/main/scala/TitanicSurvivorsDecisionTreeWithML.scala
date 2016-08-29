@@ -6,6 +6,7 @@ import org.apache.spark.ml.classification.DecisionTreeClassificationModel
 import org.apache.spark.ml.feature.{ StringIndexer, IndexToString, VectorIndexer, VectorAssembler }
 import org.apache.spark.ml.evaluation.{ RegressionEvaluator, MulticlassClassificationEvaluator }
 import org.apache.spark.ml.classification._
+import org.apache.spark.ml.tuning.{CrossValidator, ParamGridBuilder}
 import org.apache.spark.SparkContext
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql._
@@ -75,32 +76,21 @@ object TitanicSurvivorsDecisionTreeWithML {
 
     println("Median Age is:" + medianAge)
 
+    // Converting  sex column to binary
     val binaryFunc: (String => Double) = sex => if (sex.equals("male")) 1 else 0
-
-    val intToDoubleFunc: (Int => Double) = lbl => lbl.toDouble
-
-    // Alt.df.withColumn("doubles", col("ints").cast("double")).drop("ints")
-
-    val labelToDblFunc = udf(intToDoubleFunc)
     val sexToIntFunc = udf(binaryFunc)
-
     val binarySexColumnDataFrame = fillEmbarked.withColumn("SexInt", sexToIntFunc(col("Sex")))
 
+    // embarked. converting it to number
     val binEmbarked: (String => Double) = embarked => if (embarked.equals("C")) 0 else if (embarked.equals("Q")) 1 else 2
-
     val embarkedFunc = udf(binEmbarked)
-
+    
+    // converting Survived from double to integer
     val withBinaryEmbarked = binarySexColumnDataFrame.withColumn("EmbarkedInt",
-      embarkedFunc(col("Embarked"))).withColumn("SurvivedDbl", labelToDblFunc(col("Survived")))
+      embarkedFunc(col("Embarked")))
+      .withColumn("SurvivedDbl", col("Survived").cast("double")).drop("Survived")
 
-    withBinaryEmbarked.show()
-    /**
-     * val binFunc:(Double => Double) = ageDbl => if (ageDbl>medianAge) 1.0 else 0.0
-     * val func2 = udf(binFunc)
-     *
-     *
-     * //val binaryAgeDs  = withBinaryEmbarked.withColumn("AgeInt", func2(col("Age")))
-     */
+    // Dropping column we dont need
     val res = withBinaryEmbarked.drop("Name").drop("Sex").drop("Ticket").drop("Cabin").drop("PassengerId").drop("Embarked").drop("Survived")
     println("Before decision tree. data is\n")
     res.show()
@@ -118,7 +108,7 @@ object TitanicSurvivorsDecisionTreeWithML {
       .setOutputCol("indexedLabel")
       .fit(data)
 
-    // Other features
+    // Other features. crete a Vecto assembler if there are more than 1 feature
     val features = new VectorAssembler()
       .setInputCols(Array(
         "Pclass", "Age", "Parch", "SexInt", "EmbarkedInt",
@@ -145,8 +135,6 @@ object TitanicSurvivorsDecisionTreeWithML {
     val model = pipeline.fit(trainingData)
 
     // Make predictions.
-
-    // Make predictions.
     val predictions = model.transform(testData)
 
     // Select example rows to display.
@@ -157,11 +145,56 @@ object TitanicSurvivorsDecisionTreeWithML {
       .setLabelCol("indexedLabel")
       .setPredictionCol("prediction")
       .setMetricName("precision")
+    
     val accuracy = evaluator.evaluate(predictions)
-    println("Test Error = " + (1.0 - accuracy))
+    println("TestError= " + (1 - accuracy))
 
+    
     val treeModel = model.stages(2).asInstanceOf[DecisionTreeClassificationModel]
     println("Learned classification tree model:\n" + treeModel.toDebugString)
+    
+    
+    // now improving the model
+    //We can reuse the RegressionEvaluator, regEval, to judge the model based on the best Root Mean Squared Error
+    // Let's create our CrossValidator with 3 fold cross validation
+    val crossval = new CrossValidator()
+    crossval.setEstimator(pipeline)
+    crossval.setEvaluator(evaluator)
+    crossval.setNumFolds(3)
+    
+    // tuning params
+    //Let's tune over our regularization parameter from 0.01 to 0.10
+    val regParam = Array(2,3)
+    // Let's tune over our dt.maxDepth parameter on the values 2 and 3, create a paramter grid using the ParamGridBuilder
+    val paramGrid = (new ParamGridBuilder()
+                 .addGrid(dt.maxDepth, regParam)
+                 .build())
+    
+    // Add the grid to the CrossValidator
+    crossval.setEstimatorParamMaps(paramGrid)
+    
+    // Now let's find and return the best model
+    val bestDtModel = crossval.fit(trainingData).bestModel
+
+    
+    println("----------- Evaluating with best model -----------------")
+    // Make predictions.
+    val improvedPredictions = bestDtModel.transform(testData)
+
+    // Select example rows to display.
+    improvedPredictions.select("predictedLabel", "SurvivedDbl", "features").show(5)
+
+    // Select (prediction, true label) and compute test error.
+    val improvedEvaluator = new MulticlassClassificationEvaluator()
+      .setLabelCol("indexedLabel")
+      .setPredictionCol("prediction")
+      .setMetricName("precision")
+    
+    val improvedAccuracy = improvedEvaluator.evaluate(predictions)
+    println("Improved error = " + (1 - improvedAccuracy))
+
+    
+    
   }
 
   def generateModel(data: DataFrame): Unit = {
