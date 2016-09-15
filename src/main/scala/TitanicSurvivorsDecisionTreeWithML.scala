@@ -40,8 +40,6 @@ object TitanicSurvivorsDecisionTreeWithML {
       .option("inferSchema", "true") // Automatically infer data types
       .load("file:///c:/Users/marco/SparkExamples/src/main/resources/train.csv")
 
-    // sorting out null values. we set them to zero by default
-    //df.na.fill(0, df.columns)
     df.registerTempTable("survivors")
     df
   }
