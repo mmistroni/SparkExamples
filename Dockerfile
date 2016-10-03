@@ -45,7 +45,7 @@ RUN echo "Installing Apache spark 2.0"
 RUN git clone git://github.com/apache/spark.git
 WORKDIR /spark
 # adding permissions to ssh
-#RUN ./dev/change-scala-version.sh 2.10
-#RUN mvn -Pyarn -Phadoop-2.4 -Dscala-2.10 -DskipTests clean package
-#ENV SPARK_HOME="/spark"
-#ENV PATH="$SPARK_HOME/bin:${PATH}"
+RUN ./dev/change-scala-version.sh 2.10
+RUN mvn -Pyarn -Dscala-2.10 -DskipTests clean package
+ENV SPARK_HOME="/spark"
+ENV PATH="$SPARK_HOME/bin:${PATH}"
