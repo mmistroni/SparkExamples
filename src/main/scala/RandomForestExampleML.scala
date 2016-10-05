@@ -48,7 +48,7 @@ object RandomForestExampleML {
   import org.apache.spark.SparkConf
   import org.apache.spark.SparkContext
 
-  def getRDD(sc: SparkContext): RDD[String] = {
+  def getRDD(sc: SparkContext, fileName:String): RDD[String] = {
 
     /**
      * val sqlContext = new SQLContext(sc)
@@ -60,7 +60,7 @@ object RandomForestExampleML {
      * .load("file://c:/Users/marco/SparkExamples/src/main/resources/covtype.data.gz")
      * // return integers
      */
-    return sc.textFile("file://c:/Users/marco/SparkExamples/src/main/resources/covtype.data.gz")
+    return sc.textFile(fileName)
   }
 
   def toReducedFeatures(row: Array[Double]) = {
@@ -215,8 +215,10 @@ object RandomForestExampleML {
   def generateDecisionTree(sconf: SparkConf, args: Array[String]): Unit = {
 
     SparkUtil.disableSparkLogging
+    
+    println("Attempting to load:$args(0)")
     val sc = new SparkContext(sconf)
-    val rdd = getRDD(sc)
+    val rdd = getRDD(sc, args(0))
     println("InputData:" + rdd.count())
     // ccrete labeled points. rmeember above we only have tuples
     val dataFrame = toDataFrame(rdd, sc)
