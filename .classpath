@@ -10,37 +10,6 @@
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.mockito\mockito-core\jars\mockito-core-1.9.5.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.slf4j\slf4j-simple\jars\slf4j-simple-1.7.5.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.clapper\grizzled-slf4j_2.10\jars\grizzled-slf4j_2.10-1.0.2.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\Scala\activator-dist-1.3.7\repository\org.slf4j\slf4j-api\1.7.7\jars\slf4j-api.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-core\jars\powermock-core-1.5.4.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-core\jars\powermock-core-1.5.4-sources.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-reflect\jars\powermock-reflect-1.5.4-sources.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-reflect\jars\powermock-reflect-1.5.4.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.objenesis\objenesis\jars\objenesis-2.1.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\Scala\activator-dist-1.3.7\repository\org.javassist\javassist\3.18.1-GA\bundles\javassist.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-api-mockito\jars\powermock-api-mockito-1.5.4.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-api-mockito\jars\powermock-api-mockito-1.5.4-sources.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.mockito\mockito-all\jars\mockito-all-1.9.5.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-api-support\jars\powermock-api-support-1.5.4-sources.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-api-support\jars\powermock-api-support-1.5.4.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-module-junit4-common\jars\powermock-module-junit4-common-1.5.4.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-module-junit4-common\jars\powermock-module-junit4-common-1.5.4-sources.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-module-junit4\jars\powermock-module-junit4-1.5.4.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-module-junit4\jars\powermock-module-junit4-1.5.4-sources.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\junit\junit\jars\junit-4.11.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.hamcrest\hamcrest-core\jars\hamcrest-core-1.3.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-module-junit4-legacy\jars\powermock-module-junit4-legacy-1.5.4.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-module-junit4-legacy\jars\powermock-module-junit4-legacy-1.5.4-sources.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-module-junit3\jars\powermock-module-junit3-1.5.4.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-module-junit3\jars\powermock-module-junit3-1.5.4-sources.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-module-testng\jars\powermock-module-testng-1.5.4.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-module-testng\jars\powermock-module-testng-1.5.4-sources.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\Scala\activator-dist-1.3.7\repository\org.testng\testng\6.8.7\jars\testng.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\Scala\activator-dist-1.3.7\repository\org.beanshell\bsh\2.0b4\jars\bsh.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\Scala\activator-dist-1.3.7\repository\com.beust\jcommander\1.27\jars\jcommander.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\Scala\activator-dist-1.3.7\repository\org.yaml\snakeyaml\1.12\bundles\snakeyaml.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-module-testng-common\jars\powermock-module-testng-common-1.5.4.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-classloading-base\jars\powermock-classloading-base-1.5.4.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-classloading-base\jars\powermock-classloading-base-1.5.4-sources.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.apache.spark\spark-core_2.10\jars\spark-core_2.10-1.6.1.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.apache.avro\avro-mapred\jars\avro-mapred-1.7.7-hadoop2.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.apache.avro\avro-ipc\jars\avro-ipc-1.7.7-tests.jar"/>
@@ -149,6 +118,7 @@
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.tachyonproject\tachyon-client\jars\tachyon-client-0.8.2.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\commons-io\commons-io\jars\commons-io-2.4.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.apache.commons\commons-lang3\jars\commons-lang3-3.0.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.slf4j\slf4j-api\jars\slf4j-api-1.7.2.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.tachyonproject\tachyon-underfs-hdfs\jars\tachyon-underfs-hdfs-0.8.2.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.tachyonproject\tachyon-underfs-s3\jars\tachyon-underfs-s3-0.8.2.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.tachyonproject\tachyon-underfs-local\jars\tachyon-underfs-local-0.8.2.jar"/>
@@ -197,6 +167,39 @@
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.mortbay.jetty\jetty\jars\jetty-6.1.26.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\com.google.code.gson\gson\jars\gson-2.2.2.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.apache.mina\mina-core\bundles\mina-core-2.0.4.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\com.databricks\spark-csv_2.10\jars\spark-csv_2.10-1.5.0.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.apache.commons\commons-csv\jars\commons-csv-1.1.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\com.univocity\univocity-parsers\jars\univocity-parsers-1.5.1.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-core\jars\powermock-core-1.5.4.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-core\jars\powermock-core-1.5.4-sources.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-reflect\jars\powermock-reflect-1.5.4-sources.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-reflect\jars\powermock-reflect-1.5.4.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.objenesis\objenesis\jars\objenesis-2.1.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\Scala\activator-dist-1.3.7\repository\org.javassist\javassist\3.18.1-GA\bundles\javassist.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-api-mockito\jars\powermock-api-mockito-1.5.4.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-api-mockito\jars\powermock-api-mockito-1.5.4-sources.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.mockito\mockito-all\jars\mockito-all-1.9.5.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-api-support\jars\powermock-api-support-1.5.4-sources.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-api-support\jars\powermock-api-support-1.5.4.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-module-junit4-common\jars\powermock-module-junit4-common-1.5.4.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-module-junit4-common\jars\powermock-module-junit4-common-1.5.4-sources.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-module-junit4\jars\powermock-module-junit4-1.5.4.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-module-junit4\jars\powermock-module-junit4-1.5.4-sources.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\junit\junit\jars\junit-4.11.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.hamcrest\hamcrest-core\jars\hamcrest-core-1.3.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-module-junit4-legacy\jars\powermock-module-junit4-legacy-1.5.4.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-module-junit4-legacy\jars\powermock-module-junit4-legacy-1.5.4-sources.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-module-junit3\jars\powermock-module-junit3-1.5.4.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-module-junit3\jars\powermock-module-junit3-1.5.4-sources.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-module-testng\jars\powermock-module-testng-1.5.4.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-module-testng\jars\powermock-module-testng-1.5.4-sources.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\Scala\activator-dist-1.3.7\repository\org.testng\testng\6.8.7\jars\testng.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\Scala\activator-dist-1.3.7\repository\org.beanshell\bsh\2.0b4\jars\bsh.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\Scala\activator-dist-1.3.7\repository\com.beust\jcommander\1.27\jars\jcommander.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\Scala\activator-dist-1.3.7\repository\org.yaml\snakeyaml\1.12\bundles\snakeyaml.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-module-testng-common\jars\powermock-module-testng-common-1.5.4.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-classloading-base\jars\powermock-classloading-base-1.5.4.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.powermock\powermock-classloading-base\jars\powermock-classloading-base-1.5.4-sources.jar"/>
   <classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
   <classpathentry kind="output" path="bin"/>
 </classpath>

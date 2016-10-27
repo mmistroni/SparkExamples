@@ -1,0 +1,37 @@
+Steps to create and populate docker container
+
+1. pull an instance
+   docker pull ubuntu
+   
+2. run it  (track down the name of the container)
+   docker run -it ubuntu /bin/bash
+   
+3. populate with all the software you need
+
+4. exit
+
+5. commit
+#   docker commit -a "Spark Host" -m "spark build machine" 28afb1aff496  spark-build
+
+6. view containers
+    docker ps -a
+    
+7. choose your container and run it
+    docker start 102da60173bf
+    
+8. attach a console to it
+    docker start 102da60173bf
+    
+9  once you are logged in then you can do whatever
+
+10. exit
+
+11. commit using the na eof the container
+    docker start 102da60173bf    
+    
+12. Mount host directory on container
+      docker run -v /host/directory:/container/directory -other -options image_name command_to_ru
+     
+      
+ 
+ 
