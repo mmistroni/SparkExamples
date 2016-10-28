@@ -7,13 +7,13 @@ import org.apache.spark.ml.feature.{ StringIndexer, IndexToString, VectorIndexer
 import org.apache.spark.ml.evaluation.{ RegressionEvaluator, MulticlassClassificationEvaluator }
 import org.apache.spark.ml.classification._
 import org.apache.spark.ml.tuning.{ CrossValidator, ParamGridBuilder }
-import org.apache.spark.ml.tuning.{ParamGridBuilder, TrainValidationSplit}
+import org.apache.spark.ml.tuning.{ ParamGridBuilder, TrainValidationSplit }
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql._
 import org.apache.spark.sql.SQLImplicits
 import org.apache.spark.sql.Row
 import org.apache.spark.sql.types._
-import org.apache.spark.ml.{Pipeline, PipelineModel}
+import org.apache.spark.ml.{ Pipeline, PipelineModel }
 import org.apache.spark.sql.functions._
 import scala.util.Random
 
@@ -88,7 +88,12 @@ object RandomForestExampleML {
           (0 until 40).map(i => s"Soil_Type_$i")) ++ Seq("Cover_Type")
 
     val data = dataWithoutHeader.toDF(colNames: _*)
-    data
+
+    val withCoverTypeDoubled = data.withColumn("Cover_TypeDbl", col("Cover_Type").cast("double")).drop("Cover_Type")
+      .withColumnRenamed("Cover_TypeDbl", "Cover_Type")
+
+    withCoverTypeDoubled.printSchema()
+    withCoverTypeDoubled
   }
 
   def unencodeOneHot(data: DataFrame): DataFrame = {
@@ -131,9 +136,23 @@ object RandomForestExampleML {
     withOneHotSoil
   }
 
-  def evaluateForest(trainData: DataFrame, testData: DataFrame): Unit = {
+  def evaluateForest(data: DataFrame): Unit = {
+
+    val Array(trainData, testData) = data.randomSplit(Array(0.9, 0.1))
+    trainData.cache()
+    testData.cache()
+
     val unencTrainData = unencodeOneHot(trainData)
     val unencTestData = unencodeOneHot(testData)
+    unencTrainData.cache()
+    unencTestData.cache()
+
+    // Declare label . added by m
+    val labelIndexer = new StringIndexer()
+      .setInputCol("Cover_Type")
+      .setOutputCol("indexedLabel")
+      .setHandleInvalid("skip")
+      //.fit(unencTrainData)
 
     val assembler = new VectorAssembler().
       setInputCols(unencTrainData.columns.filter(_ != "Cover_Type")).
@@ -143,17 +162,24 @@ object RandomForestExampleML {
       setMaxCategories(40).
       setInputCol("featureVector").
       setOutputCol("indexedVector")
+      //fit(unencTrainData)
 
+    /* Convert indexed labels back to original labels.
+    val labelConverter = new IndexToString()
+      .setInputCol("prediction")
+      .setOutputCol("predictedLabel")
+      .setLabels(labelIndexer.labels)
+		*/
     val classifier = new RandomForestClassifier().
       setSeed(Random.nextLong()).
-      setLabelCol("Cover_Type").
+      setLabelCol("indexedLabel"). //"Cover_Type").
       setFeaturesCol("indexedVector").
       setPredictionCol("prediction").
       setImpurity("entropy").
       setMaxDepth(20).
       setMaxBins(300)
 
-    val pipeline = new Pipeline().setStages(Array(assembler, indexer, classifier))
+    val pipeline = new Pipeline().setStages(Array(labelIndexer, assembler, indexer, classifier))// labelConverter))
 
     val paramGrid = new ParamGridBuilder().
       addGrid(classifier.minInfoGain, Seq(0.0, 0.05)).
@@ -161,12 +187,12 @@ object RandomForestExampleML {
       build()
 
     val multiclassEval = new MulticlassClassificationEvaluator().
-      setLabelCol("Cover_Type").
+      //setLabelCol("Cover_Type").
+      setLabelCol("indexedLabel").
       setPredictionCol("prediction").
-      setMetricName("accuracy")
+      setMetricName("precision")
 
     val validator = new TrainValidationSplit().
-      
       //setSeed(Random.nextLong()).
       setEstimator(pipeline).
       setEvaluator(multiclassEval).
@@ -175,13 +201,18 @@ object RandomForestExampleML {
 
     val validatorModel = validator.fit(unencTrainData)
 
+    
     val bestModel = validatorModel.bestModel
 
+    println("====== And The Best Model is:" + bestModel)
+    
+    println("===== carry on ====")
     val forestModel = bestModel.asInstanceOf[PipelineModel].
       stages.last.asInstanceOf[RandomForestClassificationModel]
 
-    println(forestModel.extractParamMap)
-    //println(forestModel.getNumTrees)
+    
+    println("########################PARAMETERS ARE:\n" + forestModel.extractParamMap)
+    println("########################NUMTREEES ARE:" + forestModel.numTrees)
     forestModel.featureImportances.toArray.zip(unencTrainData.columns).
       sorted.reverse.foreach(println)
 
@@ -189,10 +220,11 @@ object RandomForestExampleML {
     println(testAccuracy)
 
     bestModel.transform(unencTestData.drop("Cover_Type")).select("prediction").show()
-}
-  
-  
-  
+
+    println("================== OUTTA HERE ================================")
+
+  }
+
   def generateDecisionTree(sconf: SparkConf, args: Array[String]): Unit = {
 
     SparkUtil.disableSparkLogging
@@ -207,14 +239,10 @@ object RandomForestExampleML {
       case 1 => df
       case 2 => df.sample(false, 0.001)
     }
-    
-    val Array(trainData, testData) = reduced.randomSplit(Array(0.9, 0.1))
-    trainData.cache()
-    testData.cache()
-    
+
     println("Unenconding one hot...")
-    unencodeOneHot(trainData)
-    //evaluateForest(trainData, testData)
+    //unencodeOneHot(trainData)
+    evaluateForest(reduced) //trainData, testData)
     //val dataFrame = unencodeOneHot(reduced)
     //println("Creating Model for Df of size:" + dataFrame.count())
     // create model
