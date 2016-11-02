@@ -153,7 +153,6 @@ object RandomForestExampleML {
     println("====== And The Best Model is:" + bestModel)
     
     println("===== carry on ====")
-    /**
     val forestModel = bestModel.asInstanceOf[PipelineModel].
       stages.last.asInstanceOf[RandomForestClassificationModel]
 
@@ -164,11 +163,11 @@ object RandomForestExampleML {
       sorted.reverse.foreach(println)
 
     println("========== TESTING ACCURACY ===========")
-    val testAccuracy = multiclassEval.evaluate(bestModel.transform(unencTestData))
-    println(testAccuracy)
+    //val testAccuracy = multiclassEval.evaluate(bestModel.transform(unencTestData))
+    //println(testAccuracy)
 
-    bestModel.transform(unencTestData.drop("Cover_Type")).select("prediction").show()
-		**/
+    //bestModel.transform(unencTestData.drop("Cover_Type")).select("prediction").show()
+		
   }
   
   
@@ -183,11 +182,6 @@ object RandomForestExampleML {
     unencTrainData.cache()
     unencTestData.cache()
 
-    val labelIndexer = new StringIndexer()
-      .setInputCol("Cover_Type")
-      .setOutputCol("indexedLabel")
-      .setHandleInvalid("skip")
-      .fit(data)
       
     val assembler = new VectorAssembler().
       setInputCols(unencTrainData.columns.filter(_ != "Cover_Type")).
@@ -198,6 +192,14 @@ object RandomForestExampleML {
       setMaxCategories(40).
       setInputCol("featureVector").
       setOutputCol("indexedVector")
+      //fit(unencTrainData)
+    
+    val labelIndexer = new StringIndexer()
+      .setInputCol("Cover_Type")
+      .setOutputCol("indexedLabel")
+      .setHandleInvalid("skip")
+      //.fit(unencTrainData)
+      
       
 
     val classifier = new RandomForestClassifier().
@@ -221,7 +223,7 @@ object RandomForestExampleML {
     predictions.select("prediction", "indexedLabel", "indexedVector").show(5)
    
     println("================== NOW CALCULATING BEST MODEL.. ================================")
-
+    findBestModel(classifier, unencTrainData, unencTestData, pipeline)
   }
 
   def generateDecisionTree(sconf: SparkConf, args: Array[String]): Unit = {
