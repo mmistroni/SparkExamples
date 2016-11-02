@@ -53,16 +53,6 @@ object RandomForestExampleML {
 
   def getDataFrame(sc: SparkContext, args: Array[String]): DataFrame = {
 
-    /**
-     * val sqlContext = new SQLContext(sc)
-     * println(s"Creating RDD ......")
-     * sqlContext.read
-     * .format("com.databricks.spark.csv")
-     * .option("header", "true") // Use first line of all files as header
-     * .option("inferSchema", "true") // Automatically infer data types
-     * .load("file://c:/Users/marco/SparkExamples/src/main/resources/covtype.data.gz")
-     * // return integers
-     */
     val filename = args.size match {
       case 1 => args(0)
       case 2 => "file://c:/Users/marco/SparkExamples/src/main/resources/covtype.data.gz"
@@ -92,14 +82,12 @@ object RandomForestExampleML {
     val withCoverTypeDoubled = data.withColumn("Cover_TypeDbl", col("Cover_Type").cast("double")).drop("Cover_Type")
       .withColumnRenamed("Cover_TypeDbl", "Cover_Type")
 
-    withCoverTypeDoubled.printSchema()
     withCoverTypeDoubled
   }
 
   def unencodeOneHot(data: DataFrame): DataFrame = {
     val wildernessCols = (0 until 4).map(i => s"Wilderness_Area_$i").toArray
-    println("Cols to be droppped are:" + wildernessCols.mkString(","))
-
+    
     val wildernessAssembler = new VectorAssembler().
       setInputCols(wildernessCols).
       setOutputCol("wilderness")
@@ -136,51 +124,10 @@ object RandomForestExampleML {
     withOneHotSoil
   }
 
-  def evaluateForest(data: DataFrame): Unit = {
-
-    val Array(trainData, testData) = data.randomSplit(Array(0.9, 0.1))
-    trainData.cache()
-    testData.cache()
-
-    val unencTrainData = unencodeOneHot(trainData)
-    val unencTestData = unencodeOneHot(testData)
-    unencTrainData.cache()
-    unencTestData.cache()
-
-    // Declare label . added by m
-    val labelIndexer = new StringIndexer()
-      .setInputCol("Cover_Type")
-      .setOutputCol("indexedLabel")
-      .setHandleInvalid("skip")
-      //.fit(unencTrainData)
-
-    val assembler = new VectorAssembler().
-      setInputCols(unencTrainData.columns.filter(_ != "Cover_Type")).
-      setOutputCol("featureVector")
-
-    val indexer = new VectorIndexer().
-      setMaxCategories(40).
-      setInputCol("featureVector").
-      setOutputCol("indexedVector")
-      //fit(unencTrainData)
-
-    /* Convert indexed labels back to original labels.
-    val labelConverter = new IndexToString()
-      .setInputCol("prediction")
-      .setOutputCol("predictedLabel")
-      .setLabels(labelIndexer.labels)
-		*/
-    val classifier = new RandomForestClassifier().
-      setSeed(Random.nextLong()).
-      setLabelCol("indexedLabel"). //"Cover_Type").
-      setFeaturesCol("indexedVector").
-      setPredictionCol("prediction").
-      setImpurity("entropy").
-      setMaxDepth(20).
-      setMaxBins(300)
-
-    val pipeline = new Pipeline().setStages(Array(labelIndexer, assembler, indexer, classifier))// labelConverter))
-
+  def findBestModel(classifier:RandomForestClassifier, 
+                    unencTrainData:DataFrame , 
+                    unencTestData:DataFrame,
+                    pipeline:Pipeline) = {
     val paramGrid = new ParamGridBuilder().
       addGrid(classifier.minInfoGain, Seq(0.0, 0.05)).
       addGrid(classifier.numTrees, Seq(1, 10)).
@@ -193,7 +140,6 @@ object RandomForestExampleML {
       setMetricName("precision")
 
     val validator = new TrainValidationSplit().
-      //setSeed(Random.nextLong()).
       setEstimator(pipeline).
       setEvaluator(multiclassEval).
       setEstimatorParamMaps(paramGrid).
@@ -207,6 +153,7 @@ object RandomForestExampleML {
     println("====== And The Best Model is:" + bestModel)
     
     println("===== carry on ====")
+    /**
     val forestModel = bestModel.asInstanceOf[PipelineModel].
       stages.last.asInstanceOf[RandomForestClassificationModel]
 
@@ -216,12 +163,64 @@ object RandomForestExampleML {
     forestModel.featureImportances.toArray.zip(unencTrainData.columns).
       sorted.reverse.foreach(println)
 
+    println("========== TESTING ACCURACY ===========")
     val testAccuracy = multiclassEval.evaluate(bestModel.transform(unencTestData))
     println(testAccuracy)
 
     bestModel.transform(unencTestData.drop("Cover_Type")).select("prediction").show()
+		**/
+  }
+  
+  
+  def evaluateForest(data: DataFrame): Unit = {
 
-    println("================== OUTTA HERE ================================")
+    val Array(trainData, testData) = data.randomSplit(Array(0.9, 0.1))
+    trainData.cache()
+    testData.cache()
+
+    val unencTrainData = unencodeOneHot(trainData)
+    val unencTestData = unencodeOneHot(testData)
+    unencTrainData.cache()
+    unencTestData.cache()
+
+    val labelIndexer = new StringIndexer()
+      .setInputCol("Cover_Type")
+      .setOutputCol("indexedLabel")
+      .setHandleInvalid("skip")
+      .fit(data)
+      
+    val assembler = new VectorAssembler().
+      setInputCols(unencTrainData.columns.filter(_ != "Cover_Type")).
+      setOutputCol("featureVector")
+      
+
+    val indexer = new VectorIndexer().
+      setMaxCategories(40).
+      setInputCol("featureVector").
+      setOutputCol("indexedVector")
+      
+
+    val classifier = new RandomForestClassifier().
+      setSeed(Random.nextLong()).
+      setLabelCol("indexedLabel"). //"Cover_Type").
+      setFeaturesCol("indexedVector").
+      setPredictionCol("prediction").
+      setImpurity("entropy").
+      setMaxDepth(20).
+      setMaxBins(300)
+
+    val pipeline = new Pipeline().setStages(Array(labelIndexer, assembler, indexer, classifier))// labelConverter))
+
+    // Train model.  This also runs the indexers.
+    val model = pipeline.fit(unencTrainData)
+    
+    // Make predictions.
+    val predictions = model.transform(unencTestData)
+    // Select example rows to display.
+    println("------ displaying predictions -----------------")
+    predictions.select("prediction", "indexedLabel", "indexedVector").show(5)
+   
+    println("================== NOW CALCULATING BEST MODEL.. ================================")
 
   }
 
@@ -234,19 +233,14 @@ object RandomForestExampleML {
     val df = getDataFrame(sc, args)
 
     println("InputData:" + df.count())
-    // ccrete labeled points. rmeember above we only have tuples
     val reduced = args.size match {
       case 1 => df
       case 2 => df.sample(false, 0.001)
     }
 
     println("Unenconding one hot...")
-    //unencodeOneHot(trainData)
     evaluateForest(reduced) //trainData, testData)
-    //val dataFrame = unencodeOneHot(reduced)
-    //println("Creating Model for Df of size:" + dataFrame.count())
-    // create model
-    //createModel(sc, dataFrame)
+    
   }
 
   def main(args: Array[String]) = {
