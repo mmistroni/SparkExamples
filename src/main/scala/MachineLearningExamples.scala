@@ -46,12 +46,13 @@ object MachineLearningExamples {
     val predictionsDF = transformer.transform(featuresDF)
     
     println("Predictions....")
-    predictionsDF.foreach(println)
     
     val shorterPredictionsDF = predictionsDF.select("features", "prediction")
     val playerDF = shorterPredictionsDF.toDF("features", "ISBASKETBALLPLAYER")
     
-    playerDF.foreach(println)
+    playerDF.rdd.foreach { println}
+    
+    //playerDF.foreach(println)
     playerDF.printSchema()
     
    

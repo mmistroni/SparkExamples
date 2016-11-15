@@ -134,7 +134,7 @@ object AnotherDecisionTreeExample {
 
     println("Converting to RDD")
     
-    val vectorRdd = df.map(createVectorRDD)
+    val vectorRdd = df.rdd.map(row => row.toSeq.map(_.asInstanceOf[Number].doubleValue))
         
         // Transforming data to LabeledPoint
     println("Creating labeled points")

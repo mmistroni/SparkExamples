@@ -9,10 +9,10 @@
 		extra-sbtVersion="0.13"
 		conf="runtime"
 		confs="compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, sources, docs, pom, scala-tool"
-		date="20160829091238"/>
+		date="20161115224938"/>
 	<dependencies>
 		<module organisation="com.typesafe.sbteclipse" name="sbteclipse-plugin">
-			<revision name="2.5.0" status="release" pubdate="20140430121620" resolver="sbt-chain" artresolver="sbt-chain" extra-scalaVersion="2.10" extra-sbtVersion="0.13" downloaded="false" searched="false" default="false" conf="compile, default(compile)" position="21">
+			<revision name="2.5.0" status="release" pubdate="20140430121620" resolver="sbt-chain" artresolver="sbt-chain" extra-scalaVersion="2.10" extra-sbtVersion="0.13" downloaded="false" searched="false" default="false" conf="compile, default(compile)" position="23">
 				<metadata-artifact status="no" details="" size="1436" time="0" location="C:\Users\marco\.ivy2\cache\scala_2.10\sbt_0.13\com.typesafe.sbteclipse\sbteclipse-plugin\ivy-2.5.0.xml" searched="false" origin-is-local="false" origin-location="https://repo.typesafe.com/typesafe/ivy-releases/com.typesafe.sbteclipse/sbteclipse-plugin/scala_2.10/sbt_0.13/2.5.0/ivys/ivy.xml"/>
 				<caller organisation="default" name="sparkexamples-build" conf="compile, runtime" rev="2.5.0" rev-constraint-default="2.5.0" rev-constraint-dynamic="2.5.0" callerrev="0.1-SNAPSHOT" extra-scalaVersion="2.10" extra-sbtVersion="0.13"/>
 				<artifacts>
@@ -23,7 +23,7 @@
 			</revision>
 		</module>
 		<module organisation="com.typesafe.sbteclipse" name="sbteclipse-core">
-			<revision name="2.5.0" status="release" pubdate="20140430121620" resolver="sbt-chain" artresolver="sbt-chain" extra-scalaVersion="2.10" extra-sbtVersion="0.13" downloaded="false" searched="false" default="false" conf="compile, default(compile)" position="22">
+			<revision name="2.5.0" status="release" pubdate="20140430121620" resolver="sbt-chain" artresolver="sbt-chain" extra-scalaVersion="2.10" extra-sbtVersion="0.13" downloaded="false" searched="false" default="false" conf="compile, default(compile)" position="24">
 				<metadata-artifact status="no" details="" size="1480" time="0" location="C:\Users\marco\.ivy2\cache\scala_2.10\sbt_0.13\com.typesafe.sbteclipse\sbteclipse-core\ivy-2.5.0.xml" searched="false" origin-is-local="false" origin-location="https://repo.typesafe.com/typesafe/ivy-releases/com.typesafe.sbteclipse/sbteclipse-core/scala_2.10/sbt_0.13/2.5.0/ivys/ivy.xml"/>
 				<caller organisation="com.typesafe.sbteclipse" name="sbteclipse-plugin" conf="compile" rev="2.5.0" rev-constraint-default="2.5.0" rev-constraint-dynamic="2.5.0" callerrev="2.5.0" extra-scalaVersion="2.10" extra-sbtVersion="0.13"/>
 				<artifacts>
@@ -34,7 +34,7 @@
 			</revision>
 		</module>
 		<module organisation="org.scalaz" name="scalaz-effect_2.10">
-			<revision name="7.0.2" status="release" pubdate="20130707133131" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://scalaz.org" downloaded="false" searched="false" default="false" conf="default, compile, runtime, default(compile), master" position="24">
+			<revision name="7.0.2" status="release" pubdate="20130707133131" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://scalaz.org" downloaded="false" searched="false" default="false" conf="default, compile, runtime, default(compile), master" position="26">
 				<license name="BSD-style" url="http://www.opensource.org/licenses/bsd-license.php"/>
 				<metadata-artifact status="no" details="" size="2704" time="0" location="C:\Users\marco\.ivy2\cache\org.scalaz\scalaz-effect_2.10\ivy-7.0.2.xml" searched="false" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/scalaz/scalaz-effect_2.10/7.0.2/scalaz-effect_2.10-7.0.2.pom"/>
 				<caller organisation="com.typesafe.sbteclipse" name="sbteclipse-core" conf="compile" rev="7.0.2" rev-constraint-default="7.0.2" rev-constraint-dynamic="7.0.2" callerrev="2.5.0"/>
@@ -46,7 +46,7 @@
 			</revision>
 		</module>
 		<module organisation="org.scalaz" name="scalaz-core_2.10">
-			<revision name="7.0.2" status="release" pubdate="20130707133202" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://scalaz.org" downloaded="false" searched="false" default="false" conf="default, compile, runtime(*), master(compile), runtime, default(compile), compile(*), master" position="23">
+			<revision name="7.0.2" status="release" pubdate="20130707133202" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://scalaz.org" downloaded="false" searched="false" default="false" conf="default, compile, runtime(*), master(compile), runtime, default(compile), compile(*), master" position="25">
 				<license name="BSD-style" url="http://www.opensource.org/licenses/bsd-license.php"/>
 				<metadata-artifact status="no" details="" size="2552" time="0" location="C:\Users\marco\.ivy2\cache\org.scalaz\scalaz-core_2.10\ivy-7.0.2.xml" searched="false" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/scalaz/scalaz-core_2.10/7.0.2/scalaz-core_2.10-7.0.2.pom"/>
 				<caller organisation="com.typesafe.sbteclipse" name="sbteclipse-core" conf="compile" rev="7.0.2" rev-constraint-default="7.0.2" rev-constraint-dynamic="7.0.2" callerrev="2.5.0"/>
@@ -54,6 +54,58 @@
 				<artifacts>
 					<artifact name="scalaz-core_2.10" type="bundle" ext="jar" status="no" details="" size="8596592" time="0" location="C:\Users\marco\.ivy2\cache\org.scalaz\scalaz-core_2.10\bundles\scalaz-core_2.10-7.0.2.jar">
 						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/scalaz/scalaz-core_2.10/7.0.2/scalaz-core_2.10-7.0.2.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="net.virtual-void" name="sbt-dependency-graph">
+			<revision name="0.8.2" status="release" pubdate="20160201095831" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://github.com/jrudolph/sbt-dependency-graph" extra-scalaVersion="2.10" extra-sbtVersion="0.13" downloaded="false" searched="false" default="false" conf="default, compile, runtime, default(compile), master" position="21">
+				<license name="Apache License 2.0" url="https://github.com/jrudolph/sbt-dependency-graph/raw/master/LICENSE"/>
+				<metadata-artifact status="no" details="" size="3493" time="0" location="C:\Users\marco\.ivy2\cache\scala_2.10\sbt_0.13\net.virtual-void\sbt-dependency-graph\ivy-0.8.2.xml" searched="false" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/net/virtual-void/sbt-dependency-graph_2.10_0.13/0.8.2/sbt-dependency-graph-0.8.2.pom"/>
+				<caller organisation="default" name="sparkexamples-build" conf="compile, runtime" rev="0.8.2" rev-constraint-default="0.8.2" rev-constraint-dynamic="0.8.2" callerrev="0.1-SNAPSHOT" extra-scalaVersion="2.10" extra-sbtVersion="0.13"/>
+				<artifacts>
+					<artifact name="sbt-dependency-graph" type="jar" ext="jar" status="no" details="" size="285009" time="0" location="C:\Users\marco\.ivy2\cache\scala_2.10\sbt_0.13\net.virtual-void\sbt-dependency-graph\jars\sbt-dependency-graph-0.8.2.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/net/virtual-void/sbt-dependency-graph_2.10_0.13/0.8.2/sbt-dependency-graph-0.8.2.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="com.github.mdr" name="ascii-graphs_2.10">
+			<revision name="0.0.3" status="release" pubdate="20130509131044" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://github.com/mdr/ascii-graphs" downloaded="false" searched="false" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="22">
+				<license name="MIT License" url="http://www.opensource.org/licenses/mit-license.php"/>
+				<metadata-artifact status="no" details="" size="2699" time="0" location="C:\Users\marco\.ivy2\cache\com.github.mdr\ascii-graphs_2.10\ivy-0.0.3.xml" searched="false" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/com/github/mdr/ascii-graphs_2.10/0.0.3/ascii-graphs_2.10-0.0.3.pom"/>
+				<caller organisation="net.virtual-void" name="sbt-dependency-graph" conf="default, compile, runtime, master" rev="0.0.3" rev-constraint-default="0.0.3" rev-constraint-dynamic="0.0.3" callerrev="0.8.2"/>
+				<artifacts>
+					<artifact name="ascii-graphs_2.10" type="jar" ext="jar" status="no" details="" size="466397" time="0" location="C:\Users\marco\.ivy2\cache\com.github.mdr\ascii-graphs_2.10\jars\ascii-graphs_2.10-0.0.3.jar">
+						<origin-location is-local="false" location="https://repo1.maven.org/maven2/com/github/mdr/ascii-graphs_2.10/0.0.3/ascii-graphs_2.10-0.0.3.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="org.scala-lang" name="scala-reflect">
+			<revision name="2.10.6" status="release" pubdate="20150918053538" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://www.scala-lang.org/" extra-info.apiURL="http://www.scala-lang.org/api/2.10.6/" downloaded="false" searched="false" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="3">
+				<license name="BSD-like" url="http://www.scala-lang.org/downloads/license.html    "/>
+				<metadata-artifact status="no" details="" size="2824" time="0" location="C:\Users\marco\.ivy2\cache\org.scala-lang\scala-reflect\ivy-2.10.6.xml" searched="false" origin-is-local="false" origin-location="file:////C:/activator-dist-1.3.10//repository/org.scala-lang/scala-reflect/2.10.6/ivys/ivy.xml"/>
+				<caller organisation="org.scalactic" name="scalactic_2.10" conf="default, compile, runtime, master" rev="2.10.6" rev-constraint-default="2.10.6" rev-constraint-dynamic="2.10.6" callerrev="2.2.1"/>
+				<artifacts>
+					<artifact name="scala-reflect" type="jar" ext="jar" status="no" details="" size="3206180" time="0" location="C:\Users\marco\.ivy2\cache\org.scala-lang\scala-reflect\jars\scala-reflect-2.10.6.jar">
+						<origin-location is-local="false" location="file:////C:/activator-dist-1.3.10//repository/org.scala-lang/scala-reflect/2.10.6/jars/scala-reflect.jar"/>
+					</artifact>
+				</artifacts>
+			</revision>
+		</module>
+		<module organisation="org.scala-lang" name="scala-library">
+			<revision name="2.10.6" status="release" pubdate="20150918053528" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://www.scala-lang.org/" extra-info.apiURL="http://www.scala-lang.org/api/2.10.6/" downloaded="false" searched="false" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="2">
+				<license name="BSD-like" url="http://www.scala-lang.org/downloads/license.html          "/>
+				<metadata-artifact status="no" details="" size="2658" time="0" location="C:\Users\marco\.ivy2\cache\org.scala-lang\scala-library\ivy-2.10.6.xml" searched="false" origin-is-local="true" origin-location="C:\activator-dist-1.3.10\repository\org.scala-lang\scala-library\2.10.6\ivys\ivy.xml"/>
+				<caller organisation="com.github.mdr" name="ascii-graphs_2.10" conf="compile, runtime" rev="2.10.6" rev-constraint-default="2.10.6" rev-constraint-dynamic="2.10.6" callerrev="0.0.3"/>
+				<caller organisation="org.scalaz" name="scalaz-effect_2.10" conf="default, compile, runtime, master" rev="2.10.6" rev-constraint-default="2.10.6" rev-constraint-dynamic="2.10.6" callerrev="7.0.2"/>
+				<caller organisation="org.scala-lang" name="scala-reflect" conf="compile, runtime" rev="2.10.6" rev-constraint-default="2.10.6" rev-constraint-dynamic="2.10.6" callerrev="2.10.6"/>
+				<caller organisation="org.scalactic" name="scalactic_2.10" conf="default, compile, runtime, master" rev="2.10.6" rev-constraint-default="2.10.6" rev-constraint-dynamic="2.10.6" callerrev="2.2.1"/>
+				<caller organisation="org.scalaz" name="scalaz-core_2.10" conf="default, compile, runtime, master" rev="2.10.6" rev-constraint-default="2.10.6" rev-constraint-dynamic="2.10.6" callerrev="7.0.2"/>
+				<artifacts>
+					<artifact name="scala-library" type="jar" ext="jar" status="no" details="" size="7132001" time="0" location="C:\Users\marco\.ivy2\cache\org.scala-lang\scala-library\jars\scala-library-2.10.6.jar">
+						<origin-location is-local="false" location="file:////C:/activator-dist-1.3.10//repository/org.scala-lang/scala-library/2.10.6/jars/scala-library.jar"/>
 					</artifact>
 				</artifacts>
 			</revision>
@@ -116,12 +168,13 @@
 			</revision>
 		</module>
 		<module organisation="org.codehaus.plexus" name="plexus-component-annotations">
-			<revision name="1.5.5" status="release" pubdate="20151123131436" resolver="sbt-chain" artresolver="sbt-chain" homepage="" downloaded="false" searched="false" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="19">
-				<metadata-artifact status="no" details="" size="5164" time="0" location="C:\Users\marco\.ivy2\cache\org.codehaus.plexus\plexus-component-annotations\ivy-1.5.5.xml" searched="false" origin-is-local="true" origin-location="C:\Users\marco\Scala\activator-dist-1.3.7\repository\org.codehaus.plexus\plexus-component-annotations\1.5.5\ivys\ivy.xml"/>
+			<revision name="1.5.5" status="release" pubdate="20100930161459" resolver="sbt-chain" artresolver="sbt-chain" homepage="" downloaded="false" searched="false" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="19">
+				<license name="The Apache Software License, Version 2.0" url="http://www.apache.org/licenses/LICENSE-2.0.txt"/>
+				<metadata-artifact status="no" details="" size="5278" time="0" location="C:\Users\marco\.ivy2\cache\org.codehaus.plexus\plexus-component-annotations\ivy-1.5.5.xml" searched="false" origin-is-local="true" origin-location="C:\activator-dist-1.3.10\repository\org.codehaus.plexus\plexus-component-annotations\1.5.5\ivys\ivy.xml"/>
 				<caller organisation="org.eclipse.sisu" name="org.eclipse.sisu.plexus" conf="compile, runtime" rev="1.5.5" rev-constraint-default="1.5.5" rev-constraint-dynamic="1.5.5" callerrev="0.3.0"/>
 				<artifacts>
-					<artifact name="plexus-component-annotations" type="jar" ext="jar" status="no" details="" size="4211" time="0" location="C:\Users\marco\Scala\activator-dist-1.3.7\repository\org.codehaus.plexus\plexus-component-annotations\1.5.5\jars\plexus-component-annotations.jar">
-						<origin-location is-local="true" location="C:\Users\marco\Scala\activator-dist-1.3.7\repository\org.codehaus.plexus\plexus-component-annotations\1.5.5\jars\plexus-component-annotations.jar"/>
+					<artifact name="plexus-component-annotations" type="jar" ext="jar" status="no" details="" size="4211" time="0" location="C:\activator-dist-1.3.10\repository\org.codehaus.plexus\plexus-component-annotations\1.5.5\jars\plexus-component-annotations.jar">
+						<origin-location is-local="true" location="C:\activator-dist-1.3.10\repository\org.codehaus.plexus\plexus-component-annotations\1.5.5\jars\plexus-component-annotations.jar"/>
 					</artifact>
 				</artifacts>
 			</revision>
@@ -138,36 +191,37 @@
 			</revision>
 		</module>
 		<module organisation="javax.enterprise" name="cdi-api">
-			<revision name="1.0" status="release" pubdate="20151123131558" resolver="sbt-chain" artresolver="sbt-chain" homepage="" downloaded="false" searched="false" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="15">
-				<metadata-artifact status="no" details="" size="9661" time="0" location="C:\Users\marco\.ivy2\cache\javax.enterprise\cdi-api\ivy-1.0.xml" searched="false" origin-is-local="true" origin-location="C:\Users\marco\Scala\activator-dist-1.3.7\repository\javax.enterprise\cdi-api\1.0\ivys\ivy.xml"/>
+			<revision name="1.0" status="release" pubdate="20091108174421" resolver="sbt-chain" artresolver="sbt-chain" homepage="" downloaded="false" searched="false" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="15">
+				<license name="Apache License, Version 2.0" url="http://www.apache.org/licenses/LICENSE-2.0"/>
+				<metadata-artifact status="no" details="" size="9758" time="0" location="C:\Users\marco\.ivy2\cache\javax.enterprise\cdi-api\ivy-1.0.xml" searched="false" origin-is-local="true" origin-location="C:\activator-dist-1.3.10\repository\javax.enterprise\cdi-api\1.0\ivys\ivy.xml"/>
 				<caller organisation="org.eclipse.sisu" name="org.eclipse.sisu.plexus" conf="compile, runtime" rev="1.0" rev-constraint-default="1.0" rev-constraint-dynamic="1.0" callerrev="0.3.0"/>
 				<artifacts>
-					<artifact name="cdi-api" type="jar" ext="jar" status="no" details="" size="44908" time="0" location="C:\Users\marco\Scala\activator-dist-1.3.7\repository\javax.enterprise\cdi-api\1.0\jars\cdi-api.jar">
-						<origin-location is-local="true" location="C:\Users\marco\Scala\activator-dist-1.3.7\repository\javax.enterprise\cdi-api\1.0\jars\cdi-api.jar"/>
+					<artifact name="cdi-api" type="jar" ext="jar" status="no" details="" size="44908" time="0" location="C:\activator-dist-1.3.10\repository\javax.enterprise\cdi-api\1.0\jars\cdi-api.jar">
+						<origin-location is-local="true" location="C:\activator-dist-1.3.10\repository\javax.enterprise\cdi-api\1.0\jars\cdi-api.jar"/>
 					</artifact>
 				</artifacts>
 			</revision>
 		</module>
 		<module organisation="javax.inject" name="javax.inject">
-			<revision name="1" status="release" pubdate="20091014003500" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://code.google.com/p/atinject/" downloaded="false" searched="false" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="17">
+			<revision name="1" status="release" pubdate="20091013193500" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://code.google.com/p/atinject/" downloaded="false" searched="false" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="17">
 				<license name="The Apache Software License, Version 2.0" url="http://www.apache.org/licenses/LICENSE-2.0.txt"/>
-				<metadata-artifact status="no" details="" size="2409" time="0" location="C:\Users\marco\.ivy2\cache\javax.inject\javax.inject\ivy-1.xml" searched="false" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/javax/inject/javax.inject/1/javax.inject-1.pom"/>
+				<metadata-artifact status="no" details="" size="2497" time="0" location="C:\Users\marco\.ivy2\cache\javax.inject\javax.inject\ivy-1.xml" searched="false" origin-is-local="true" origin-location="C:\activator-dist-1.3.10\repository\javax.inject\javax.inject\1\ivys\ivy.xml"/>
 				<caller organisation="javax.enterprise" name="cdi-api" conf="compile, runtime" rev="1" rev-constraint-default="1" rev-constraint-dynamic="1" callerrev="1.0"/>
 				<artifacts>
-					<artifact name="javax.inject" type="jar" ext="jar" status="no" details="" size="2497" time="0" location="C:\Users\marco\.ivy2\cache\javax.inject\javax.inject\jars\javax.inject-1.jar">
-						<origin-location is-local="false" location="https://repo1.maven.org/maven2/javax/inject/javax.inject/1/javax.inject-1.jar"/>
+					<artifact name="javax.inject" type="jar" ext="jar" status="no" details="" size="2497" time="0" location="C:\activator-dist-1.3.10\repository\javax.inject\javax.inject\1\jars\javax.inject.jar">
+						<origin-location is-local="true" location="C:\activator-dist-1.3.10\repository\javax.inject\javax.inject\1\jars\javax.inject.jar"/>
 					</artifact>
 				</artifacts>
 			</revision>
 		</module>
 		<module organisation="javax.annotation" name="jsr250-api">
-			<revision name="1.0" status="release" pubdate="20151123131627" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://jcp.org/aboutJava/communityprocess/final/jsr250/index.html" downloaded="false" searched="false" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="16">
+			<revision name="1.0" status="release" pubdate="20070515162559" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://jcp.org/aboutJava/communityprocess/final/jsr250/index.html" downloaded="false" searched="false" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="16">
 				<license name="COMMON DEVELOPMENT AND DISTRIBUTION LICENSE (CDDL) Version 1.0" url="https://glassfish.dev.java.net/public/CDDLv1.0.html"/>
-				<metadata-artifact status="no" details="" size="2582" time="0" location="C:\Users\marco\.ivy2\cache\javax.annotation\jsr250-api\ivy-1.0.xml" searched="false" origin-is-local="true" origin-location="C:\Users\marco\Scala\activator-dist-1.3.7\repository\javax.annotation\jsr250-api\1.0\ivys\ivy.xml"/>
+				<metadata-artifact status="no" details="" size="2582" time="0" location="C:\Users\marco\.ivy2\cache\javax.annotation\jsr250-api\ivy-1.0.xml" searched="false" origin-is-local="true" origin-location="C:\activator-dist-1.3.10\repository\javax.annotation\jsr250-api\1.0\ivys\ivy.xml"/>
 				<caller organisation="javax.enterprise" name="cdi-api" conf="compile, runtime" rev="1.0" rev-constraint-default="1.0" rev-constraint-dynamic="1.0" callerrev="1.0"/>
 				<artifacts>
-					<artifact name="jsr250-api" type="jar" ext="jar" status="no" details="" size="5848" time="0" location="C:\Users\marco\Scala\activator-dist-1.3.7\repository\javax.annotation\jsr250-api\1.0\jars\jsr250-api.jar">
-						<origin-location is-local="true" location="C:\Users\marco\Scala\activator-dist-1.3.7\repository\javax.annotation\jsr250-api\1.0\jars\jsr250-api.jar"/>
+					<artifact name="jsr250-api" type="jar" ext="jar" status="no" details="" size="5848" time="0" location="C:\activator-dist-1.3.10\repository\javax.annotation\jsr250-api\1.0\jars\jsr250-api.jar">
+						<origin-location is-local="true" location="C:\activator-dist-1.3.10\repository\javax.annotation\jsr250-api\1.0\jars\jsr250-api.jar"/>
 					</artifact>
 				</artifacts>
 			</revision>
@@ -198,12 +252,18 @@
 			<revision name="3.0.20" status="release" pubdate="20141018210010" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://plexus.codehaus.org/plexus-utils" downloaded="false" searched="false" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="12">
 				<metadata-artifact status="no" details="" size="8248" time="0" location="C:\Users\marco\.ivy2\cache\org.codehaus.plexus\plexus-utils\ivy-3.0.20.xml" searched="false" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-utils/3.0.20/plexus-utils-3.0.20.pom"/>
 				<caller organisation="org.apache.maven" name="maven-model" conf="compile, runtime" rev="3.0.20" rev-constraint-default="3.0.20" rev-constraint-dynamic="3.0.20" callerrev="3.3.3"/>
-				<caller organisation="org.eclipse.sisu" name="org.eclipse.sisu.plexus" conf="compile, runtime" rev="3.0.20" rev-constraint-default="3.0.20" rev-constraint-dynamic="3.0.17" callerrev="0.3.0"/>
+				<caller organisation="org.eclipse.sisu" name="org.eclipse.sisu.plexus" conf="compile, runtime" rev="3.0.17" rev-constraint-default="3.0.17" rev-constraint-dynamic="3.0.17" callerrev="0.3.0"/>
 				<caller organisation="org.apache.maven" name="maven-artifact" conf="compile, runtime" rev="3.0.20" rev-constraint-default="3.0.20" rev-constraint-dynamic="3.0.20" callerrev="3.3.3"/>
 				<artifacts>
 					<artifact name="plexus-utils" type="jar" ext="jar" status="no" details="" size="243128" time="0" location="C:\Users\marco\.ivy2\cache\org.codehaus.plexus\plexus-utils\jars\plexus-utils-3.0.20.jar">
 						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/codehaus/plexus/plexus-utils/3.0.20/plexus-utils-3.0.20.jar"/>
 					</artifact>
+				</artifacts>
+			</revision>
+			<revision name="3.0.17" evicted="latest-revision" evicted-reason="" downloaded="false" searched="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="-1">
+				<evicted-by rev="3.0.20"/>
+				<caller organisation="org.eclipse.sisu" name="org.eclipse.sisu.plexus" conf="compile, runtime" rev="3.0.17" rev-constraint-default="3.0.17" rev-constraint-dynamic="3.0.17" callerrev="0.3.0"/>
+				<artifacts>
 				</artifacts>
 			</revision>
 		</module>
@@ -271,33 +331,6 @@
 				<artifacts>
 					<artifact name="scalactic_2.10" type="bundle" ext="jar" status="no" details="" size="386497" time="0" location="C:\Users\marco\.ivy2\cache\org.scalactic\scalactic_2.10\bundles\scalactic_2.10-2.2.1.jar">
 						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/scalactic/scalactic_2.10/2.2.1/scalactic_2.10-2.2.1.jar"/>
-					</artifact>
-				</artifacts>
-			</revision>
-		</module>
-		<module organisation="org.scala-lang" name="scala-reflect">
-			<revision name="2.10.4" status="release" pubdate="20140318214707" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://www.scala-lang.org/" extra-info.apiURL="http://www.scala-lang.org/api/2.10.4/" downloaded="false" searched="false" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="3">
-				<license name="BSD-like" url="http://www.scala-lang.org/downloads/license.html    "/>
-				<metadata-artifact status="no" details="" size="2870" time="0" location="C:\Users\marco\.ivy2\cache\org.scala-lang\scala-reflect\ivy-2.10.4.xml" searched="false" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.10.4/scala-reflect-2.10.4.pom"/>
-				<caller organisation="org.scalactic" name="scalactic_2.10" conf="default, compile, runtime, master" rev="2.10.4" rev-constraint-default="2.10.4" rev-constraint-dynamic="2.10.4" callerrev="2.2.1"/>
-				<artifacts>
-					<artifact name="scala-reflect" type="jar" ext="jar" status="no" details="" size="3203471" time="0" location="C:\Users\marco\.ivy2\cache\org.scala-lang\scala-reflect\jars\scala-reflect-2.10.4.jar">
-						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/scala-lang/scala-reflect/2.10.4/scala-reflect-2.10.4.jar"/>
-					</artifact>
-				</artifacts>
-			</revision>
-		</module>
-		<module organisation="org.scala-lang" name="scala-library">
-			<revision name="2.10.4" status="release" pubdate="20140318214629" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://www.scala-lang.org/" extra-info.apiURL="http://www.scala-lang.org/api/2.10.4/" downloaded="false" searched="false" default="false" conf="compile, runtime(*), master(compile), runtime, compile(*), master" position="2">
-				<license name="BSD-like" url="http://www.scala-lang.org/downloads/license.html          "/>
-				<metadata-artifact status="no" details="" size="2701" time="0" location="C:\Users\marco\.ivy2\cache\org.scala-lang\scala-library\ivy-2.10.4.xml" searched="false" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.10.4/scala-library-2.10.4.pom"/>
-				<caller organisation="org.scalaz" name="scalaz-effect_2.10" conf="default, compile, runtime, master" rev="2.10.4" rev-constraint-default="2.10.4" rev-constraint-dynamic="2.10.1" callerrev="7.0.2"/>
-				<caller organisation="org.scala-lang" name="scala-reflect" conf="compile, runtime" rev="2.10.4" rev-constraint-default="2.10.4" rev-constraint-dynamic="2.10.4" callerrev="2.10.4"/>
-				<caller organisation="org.scalactic" name="scalactic_2.10" conf="default, compile, runtime, master" rev="2.10.4" rev-constraint-default="2.10.4" rev-constraint-dynamic="2.10.4" callerrev="2.2.1"/>
-				<caller organisation="org.scalaz" name="scalaz-core_2.10" conf="default, compile, runtime, master" rev="2.10.4" rev-constraint-default="2.10.4" rev-constraint-dynamic="2.10.1" callerrev="7.0.2"/>
-				<artifacts>
-					<artifact name="scala-library" type="jar" ext="jar" status="no" details="" size="7126372" time="0" location="C:\Users\marco\.ivy2\cache\org.scala-lang\scala-library\jars\scala-library-2.10.4.jar">
-						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/scala-lang/scala-library/2.10.4/scala-library-2.10.4.jar"/>
 					</artifact>
 				</artifacts>
 			</revision>

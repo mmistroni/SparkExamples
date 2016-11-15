@@ -134,8 +134,8 @@ object RandomForestExampleML {
       build()
 
     val multiclassEval = new MulticlassClassificationEvaluator().
-      //setLabelCol("Cover_Type").
-      setLabelCol("indexedLabel").
+      setLabelCol("Cover_Type").
+      //setLabelCol("indexedLabel").
       setPredictionCol("prediction").
       setMetricName("precision")
 
@@ -150,7 +150,7 @@ object RandomForestExampleML {
     
     val bestModel = validatorModel.bestModel
 
-    println("====== And The Best Model is:" + bestModel)
+    println("====== And The Best Model is:" + bestModel.explainParams())
     
     println("===== carry on ====")
     val forestModel = bestModel.asInstanceOf[PipelineModel].
@@ -163,8 +163,9 @@ object RandomForestExampleML {
       sorted.reverse.foreach(println)
 
     println("========== TESTING ACCURACY ===========")
-    //val testAccuracy = multiclassEval.evaluate(bestModel.transform(unencTestData))
-    //println(testAccuracy)
+    val preds = bestModel.transform(unencTestData)
+    val testAccuracy = multiclassEval.evaluate(preds)
+    println("=======AND THE ACCURANCY IS:" + testAccuracy)
 
     //bestModel.transform(unencTestData.drop("Cover_Type")).select("prediction").show()
 		

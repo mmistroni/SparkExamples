@@ -1,0 +1,13 @@
+show fullClasspath
+exit
+help fullClasspath
+show fullClasspath
+exit
+inspect tree
+inspect
+inspect path
+inspect help
+inspect:tree
+inspect:classpath
+quit
+exit

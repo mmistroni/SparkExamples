@@ -15,7 +15,7 @@ import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.functions._
 import SparkUtil._
-import GetCheckpointDirectory._
+
 
 /**
  * THis example has been ported from the original
@@ -50,11 +50,9 @@ object TitanicSurvivorsDecisionTreeWithML {
 
   }
 
-  def getMostCommmonEmbarked(sqlContext: SQLContext): String = {
-    val res = sqlContext.
-      sql("SELECT Embarked, count(*) as numrows from survivors WHERE Embarked <> '' GROUP BY Embarked ORDER BY numrows DESC")
-      .map(row => row.getString(0))
-    res.first()
+  def getMostCommmonEmbarked(df: DataFrame): String = {
+    // one solution, select and sort
+    df.select("Embarked").groupBy("Embarked").count().sort(desc("count")).first().getString(0)
   }
 
   def cleanUpData(sqlContext: SQLContext, dataFrame: DataFrame): DataFrame = {
@@ -63,8 +61,8 @@ object TitanicSurvivorsDecisionTreeWithML {
     // 2. Embarked: from 'C', 'Q', 'S' to 1, 2 , 3
     // 3. Age, when not present we need to take the median
 
-    val medianAge = dataFrame.select(avg("Age")).collect()(0)(0).asInstanceOf[Double]
-    val mostCommonEmbarked = getMostCommmonEmbarked(sqlContext)
+    val medianAge = dataFrame.select(avg("Age")).head().getDouble(0)
+    val mostCommonEmbarked = getMostCommmonEmbarked(dataFrame)
 
     val fillAge = dataFrame.na.fill(medianAge, Seq("Age"))
     val fillEmbarked = fillAge.na.fill(mostCommonEmbarked, Seq("Embarked"))

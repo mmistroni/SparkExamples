@@ -155,9 +155,10 @@ object EuroQualifierDecisionTree {
 
   }
 
-  def useDecisionTreeModel(trainingData: RDD[LabeledPoint], testData: RDD[LabeledPoint],
-                           euro2016Data: RDD[LabeledPoint]) = {
+  def useDecisionTreeModel(trainingData: DataFrame, testData: DataFrame,
+                           euro2016Data: DataFrame) = {
 
+    /**
     println("--------------- DECISION TREES -------------------")
     val decisionTreeEvaluations =
       for (
@@ -188,10 +189,10 @@ object EuroQualifierDecisionTree {
       (point.label, prediction)
     }
     dt_predictions.foreach(println)
-
+		**/
   }
 
-  def generateModel(data: RDD[LabeledPoint], sqlContext: SQLContext, euro2016Data: RDD[LabeledPoint]): Unit = {
+  def generateModel(data: DataFrame, sqlContext: SQLContext, euro2016Data: DataFrame): Unit = {
     val splits = data.randomSplit(Array(0.8, 0.2))
     val (trainingData, testData) = (splits(0), splits(1))
     val numClasses = 2
@@ -205,11 +206,11 @@ object EuroQualifierDecisionTree {
     
     
     println("_------- RANDOM FOREST ------------------")
-    useRandomForestModel(trainingData, testData,euro2016Data)
+    //useRandomForestModel(trainingData, testData,euro2016Data)
     println("--------- NOW WITH DECISION TREE....")
     useDecisionTreeModel(trainingData, testData, euro2016Data)
     println("--------- USING SVM --------")
-    useSVM(trainingData, testData, euro2016Data)
+    //useSVM(trainingData, testData, euro2016Data)
 
   }
 
@@ -224,20 +225,20 @@ object EuroQualifierDecisionTree {
     val euroQualifierDataFrame = getDataSet(sqlContext, trainDataPath)
     println("Cleaning up data...")
     val cleanedDataSet = cleanUpData(sqlContext, euroQualifierDataFrame)
-    val vectorRdd = cleanedDataSet.map(createVectorRDD)
+    //val vectorRdd = cleanedDataSet.map(createVectorRDD)
     println("Creating labeled points")
     // ccrete labeled points. rmeember above we only have tuples
-    val data = toLabeledPointsRDD(vectorRdd, 0)
+    //val data = toLabeledPointsRDD(vectorRdd, 0)
     println("TrainData")
 
     println("Now loading euro data")
     val euro2016df = getDataSet(sqlContext, testDataPath)
     val cleanedEuro2016DataSet = cleanUpData(sqlContext, euro2016df)
-    val euro2016vectorRdd = cleanedEuro2016DataSet.map(createVectorRDD)
-    val euro2016Data = toLabeledPointsRDD(euro2016vectorRdd, 0)
+    //val euro2016vectorRdd = cleanedEuro2016DataSet.map(createVectorRDD)
+    //val euro2016Data = toLabeledPointsRDD(euro2016vectorRdd, 0)
 
     println("Now feeding the model..")
-    generateModel(data, sqlContext, euro2016Data)
+    generateModel(cleanedDataSet, sqlContext, cleanedEuro2016DataSet)
 
   }
 

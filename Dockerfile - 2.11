@@ -14,12 +14,11 @@ RUN apt-get install -y software-properties-common
 RUN apt-get -y install python-pip
 RUN apt-get update
 # Java
-RUN echo "Installing Java 8.."
+RUN echo "Installing Java 7."
 RUN add-apt-repository -y ppa:webupd8team/java
 RUN apt-get update
 RUN echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
-RUN apt-get install -y oracle-java8-installer
-
+RUN apt-get install -y oracle-java7-installer
 
 # AWS Cli
 #RUN echo "Installing AWSCLI..."
@@ -39,12 +38,12 @@ RUN apt-get install -y maven
 RUN echo "Installing git...."
 RUN apt-get install -y git
 # Spark
-RUN echo "Installing Apache spark 2.0"
+RUN echo "Installing Latest Apache spark 2.x"
 RUN git clone git://github.com/apache/spark.git
 WORKDIR /spark
-# adding permissions to ssh
-#RUN ./dev/change-scala-version.sh 2.10
-#RUN mvn  -Pyarn -Phadoop-2.666666  -DskipTests clean package
+RUN ./build/mvn -Pyarn -DskipTests clean compile
+RUN echo "Now packaging......"
+RUN ./build/mvn -Pyarn  -DskipTests package
 ENV SPARK_HOME="/spark"
 ENV PATH="$SPARK_HOME/bin:${PATH}"
 
