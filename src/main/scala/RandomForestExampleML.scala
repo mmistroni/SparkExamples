@@ -1,21 +1,25 @@
 
-import org.apache.spark.mllib.linalg.{ Vector, Vectors }
-import org.apache.spark.mllib.regression.LabeledPoint
-import org.apache.spark.ml.classification.{ RandomForestClassifier, RandomForestClassificationModel }
-import org.apache.spark.SparkContext
-import org.apache.spark.ml.feature.{ StringIndexer, IndexToString, VectorIndexer, VectorAssembler }
-import org.apache.spark.ml.evaluation.{ RegressionEvaluator, MulticlassClassificationEvaluator }
-import org.apache.spark.ml.classification._
-import org.apache.spark.ml.tuning.{ CrossValidator, ParamGridBuilder }
+import org.apache.spark.ml.{ PipelineModel, Pipeline }
+import org.apache.spark.ml.classification.{
+  DecisionTreeClassifier,
+  RandomForestClassifier,
+  RandomForestClassificationModel
+}
+import org.apache.spark.ml.evaluation.MulticlassClassificationEvaluator
+import org.apache.spark.ml.feature.{ VectorAssembler, VectorIndexer }
+import org.apache.spark.ml.linalg.Vector
 import org.apache.spark.ml.tuning.{ ParamGridBuilder, TrainValidationSplit }
-import org.apache.spark.rdd.RDD
-import org.apache.spark.sql._
-import org.apache.spark.sql.SQLImplicits
-import org.apache.spark.sql.Row
-import org.apache.spark.sql.types._
-import org.apache.spark.ml.{ Pipeline, PipelineModel }
+import org.apache.spark.mllib.evaluation.MulticlassMetrics
+import org.apache.spark.sql.{ DataFrame, SparkSession }
 import org.apache.spark.sql.functions._
 import scala.util.Random
+import org.apache.spark.sql.SQLImplicits
+import org.apache.spark.SparkConf
+import org.apache.spark.SparkContext
+import org.apache.spark.sql.functions._
+import org.apache.spark.sql.SQLContext
+
+//import spark.implicits._
 
 /**
  * This example builds a random forest tree and it's based on this video
@@ -55,7 +59,7 @@ object RandomForestExampleML {
 
     val filename = args.size match {
       case 1 => args(0)
-      case 2 => "file://c:/Users/marco/SparkExamples/src/main/resources/covtype.data.gz"
+      case 2 => "file:///c:/Users/marco/SparkExamples/src/main/resources/covtype.data.gz"
     }
 
     println(s"Loading data from $filename")
@@ -87,59 +91,124 @@ object RandomForestExampleML {
 
   def unencodeOneHot(data: DataFrame): DataFrame = {
     val wildernessCols = (0 until 4).map(i => s"Wilderness_Area_$i").toArray
-    
+
     val wildernessAssembler = new VectorAssembler().
       setInputCols(wildernessCols).
       setOutputCol("wilderness")
 
     val unhotUDF = udf((vec: Vector) => vec.toArray.indexOf(1.0).toDouble)
 
-    val withWilderness = wildernessAssembler.transform(data)
-
-    var droppedDf = withWilderness
-    println("Before we have:" + droppedDf.columns.size)
-    for (col <- wildernessCols)
-      droppedDf = droppedDf.drop(col)
-    println("After we haveL" + droppedDf.columns.size)
-    println(droppedDf.columns.mkString(","))
-
-    val withAddedWilderness = droppedDf.withColumn("wilderness", unhotUDF(col("wilderness")))
+    val withWilderness = wildernessAssembler.transform(data).
+      drop(wildernessCols: _*).
+      withColumn("wilderness", unhotUDF(col("wilderness")))
 
     val soilCols = (0 until 40).map(i => s"Soil_Type_$i").toArray
+
     val soilAssembler = new VectorAssembler().
       setInputCols(soilCols).
       setOutputCol("soil")
 
-    val transformedWilderness = soilAssembler.transform(withAddedWilderness)
-    var noSoilDf = transformedWilderness
-
-    println("Before we have:" + noSoilDf.columns.size)
-    for (soilCol <- soilCols)
-      noSoilDf = noSoilDf.drop(soilCol)
-
-    println("After we have:" + noSoilDf.columns.size)
-
-    val withOneHotSoil = noSoilDf.withColumn("soil", unhotUDF(col("soil")))
-
-    withOneHotSoil
+    soilAssembler.transform(withWilderness).
+      drop(soilCols: _*).
+      withColumn("soil", unhotUDF(col("soil")))
   }
 
-  def findBestModel(classifier:RandomForestClassifier, 
-                    unencTrainData:DataFrame , 
-                    unencTestData:DataFrame,
-                    pipeline:Pipeline) = {
+  
+  def evaluate(trainData: DataFrame, testData: DataFrame): Unit = {
+
+    val assembler = new VectorAssembler().
+      setInputCols(trainData.columns.filter(_ != "Cover_Type")).
+      setOutputCol("featureVector")
+
+    val classifier = new DecisionTreeClassifier().
+      setSeed(Random.nextLong()).
+      setLabelCol("Cover_Type").
+      setFeaturesCol("featureVector").
+      setPredictionCol("prediction")
+
+    val pipeline = new Pipeline().setStages(Array(assembler, classifier))
+
     val paramGrid = new ParamGridBuilder().
+      addGrid(classifier.impurity, Seq("gini", "entropy")).
+      addGrid(classifier.maxDepth, Seq(1, 20)).
+      addGrid(classifier.maxBins, Seq(40, 300)).
       addGrid(classifier.minInfoGain, Seq(0.0, 0.05)).
-      addGrid(classifier.numTrees, Seq(1, 10)).
       build()
 
     val multiclassEval = new MulticlassClassificationEvaluator().
       setLabelCol("Cover_Type").
-      //setLabelCol("indexedLabel").
       setPredictionCol("prediction").
-      setMetricName("precision")
+      setMetricName("accuracy")
 
     val validator = new TrainValidationSplit().
+      setSeed(Random.nextLong()).
+      setEstimator(pipeline).
+      setEvaluator(multiclassEval).
+      setEstimatorParamMaps(paramGrid).
+      setTrainRatio(0.9)
+
+    //spark.sparkContext.setLogLevel("DEBUG")
+    val validatorModel = validator.fit(trainData)
+    /*
+    DEBUG TrainValidationSplit: Got metric 0.6315930234779452 for model trained with {
+      dtc_ca0f064d06dd-impurity: gini,
+      dtc_ca0f064d06dd-maxBins: 10,
+      dtc_ca0f064d06dd-maxDepth: 1,
+      dtc_ca0f064d06dd-minInfoGain: 0.0
+    }.
+    */
+    //spark.sparkContext.setLogLevel("WARN")
+
+    val bestModel = validatorModel.bestModel
+    println("---------------BEST MODEL PARAMS --------------------------------")
+    println(bestModel.asInstanceOf[PipelineModel].stages.last.extractParamMap)
+
+    println("-------------MAX VALIDATION METRICS--------------------------------------")
+    println(validatorModel.validationMetrics.max)
+    println("---------------------------------------------------")
+    
+    val testAccuracy = multiclassEval.evaluate(bestModel.transform(testData))
+    println(s"------------- TEST ACCURACY is: $testAccuracy")
+
+    val trainAccuracy = multiclassEval.evaluate(bestModel.transform(trainData))
+    println(s"----------------- TRAIN ACCURACY IS : $trainAccuracy")
+  }
+
+  def evaluateCategorical(trainData: DataFrame, testData: DataFrame): Unit = {
+    val unencTrainData = unencodeOneHot(trainData)
+    val unencTestData = unencodeOneHot(testData)
+
+    val assembler = new VectorAssembler().
+      setInputCols(unencTrainData.columns.filter(_ != "Cover_Type")).
+      setOutputCol("featureVector")
+
+    val indexer = new VectorIndexer().
+      setMaxCategories(40).
+      setInputCol("featureVector").
+      setOutputCol("indexedVector")
+
+    val classifier = new DecisionTreeClassifier().
+      setSeed(Random.nextLong()).
+      setLabelCol("Cover_Type").
+      setFeaturesCol("indexedVector").
+      setPredictionCol("prediction")
+
+    val pipeline = new Pipeline().setStages(Array(assembler, indexer, classifier))
+
+    val paramGrid = new ParamGridBuilder().
+      addGrid(classifier.impurity, Seq("gini", "entropy")).
+      addGrid(classifier.maxDepth, Seq(1, 20)).
+      addGrid(classifier.maxBins, Seq(40, 300)).
+      addGrid(classifier.minInfoGain, Seq(0.0, 0.05)).
+      build()
+
+    val multiclassEval = new MulticlassClassificationEvaluator().
+      setLabelCol("Cover_Type").
+      setPredictionCol("prediction").
+      setMetricName("accuracy")
+
+    val validator = new TrainValidationSplit().
+      setSeed(Random.nextLong()).
       setEstimator(pipeline).
       setEvaluator(multiclassEval).
       setEstimatorParamMaps(paramGrid).
@@ -147,92 +216,91 @@ object RandomForestExampleML {
 
     val validatorModel = validator.fit(unencTrainData)
 
-    
     val bestModel = validatorModel.bestModel
 
-    println("====== And The Best Model is:" + bestModel.explainParams())
-    
-    println("===== carry on ====")
-    val forestModel = bestModel.asInstanceOf[PipelineModel].
-      stages.last.asInstanceOf[RandomForestClassificationModel]
+    println(bestModel.asInstanceOf[PipelineModel].stages.last.extractParamMap)
 
-    
-    println("########################PARAMETERS ARE:\n" + forestModel.extractParamMap)
-    println("########################NUMTREEES ARE:" + forestModel.numTrees)
-    forestModel.featureImportances.toArray.zip(unencTrainData.columns).
-      sorted.reverse.foreach(println)
-
-    println("========== TESTING ACCURACY ===========")
-    val preds = bestModel.transform(unencTestData)
-    val testAccuracy = multiclassEval.evaluate(preds)
-    println("=======AND THE ACCURANCY IS:" + testAccuracy)
-
-    //bestModel.transform(unencTestData.drop("Cover_Type")).select("prediction").show()
-		
+    val testAccuracy = multiclassEval.evaluate(bestModel.transform(unencTestData))
+    println(testAccuracy)
   }
-  
-  
-  def evaluateForest(data: DataFrame): Unit = {
 
-    val Array(trainData, testData) = data.randomSplit(Array(0.9, 0.1))
-    trainData.cache()
-    testData.cache()
-
+  def evaluateForest(trainData: DataFrame, testData: DataFrame): Unit = {
     val unencTrainData = unencodeOneHot(trainData)
     val unencTestData = unencodeOneHot(testData)
-    unencTrainData.cache()
-    unencTestData.cache()
 
-      
     val assembler = new VectorAssembler().
       setInputCols(unencTrainData.columns.filter(_ != "Cover_Type")).
       setOutputCol("featureVector")
-      
 
     val indexer = new VectorIndexer().
       setMaxCategories(40).
       setInputCol("featureVector").
       setOutputCol("indexedVector")
-      //fit(unencTrainData)
-    
-    val labelIndexer = new StringIndexer()
-      .setInputCol("Cover_Type")
-      .setOutputCol("indexedLabel")
-      .setHandleInvalid("skip")
-      //.fit(unencTrainData)
-      
-      
 
     val classifier = new RandomForestClassifier().
       setSeed(Random.nextLong()).
-      setLabelCol("indexedLabel"). //"Cover_Type").
+      setLabelCol("Cover_Type").
       setFeaturesCol("indexedVector").
       setPredictionCol("prediction").
       setImpurity("entropy").
       setMaxDepth(20).
       setMaxBins(300)
 
-    val pipeline = new Pipeline().setStages(Array(labelIndexer, assembler, indexer, classifier))// labelConverter))
+    val pipeline = new Pipeline().setStages(Array(assembler, indexer, classifier))
 
-    // Train model.  This also runs the indexers.
-    val model = pipeline.fit(unencTrainData)
+    val paramGrid = new ParamGridBuilder().
+      addGrid(classifier.minInfoGain, Seq(0.0, 0.05)).
+      addGrid(classifier.numTrees, Seq(1, 10)).
+      build()
+
+    val multiclassEval = new MulticlassClassificationEvaluator().
+      setLabelCol("Cover_Type").
+      setPredictionCol("prediction").
+      setMetricName("accuracy")
+
+    val validator = new TrainValidationSplit().
+      setSeed(Random.nextLong()).
+      setEstimator(pipeline).
+      setEvaluator(multiclassEval).
+      setEstimatorParamMaps(paramGrid).
+      setTrainRatio(0.9)
+
+    val validatorModel = validator.fit(unencTrainData)
+
+    val bestModel = validatorModel.bestModel
+
+    val forestModel = bestModel.asInstanceOf[PipelineModel].
+      stages.last.asInstanceOf[RandomForestClassificationModel]
+
+    println("----------BEST MODEL PARAMS -------------------------------------")
     
-    // Make predictions.
-    val predictions = model.transform(unencTestData)
-    // Select example rows to display.
-    println("------ displaying predictions -----------------")
-    predictions.select("prediction", "indexedLabel", "indexedVector").show(5)
-   
-    println("================== NOW CALCULATING BEST MODEL.. ================================")
-    findBestModel(classifier, unencTrainData, unencTestData, pipeline)
+    println(forestModel.extractParamMap)
+    println("---------  NUM TREES--------------------------------------")
+    
+    println(s" NUMTREES:${forestModel.getNumTrees}")
+    println("-----------FEATURES ------------------------------------")
+    
+    forestModel.featureImportances.toArray.zip(unencTrainData.columns).
+      sorted.reverse.foreach(println)
+    println("-----------------------------------------------")
+      
+    val testAccuracy = multiclassEval.evaluate(bestModel.transform(unencTestData))
+    println(testAccuracy)
+    println("-------------ACCURACY ---------------------------")
+    
+    //bestModel.transform(unencTestData.drop("Cover_Type")).select("prediction").show()
   }
 
   def generateDecisionTree(sconf: SparkConf, args: Array[String]): Unit = {
 
+    //val spark = SparkSession.builder().getOrCreate()
+    //import spark.implicits._
+
+    val sc = new SparkContext(sconf)
     SparkUtil.disableSparkLogging
     println(s"Attempting to load:${args(0)}")
 
-    val sc = new SparkContext("local[*]", "RandomForestExampleML")
+    //val sc = new SparkContext("local[*]", "RandomForestExampleML")
     val df = getDataFrame(sc, args)
 
     println("InputData:" + df.count())
@@ -241,13 +309,17 @@ object RandomForestExampleML {
       case 2 => df.sample(false, 0.001)
     }
 
+    val Array(trainData, testData) = reduced.randomSplit(Array(0.9, 0.1))
+    trainData.cache()
+    testData.cache()
+
     println("Unenconding one hot...")
-    evaluateForest(reduced) //trainData, testData)
-    
+    //evaluateForest(trainData, testData)
+    evaluate(trainData, testData)
   }
 
   def main(args: Array[String]) = {
-    val conf = new SparkConf().setAppName("Simple Application")
+    val conf = new SparkConf().setAppName("Simple Application").setMaster("local")
     generateDecisionTree(conf, args)
   }
 
