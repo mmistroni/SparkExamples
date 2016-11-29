@@ -2,6 +2,7 @@ import org.apache.spark.SparkContext
 import org.apache.spark.SparkConf
 import org.apache.spark.rdd._
 import org.apache.spark.SparkContext._
+import org.apache.spark.sql._
 
 /**
  * This application extracts form4 (insider trading) filing from an EdgarIndex file, grouping the result by
@@ -44,14 +45,14 @@ object EdgarExtractor {
     ordered.foreach(println)
   }
 
-  def main(args:Array[String]) = {
-    if (args.length < 1) {
-      println("Usage  EdgarExtractor <path to edgar file name>")
-      sys.exit()
-    }
+  
+  def readWithoutSchema(sqlContext:SQLContext, fileName:String) = {
     
-    val conf = new SparkConf().setAppName("Simple Application")
-    extractListingFromFile(conf, args)
+  }
+  
+  def main(args:Array[String]) = {
+ 
+  
   }
   
 }
