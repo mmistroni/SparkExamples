@@ -84,66 +84,9 @@ object DecisionTreeExampleML {
     val data = dataWithoutHeader.toDF(colNames:_*).withColumn("Cover_Type", col("Cover_Type").cast("double"))  
       
     data
-    /**
-    val colNames = Seq(
-      "Elevation", "Aspect", "Slope",
-      "Horizontal_Distance_To_Hydrology", "Vertical_Distance_To_Hydrology",
-      "Horizontal_Distance_To_Roadways",
-      "Hillshade_9am", "Hillshade_Noon", "Hillshade_3pm",
-      "Horizontal_Distance_To_Fire_Points") ++ (
-        (0 until 4).map(i => s"Wilderness_Area_$i")) ++ (
-          (0 until 40).map(i => s"Soil_Type_$i")) ++ Seq("Cover_Type")
-
-    val data = dataWithoutHeader.toDF(colNames: _*)
-
-    val withCoverTypeDoubled = data.withColumn("Cover_TypeDbl", col("Cover_Type").cast("double")).drop("Cover_Type")
-      .withColumnRenamed("Cover_TypeDbl", "Cover_Type")
-
-    withCoverTypeDoubled
-  	**/
+      
   }
   
-
-  /** 
-  def unencodeOneHot(data: DataFrame): DataFrame = {
-    val wildernessCols = (0 until 4).map(i => s"Wilderness_Area_$i").toArray
-
-    val wildernessAssembler = new VectorAssembler().
-      setInputCols(wildernessCols).
-      setOutputCol("wilderness")
-
-    val unhotUDF = udf((vec: Vector) => vec.toArray.indexOf(1.0).toDouble)
-
-    val withWilderness = wildernessAssembler.transform(data)
-
-    var droppedDf = withWilderness
-    println("Before we have:" + droppedDf.columns.size)
-    for (col <- wildernessCols)
-      droppedDf = droppedDf.drop(col)
-    println("After we haveL" + droppedDf.columns.size)
-    println(droppedDf.columns.mkString(","))
-
-    val withAddedWilderness = droppedDf.withColumn("wilderness", unhotUDF(col("wilderness")))
-
-    val soilCols = (0 until 40).map(i => s"Soil_Type_$i").toArray
-    val soilAssembler = new VectorAssembler().
-      setInputCols(soilCols).
-      setOutputCol("soil")
-
-    val transformedWilderness = soilAssembler.transform(withAddedWilderness)
-    var noSoilDf = transformedWilderness
-
-    println("Before we have:" + noSoilDf.columns.size)
-    for (soilCol <- soilCols)
-      noSoilDf = noSoilDf.drop(soilCol)
-
-    println("After we have:" + noSoilDf.columns.size)
-
-    val withOneHotSoil = noSoilDf.withColumn("soil", unhotUDF(col("soil")))
-
-    withOneHotSoil
-  }
-	**/
 
   def evaluate(trainData: DataFrame, testData: DataFrame): Unit = {
 
@@ -178,33 +121,8 @@ object DecisionTreeExampleML {
       setEstimatorParamMaps(paramGrid).
       setTrainRatio(0.9)
 
-    //spark.sparkContext.setLogLevel("DEBUG")
-    val validatorModel = validator.fit(trainData)
-    /*
-    DEBUG TrainValidationSplit: Got metric 0.6315930234779452 for model trained with {
-      dtc_ca0f064d06dd-impurity: gini,
-      dtc_ca0f064d06dd-maxBins: 10,
-      dtc_ca0f064d06dd-maxDepth: 1,
-      dtc_ca0f064d06dd-minInfoGain: 0.0
-    }.
-    */
-    //spark.sparkContext.setLogLevel("WARN")
-
-    val bestModel = validatorModel.bestModel
-
-    println("============== BEST MODEL ")
-    println(bestModel.asInstanceOf[PipelineModel].stages.last.extractParamMap)
-
-    println("============== VALIDATION METRICS ")
-    println(validatorModel.validationMetrics.max)
-
-    val testAccuracy = multiclassEval.evaluate(bestModel.transform(testData))
-    println("============== TEST ACCURACY MODEL ")
-    println(testAccuracy)
-    val trainAccuracy = multiclassEval.evaluate(bestModel.transform(trainData))
-    println("============== TRAIN ACCURACY MODEL ")
-    
-    println(trainAccuracy)
+    SparkUtil.findBestDecisionTreeModel(multiclassEval, validator, trainData, testData)
+      
   }
   
   

@@ -8935,31 +8935,8 @@
 [0m[[0mdebug[0m] [0mdependency descriptor has been mediated: MergedDescriptors(dependency: org.scala-lang#scala-library;2.10.6 {scala-tool=[default, optional(default)]},dependency: org.scala-lang#scala-library;2.10.6 {provided=[default(compile)]}) => dependency: org.scala-lang#scala-library;2.10.6 {scala-tool=[default, optional(default)], provided=[default(compile)]}[0m
 [0m[[0minfo[0m] [0mResolving org.scala-lang#jline;2.10.6 ...[0m
 [0m[[0mdebug[0m] [0msbt-chain: Checking cache for: dependency: org.scala-lang#jline;2.10.6 {optional=[compile(*), master(compile)]}[0m
-[0m[[0minfo[0m] [0mResolving org.scala-lang#jline;2.10.6 ...[0m
-[0m[[0mdebug[0m] [0msbt-chain-delegate: Checking cache for: dependency: org.scala-lang#jline;2.10.6 {optional=[compile(*), master(compile)]}[0m
-[0m[[0mdebug[0m] [0m		tried https://repo.typesafe.com/typesafe/ivy-releases/org.scala-lang/jline/2.10.6/ivys/ivy.xml[0m
-[0m[[0mdebug[0m] [0mCLIENT ERROR: Not Found url=https://repo.typesafe.com/typesafe/ivy-releases/org.scala-lang/jline/2.10.6/ivys/ivy.xml[0m
-[0m[[0mdebug[0m] [0m	typesafe-ivy-releases: no ivy file found for org.scala-lang#jline;2.10.6[0m
-[0m[[0mdebug[0m] [0m		tried https://repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.scala-lang/jline/2.10.6/ivys/ivy.xml[0m
-[0m[[0mdebug[0m] [0mCLIENT ERROR: Not Found url=https://repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.scala-lang/jline/2.10.6/ivys/ivy.xml[0m
-[0m[[0mdebug[0m] [0m	sbt-plugin-releases: no ivy file found for org.scala-lang#jline;2.10.6[0m
-[0m[[0mdebug[0m] [0m		tried C:\Users\marco\.ivy2\local\org.scala-lang\jline\2.10.6\ivys\ivy.xml[0m
-[0m[[0mdebug[0m] [0m	local: no ivy file found for org.scala-lang#jline;2.10.6[0m
-[0m[[0mdebug[0m] [0m		tried https://repo1.maven.org/maven2/org/scala-lang/jline/2.10.6/jline-2.10.6.pom[0m
-[0m[[0mdebug[0m] [0m	public: found md file for org.scala-lang#jline;2.10.6[0m
-[0m[[0mdebug[0m] [0m		=> https://repo1.maven.org/maven2/org/scala-lang/jline/2.10.6/jline-2.10.6.pom (2.10.6)[0m
-[0m[[0mdebug[0m] [0mdownloading https://repo1.maven.org/maven2/org/scala-lang/jline/2.10.6/jline-2.10.6.pom ...[0m
-[0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/scala-lang/jline/2.10.6/jline-2.10.6.pom[0m
-[0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/scala-lang/jline/2.10.6/jline-2.10.6.pom.sha1[0m
-[0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/org/scala-lang/jline/2.10.6/jline-2.10.6.pom[0m
-[0m[[0mdebug[0m] [0m	[SUCCESSFUL ] org.scala-lang#jline;2.10.6!jline.pom(pom.original) (109ms)[0m
-[0m[[0mdebug[0m] [0m		tried https://repo.typesafe.com/typesafe/ivy-releases/org.scala-lang/jline/2.10.6/jars/jline.jar[0m
-[0m[[0mdebug[0m] [0mCLIENT ERROR: Not Found url=https://repo.typesafe.com/typesafe/ivy-releases/org.scala-lang/jline/2.10.6/jars/jline.jar[0m
-[0m[[0mdebug[0m] [0m		tried https://repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.scala-lang/jline/2.10.6/jars/jline.jar[0m
-[0m[[0mdebug[0m] [0mCLIENT ERROR: Not Found url=https://repo.scala-sbt.org/scalasbt/sbt-plugin-releases/org.scala-lang/jline/2.10.6/jars/jline.jar[0m
-[0m[[0mdebug[0m] [0m		tried C:\Users\marco\.ivy2\local\org.scala-lang\jline\2.10.6\jars\jline.jar[0m
-[0m[[0mdebug[0m] [0m		tried https://repo1.maven.org/maven2/org/scala-lang/jline/2.10.6/jline-2.10.6.jar[0m
-[0m[[0mdebug[0m] [0m	found org.scala-lang#jline;2.10.6 in public[0m
+[0m[[0mdebug[0m] [0msbt-chain: module revision found in cache: org.scala-lang#jline;2.10.6[0m
+[0m[[0mdebug[0m] [0m	found org.scala-lang#jline;2.10.6 in sbt-chain[0m
 [0m[[0mdebug[0m] [0m== resolving dependencies org.scala-lang#scala-compiler;2.10.6->org.scala-lang#jline;2.10.6 [optional->compile(*)][0m
 [0m[[0mdebug[0m] [0m== resolving dependencies org.scala-lang#jline;2.10.6->org.fusesource.jansi#jansi;1.4 [compile->master(compile)][0m
 [0m[[0mdebug[0m] [0mdependency descriptor has been mediated: dependency: org.scala-lang#scala-library;2.10.6 {compile=[compile(*), master(compile)], runtime=[runtime(*)]} => dependency: org.scala-lang#scala-library;2.10.6 {compile=[compile(*), master(compile)], runtime=[runtime(*)]}[0m
@@ -9072,14 +9049,9 @@
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.scala-sbt#test-interface;1.0!test-interface.jar[0m
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.scala-sbt#apply-macro;0.13.13!apply-macro.jar[0m
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.scala-sbt#template-resolver;0.1!template-resolver.jar[0m
-[0m[[0mdebug[0m] [0m		tried https://repo1.maven.org/maven2/org/scala-lang/jline/2.10.6/jline-2.10.6.jar[0m
-[0m[[0minfo[0m] [0mdownloading https://repo1.maven.org/maven2/org/scala-lang/jline/2.10.6/jline-2.10.6.jar ...[0m
-[0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/scala-lang/jline/2.10.6/jline-2.10.6.jar[0m
-[0m[[0mdebug[0m] [0m	public: downloading https://repo1.maven.org/maven2/org/scala-lang/jline/2.10.6/jline-2.10.6.jar.sha1[0m
-[0m[[0mdebug[0m] [0msha1 OK for https://repo1.maven.org/maven2/org/scala-lang/jline/2.10.6/jline-2.10.6.jar[0m
-[0m[[0minfo[0m] [0m	[SUCCESSFUL ] org.scala-lang#jline;2.10.6!jline.jar (252ms)[0m
+[0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.scala-lang#jline;2.10.6!jline.jar[0m
 [0m[[0mdebug[0m] [0m	[NOT REQUIRED] org.fusesource.jansi#jansi;1.4!jansi.jar[0m
-[0m[[0mdebug[0m] [0m:: resolution report :: resolve 8425ms :: artifacts dl 484ms[0m
+[0m[[0mdebug[0m] [0m:: resolution report :: resolve 10038ms :: artifacts dl 341ms[0m
 [0m[[0mdebug[0m] [0m	report for default#sparkexamples-build;0.1-SNAPSHOT compile produced in C:\Users\marco\SparkExamples\project\target\resolution-cache\reports\default-sparkexamples-build-compile.xml[0m
 [0m[[0mdebug[0m] [0m	report for default#sparkexamples-build;0.1-SNAPSHOT runtime produced in C:\Users\marco\SparkExamples\project\target\resolution-cache\reports\default-sparkexamples-build-runtime.xml[0m
 [0m[[0mdebug[0m] [0m	report for default#sparkexamples-build;0.1-SNAPSHOT test produced in C:\Users\marco\SparkExamples\project\target\resolution-cache\reports\default-sparkexamples-build-test.xml[0m
@@ -9093,5 +9065,5 @@
 [0m[[0mdebug[0m] [0m	report for default#sparkexamples-build;0.1-SNAPSHOT docs produced in C:\Users\marco\SparkExamples\project\target\resolution-cache\reports\default-sparkexamples-build-docs.xml[0m
 [0m[[0mdebug[0m] [0m	report for default#sparkexamples-build;0.1-SNAPSHOT pom produced in C:\Users\marco\SparkExamples\project\target\resolution-cache\reports\default-sparkexamples-build-pom.xml[0m
 [0m[[0mdebug[0m] [0m	report for default#sparkexamples-build;0.1-SNAPSHOT scala-tool produced in C:\Users\marco\SparkExamples\project\target\resolution-cache\reports\default-sparkexamples-build-scala-tool.xml[0m
-[0m[[0mdebug[0m] [0m	resolve done (8425ms resolve - 484ms download)[0m
+[0m[[0mdebug[0m] [0m	resolve done (10038ms resolve - 341ms download)[0m
 [0m[[0minfo[0m] [0mDone updating.[0m

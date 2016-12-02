@@ -2,6 +2,11 @@ import org.apache.spark.sql._
 import org.apache.spark.rdd.RDD
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.mllib.linalg.{ Vector, Vectors }
+import org.apache.spark.ml.{ Pipeline, PipelineModel }
+import org.apache.spark.ml.tuning.{ ParamGridBuilder, TrainValidationSplit }
+import org.apache.spark.ml.evaluation.{ RegressionEvaluator, MulticlassClassificationEvaluator }
+
+
 
 
 object SparkUtil {
@@ -32,5 +37,44 @@ object SparkUtil {
     rddData.map(seq => createLabeledPoint(seq, targetFeatureIdx))
   }
 
+  
+  def findBestDecisionTreeModel(multiclassEval:MulticlassClassificationEvaluator,
+                                validator:TrainValidationSplit,
+                                trainData:DataFrame, 
+                                testData:DataFrame) = {
+    
+    //spark.sparkContext.setLogLevel("DEBUG")
+    val validatorModel = validator.fit(trainData)
+    /*
+    DEBUG TrainValidationSplit: Got metric 0.6315930234779452 for model trained with {
+      dtc_ca0f064d06dd-impurity: gini,
+      dtc_ca0f064d06dd-maxBins: 10,
+      dtc_ca0f064d06dd-maxDepth: 1,
+      dtc_ca0f064d06dd-minInfoGain: 0.0
+    }.
+    */
+    //spark.sparkContext.setLogLevel("WARN")
+
+    val bestModel = validatorModel.bestModel
+
+    println("============== BEST MODEL ")
+    println(bestModel.asInstanceOf[PipelineModel].stages.last.extractParamMap)
+
+    println("============== VALIDATION METRICS ")
+    println(validatorModel.validationMetrics.max)
+
+    val testAccuracy = multiclassEval.evaluate(bestModel.transform(testData))
+    println("============== TEST ACCURACY MODEL ")
+    println(testAccuracy)
+    val trainAccuracy = multiclassEval.evaluate(bestModel.transform(trainData))
+    println("============== TRAIN ACCURACY MODEL ")
+    
+    println(trainAccuracy)
+
+    
+  }
+  
+  
+  
   
 }

@@ -9,7 +9,7 @@
 		extra-sbtVersion="0.13"
 		conf="scala-tool"
 		confs="compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, sources, docs, pom, scala-tool"
-		date="20161115224938"/>
+		date="20161202231240"/>
 	<dependencies>
 		<module organisation="org.scala-lang" name="scala-compiler">
 			<revision name="2.10.6" status="release" pubdate="20150918053547" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://www.scala-lang.org/" downloaded="false" searched="false" default="false" conf="default, compile, runtime, optional, optional(default), master" position="0">
@@ -24,14 +24,13 @@
 			</revision>
 		</module>
 		<module organisation="org.scala-lang" name="jline">
-			<revision name="2.10.6" status="release" pubdate="20150918103534" resolver="public" artresolver="public" homepage="http://www.scala-lang.org/" downloaded="true" searched="true" default="false" conf="compile, master(compile), compile(*), master" position="3">
-				<license name="BSD-like" url="http://www.scala-lang.org/downloads/license.html
-			"/>
+			<revision name="2.10.6" status="release" pubdate="20150918103534" resolver="sbt-chain" artresolver="sbt-chain" homepage="http://www.scala-lang.org/" downloaded="false" searched="false" default="false" conf="compile, master(compile), compile(*), master" position="3">
+				<license name="BSD-like" url="http://www.scala-lang.org/downloads/license.html    "/>
 				<license name="The BSD License" url="http://www.opensource.org/licenses/bsd-license.php"/>
-				<metadata-artifact status="successful" details="" size="2030" time="109" location="C:\Users\marco\.ivy2\cache\org.scala-lang\jline\ivy-2.10.6.xml" searched="true" original-local-location="C:\Users\marco\.ivy2\cache\org.scala-lang\jline\ivy-2.10.6.xml.original" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/scala-lang/jline/2.10.6/jline-2.10.6.pom"/>
+				<metadata-artifact status="no" details="" size="2773" time="0" location="C:\Users\marco\.ivy2\cache\org.scala-lang\jline\ivy-2.10.6.xml" searched="false" origin-is-local="false" origin-location="https://repo1.maven.org/maven2/org/scala-lang/jline/2.10.6/jline-2.10.6.pom"/>
 				<caller organisation="org.scala-lang" name="scala-compiler" conf="optional" rev="2.10.6" rev-constraint-default="2.10.6" rev-constraint-dynamic="2.10.6" callerrev="2.10.6"/>
 				<artifacts>
-					<artifact name="jline" type="jar" ext="jar" status="successful" details="" size="164623" time="252" location="C:\Users\marco\.ivy2\cache\org.scala-lang\jline\jars\jline-2.10.6.jar">
+					<artifact name="jline" type="jar" ext="jar" status="no" details="" size="164623" time="0" location="C:\Users\marco\.ivy2\cache\org.scala-lang\jline\jars\jline-2.10.6.jar">
 						<origin-location is-local="false" location="https://repo1.maven.org/maven2/org/scala-lang/jline/2.10.6/jline-2.10.6.jar"/>
 					</artifact>
 				</artifacts>

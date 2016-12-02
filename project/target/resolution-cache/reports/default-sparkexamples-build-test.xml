@@ -9,7 +9,7 @@
 		extra-sbtVersion="0.13"
 		conf="test"
 		confs="compile, runtime, test, provided, optional, compile-internal, runtime-internal, test-internal, plugin, sources, docs, pom, scala-tool"
-		date="20161115224938"/>
+		date="20161202231240"/>
 	<dependencies>
 		<module organisation="com.typesafe.sbteclipse" name="sbteclipse-plugin">
 			<revision name="2.5.0" status="release" pubdate="20140430121620" resolver="sbt-chain" artresolver="sbt-chain" extra-scalaVersion="2.10" extra-sbtVersion="0.13" downloaded="false" searched="false" default="false" conf="compile, default(compile)" position="23">
