@@ -2,7 +2,7 @@
 name := "SparkExamples"
 version := "1.0"
 scalaVersion := "2.11.8"
-val sparkVersion = "2.0.1"
+val sparkVersion = "2.1.0"
 
 // Add a single dependency
 libraryDependencies += "junit" % "junit" % "4.8" % "test"
@@ -13,8 +13,10 @@ libraryDependencies += "org.apache.spark"%%"spark-core"   % sparkVersion
 libraryDependencies += "org.apache.spark"%%"spark-streaming"   % sparkVersion 
 libraryDependencies += "org.apache.spark"%%"spark-mllib"   % sparkVersion 
 libraryDependencies += "org.apache.spark"%%"spark-streaming-flume-sink" % sparkVersion     
-libraryDependencies += "org.apache.spark"%%"spark-sql"   % sparkVersion 
+libraryDependencies += "org.apache.spark"%%"spark-streaming-kafka-0-10" % sparkVersion     
 
+libraryDependencies += "org.apache.spark"%%"spark-sql"   % sparkVersion 
+libraryDependencies += "org.mongodb.spark" % "mongo-spark-connector_2.11" % "2.0.0"
 
 resolvers += "MavenRepository" at "https://mvnrepository.com/"
 

@@ -38,6 +38,39 @@ object SparkUtil {
   }
 
   
+  def storeDataInMongo(mongoUrl:String, tableName:String, dataFrame:DataFrame) = {
+    import org.apache.spark.sql._
+    import com.mongodb.spark.sql._
+    import com.mongodb.spark._
+    
+    println(s"Storing data into $mongoUrl for table $tableName")
+    val dfWriter = dataFrame.write
+    println(s"Saving ${dataFrame.count}  into $tableName") 
+    dfWriter.option("spark.mongodb.output.uri", s"$mongoUrl.$tableName")
+    
+    MongoSpark.save(dfWriter)
+    
+  }
+  
+  def readDataFrameFromMongo(mongoDbUrl:String, spark:SparkSession):DataFrame = {
+    println(s"REading data from MongoUrl:$mongoDbUrl")
+    
+    spark.sqlContext.read.format("com.mongodb.spark.sql.DefaultSource")
+                                     .option("spark.mongodb.input.uri", mongoDbUrl).load()
+  }
+  
+  
+  def loadDataFrameFromFile(fileName:String, headerOption:Boolean, inferSchema:Boolean,
+                            session:SparkSession) = {
+    session.sqlContext.read.format("com.databricks.spark.csv")
+                                        .option("header", headerOption)
+                                        .option("inferSchema", inferSchema)
+                                        .load(fileName)
+    
+  }
+  
+  
+  
   def findBestDecisionTreeModel(multiclassEval:MulticlassClassificationEvaluator,
                                 validator:TrainValidationSplit,
                                 trainData:DataFrame, 

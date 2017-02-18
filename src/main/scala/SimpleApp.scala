@@ -50,8 +50,9 @@ object SimpleApp {
     println(s"TheJsonContent with No SChema has ${jsonContentNoSchema.count()}")   
     // with schema
     
-    val jsonRdd = sc.textFile("file:///c:/tmp/1973-01-11.json")
+    
     import sqlContext.implicits._
+    val jsonRdd = sc.textFile("file:///c:/tmp/1973-01-11.json")
     
     val schema = (new StructType).add("hour", StringType).add("month", StringType)
                   .add("second", StringType).add("year", StringType)
