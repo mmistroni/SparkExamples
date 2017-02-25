@@ -38,16 +38,24 @@ object SparkUtil {
   }
 
   
-  def storeDataInMongo(mongoUrl:String, tableName:String, dataFrame:DataFrame) = {
+  def storeDataInMongo(mongoUrl:String, tableName:String, dataFrame:DataFrame,
+                        appendMode:Boolean=false) = {
     import org.apache.spark.sql._
     import com.mongodb.spark.sql._
     import com.mongodb.spark._
     
-    println(s"Storing data into $mongoUrl for table $tableName")
     val dfWriter = dataFrame.write
-    println(s"Saving ${dataFrame.count}  into $tableName") 
-    dfWriter.option("spark.mongodb.output.uri", s"$mongoUrl.$tableName")
+    val mode = appendMode match {
+      case true => "append"
+      case false => "insert"
+    }
     
+    println(s"$mode data into $mongoUrl for table $tableName.AppendMode:$appendMode")
+    
+    dfWriter.option("spark.mongodb.output.uri", s"$mongoUrl")
+                        .option("collection", tableName)
+                        .mode(mode)
+    println(s"$mode ${dataFrame.count}  into $tableName") 
     MongoSpark.save(dfWriter)
     
   }

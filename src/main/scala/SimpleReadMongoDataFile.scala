@@ -14,11 +14,15 @@ object SimpleReadMongoDataFile {
 
   def createDataFrameFromRDD(existingRdd:RDD[String]):DataFrame = null
   
-  def loadDataFrame(spark:SparkSession):DataFrame = {
+  def loadDataFrame(spark:SparkSession, fileName:String):DataFrame = {
+    
+    println(s"Loadign data from file:$fileName")
+    
+    
     val sharesDf = spark.sqlContext.read.format("com.databricks.spark.csv")
                                         .option("header", false)
                                         .option("inferSchema", true)
-                                        .load("file:///c:/Users/marco/SparkExamples/tmp/shares.csv")
+                                        .load(fileName)
     
     
     println("Loaded:" + sharesDf.count())
@@ -59,18 +63,29 @@ object SimpleReadMongoDataFile {
   
   def main(args: Array[String]) = {
     
-    val tableName  =args(0)
+    if (args.size < 2) {
+      println ("Usage:SimpleReadMongoDataFile <tableName> <inputDataFile>")
+      System.exit(0)
+    }
     
-    println(s"Running application against table:$tableName")
+    
+    val tableName  =args(0)
+    val inputDataFile = args(1)
+    
+    println(s"Running application against table:$tableName, sourcing data from file:$inputDataFile")
     
     val spark = SparkSession
          .builder()
          .master("local")
          .appName("Spark Reading Share CSV file")
          .getOrCreate() 
+    spark.conf.set("spark.driver.memory", "4g") 
+    
+    val sharesDf = loadDataFrame(spark, inputDataFile)
     
     
-    val sharesDf = loadDataFrame(spark)
+    println("Spark Properties :" + spark.conf.getAll.mkString(","))
+    
     
     println("LoadedData has ${sharesDf.count} rows...")
     
@@ -82,7 +97,7 @@ object SimpleReadMongoDataFile {
     
     println("...SAving to mongo...")
     
-    storeDataInMongo("mongodb://localhost:27017/test", tableName, optimalDf)
+    storeDataInMongo("mongodb://localhost:27017/test", tableName, optimalDf, appendMode=true)
     
     println("Selecting agian.,.,.")
     

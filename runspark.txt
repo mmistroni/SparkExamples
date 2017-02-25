@@ -1,0 +1,1 @@
+C:\Users\marco\SparkExamples>java -Xms256m -Xmx1024m -jar  target\scala-2.11\spark-examples.jar  share_tests file:///c:/Users/marco/SparkExamples/shares.csv
