@@ -1,0 +1,37 @@
+############################################################
+# Dockerfile to build Container to be used to create Spark Cluster for Ubuntu 14.04
+# Based on Ubuntu
+############################################################
+# Set the base image to Ubuntu
+FROM ubuntu:14.04
+RUN apt-get update
+# Common
+RUN echo "Installing common packages"
+RUN apt-get install -y vim
+RUN apt-get install -y curl
+RUN apt-get install -y python-software-properties
+RUN apt-get install -y python-pip
+RUN apt-get install -y wget
+RUN apt-get update
+
+RUN echo "Setting AWS global variables..."
+ENV AWS_ACCESS_KEY_ID="<YOURACCESSKEY>"
+ENV AWS_SECRET_ACCESS_KEY="<YOURSECRETKEY>"
+
+# AWS Cli
+RUN echo "Installing AWSCLI..."
+RUN pip install awscli
+# Git
+RUN echo "Installing git...."
+RUN apt-get install -y git
+# Spark EC2 project
+RUN echo "Downloading amplab 2.0 branches"
+RUN git clone https://github.com/amplab/spark-ec2 --branch branch-2.0
+
+# Copying access key to instance
+RUN echo "Copying access key to container.."
+ADD <YOUR .pem FILE> /spark-ec2
+
+# Setting workdif to spark-ec2
+RUN echo "Setting workdir to spark-ec2"
+WORKDIR /spark-ec2

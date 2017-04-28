@@ -82,14 +82,6 @@ object ItalianReferendumDecisionTreeExampleML {
     
     //spark.sparkContext.setLogLevel("DEBUG")
     val validatorModel = validator.fit(trainData)
-    /*
-    DEBUG TrainValidationSplit: Got metric 0.6315930234779452 for model trained with {
-      dtc_ca0f064d06dd-impurity: gini,
-      dtc_ca0f064d06dd-maxBins: 10,
-      dtc_ca0f064d06dd-maxDepth: 1,
-      dtc_ca0f064d06dd-minInfoGain: 0.0
-    }.
-    */
     //spark.sparkContext.setLogLevel("WARN")
 
     val bestModel = validatorModel.bestModel

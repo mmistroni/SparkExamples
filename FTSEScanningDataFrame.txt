@@ -1,0 +1,31 @@
+! val l = List(1,2,3,2,4,3,1,5); l.zip(l.drop(1)).map{ case (a,b) => (s"$a -> $b" ,a < b) }
+
+In Spark the one above cannot be done!
+
+SOLUTION 1:
+
+we have to go through this
+
+val l =sc.parallelize(List(1,2,3,2,4,3,1,5))
+val l2 = l.zipWithIndex.filter{case(item,idx) => idx > 0}.map{case(item,idx) => item} # getting all but first
+# then we add a zero to the second so we can zip it
+
+val l3  = l2.union(sc.parallelize(0))
+
+# rpartition to same '#
+val lr = l.repartition(1)
+val l3r = l3.repartition(1)
+
+#then we zip them together
+val zipped = lr.zip(res19r)
+# then we map
+val mapped = res37.map{case (item, next) => (s"$item@$next", next>item)}
+# and from here we extract
+
+SOLUTION 2
+We create two RDD using ZipWithIndex
+One that goes from 0 to n-1
+the other from 1 to n
+and we zip them together to find movements
+Then we join all the dataframes on date using reduce
+

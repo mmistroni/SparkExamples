@@ -3,12 +3,16 @@ name := "SparkExamples"
 version := "1.0"
 scalaVersion := "2.11.8"
 val sparkVersion = "2.1.0"
+parallelExecution in Test := false
 
 // Add a single dependency
 libraryDependencies += "junit" % "junit" % "4.8" % "test"
 libraryDependencies ++= Seq("org.slf4j" % "slf4j-api" % "1.7.5",
                             "org.slf4j" % "slf4j-simple" % "1.7.5",
                             "org.clapper" %% "grizzled-slf4j" % "1.0.2")
+libraryDependencies +=    "org.scalatest" %% "scalatest" % "2.2.5" % "test"
+libraryDependencies +=    "org.specs2" %% "specs2" % "2.3.11" % "test"
+
 libraryDependencies += "org.apache.spark"%%"spark-core"   % sparkVersion 
 libraryDependencies += "org.apache.spark"%%"spark-streaming"   % sparkVersion 
 libraryDependencies += "org.apache.spark"%%"spark-mllib"   % sparkVersion 
@@ -17,6 +21,8 @@ libraryDependencies += "org.apache.spark"%%"spark-streaming-kafka-0-10" % sparkV
 
 libraryDependencies += "org.apache.spark"%%"spark-sql"   % sparkVersion 
 libraryDependencies += "org.mongodb.spark" % "mongo-spark-connector_2.11" % "2.0.0"
+libraryDependencies += "com.holdenkarau" %% "spark-testing-base" % "2.1.0_0.6.0" % "test"
+libraryDependencies += "org.apache.spark" %% "spark-hive"  % sparkVersion % "test"
 
 resolvers += "MavenRepository" at "https://mvnrepository.com/"
 

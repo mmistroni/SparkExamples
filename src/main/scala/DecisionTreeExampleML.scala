@@ -133,7 +133,7 @@ object DecisionTreeExampleML {
 
     val sc = new SparkContext("local[*]", "DecisionTreeExampleML")
     val df = getDataFrame(sc, args)
-
+    
     println("InputData:" + df.count())
     val reduced = args.size match {
       case 1 => df

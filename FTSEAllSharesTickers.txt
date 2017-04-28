@@ -1,0 +1,33 @@
+RDSB.L,ULVR.L,HSBA.L,BATS.L,GSK.L,BP.L,VOD.L,AZN.L,CRDA.L,DGE.L,BT.L,LLOY.L,BLT.L,NG.L,IMB.L,RIO.L,PRU.L,RBS.L,BARC.L,CCL.L,SHP.L,CPG.L
+
+^FTSE
+
+Link to download all data:
+
+http://chart.finance.yahoo.com/table.csv?s=ULVR.L&a=1&b=6&c=2017&d=2&e=6&f=2017&g=d&ignore=.csv
+We can use the Yahoo Downloader part of MarketSectorGauge to store data as DataFrame
+
+- The easiest way to do that is to create a caseclass with the following fields
+
+- Date  string (asOfDate)
+- Open  float
+- High  float
+- Low   float
+- Close float
+- AdjClose float
+- Volume long
+
+We should be able to write a funtion which, for each ticker,
+- retrieve the data and save it as  csv.
+- extend it to see if value has increased or decreased from previous , storing as 1 or 0
+
+Then we can download FTSE and check
+
+To dlownload all data we can use this, from MarketSectorGauge
+
+val dd = new DataDownloader{}
+val url = "http://chart.finance.yahoo.com/table.csv?s=HSBA.L&a=3&b=18&c=2016&d=3&e=18&f=2017&g=d&ignore=.csv"
+
+val res = dd.downloadCSV(url)
+val valonly = res.tail
+val mapped = valonly.map(lst => (lst(0), lst(4).toFloat))

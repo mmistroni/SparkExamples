@@ -9,7 +9,7 @@ import org.apache.spark.SparkConf
 import org.apache.spark.sql._
 import org.apache.spark.rdd._
 import org.apache.spark.sql.functions._
-
+import SparkUtil._
 object SimpleReadMongoDataFile {
 
   def createDataFrameFromRDD(existingRdd:RDD[String]):DataFrame = null
@@ -68,6 +68,8 @@ object SimpleReadMongoDataFile {
       System.exit(0)
     }
     
+    println("Disabling logging")
+    //setupLogging
     
     val tableName  =args(0)
     val inputDataFile = args(1)
@@ -93,7 +95,6 @@ object SimpleReadMongoDataFile {
     
     val optimalDf = normalizeData(sharesDf)
     
-    import SparkUtil.storeDataInMongo
     
     println("...SAving to mongo...")
     

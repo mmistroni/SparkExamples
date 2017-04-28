@@ -1,0 +1,15 @@
+-- Starting zookeper
+type zkserver
+
+-- Starting kafka
+from kafka install dir
+
+.\bin\windows\kafka-server-start.bat .\config\server.properties
+
+-- creating topics
+C:\Users\marco\kafka_2.11-0.10.1.1\bin\windows>kafka-topics.bat --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic testLogs
+
+-- pushing data to topic
+
+C:\Users\marco\kafka_2.11-0.10.1.1\bin\windows>kafka-console-producer --broker-list localhost:9092  --topic testLogs < access_log.txt
+
