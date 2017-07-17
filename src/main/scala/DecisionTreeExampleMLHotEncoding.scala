@@ -16,6 +16,9 @@ import org.apache.spark.sql.types._
 import org.apache.spark.ml.{ Pipeline, PipelineModel }
 import org.apache.spark.sql.functions._
 import scala.util.Random
+import org.apache.log4j.{Level, Logger}    
+ 
+
 
 /**
  * This example builds a random forest tree and it's based on this video
@@ -51,6 +54,8 @@ object DecisionTreeExampleMLHotEncoding {
   import org.apache.spark.SparkConf
   import org.apache.spark.SparkContext
 
+  val logger: Logger = Logger.getLogger("DecisionTree.Sample.MLHotEncoding")
+  
   def getDataFrame(sc: SparkContext, args: Array[String]): DataFrame = {
 
     val filename = args.size match {
@@ -58,7 +63,7 @@ object DecisionTreeExampleMLHotEncoding {
       case 2 => "file:///c:/Users/marco/SparkExamples/src/main/resources/covtype.data.gz"
     }
 
-    println(s"Loading data from $filename")
+    logger.info(s"Loading data from $filename")
 
     val sqlContext = new SQLContext(sc)
 
@@ -68,23 +73,6 @@ object DecisionTreeExampleMLHotEncoding {
       .option("header", "false")
       .load(filename)
 
-      
-    val colNames = Seq(
-        "Elevation", "Aspect", "Slope",
-        "Horizontal_Distance_To_Hydrology", "Vertical_Distance_To_Hydrology",
-        "Horizontal_Distance_To_Roadways",
-        "Hillshade_9am", "Hillshade_Noon", "Hillshade_3pm",
-        "Horizontal_Distance_To_Fire_Points"
-      ) ++ (
-        (0 until 4).map(i => s"Wilderness_Area_$i")
-      ) ++ (
-        (0 until 40).map(i => s"Soil_Type_$i")
-      ) ++ Seq("Cover_Type")
-
-    val data = dataWithoutHeader.toDF(colNames:_*).withColumn("Cover_Type", col("Cover_Type").cast("double"))  
-      
-    data
-    /**
     val colNames = Seq(
       "Elevation", "Aspect", "Slope",
       "Horizontal_Distance_To_Hydrology", "Vertical_Distance_To_Hydrology",
@@ -94,15 +82,10 @@ object DecisionTreeExampleMLHotEncoding {
         (0 until 4).map(i => s"Wilderness_Area_$i")) ++ (
           (0 until 40).map(i => s"Soil_Type_$i")) ++ Seq("Cover_Type")
 
-    val data = dataWithoutHeader.toDF(colNames: _*)
+    val data = dataWithoutHeader.toDF(colNames: _*).withColumn("Cover_Type", col("Cover_Type").cast("double"))
 
-    val withCoverTypeDoubled = data.withColumn("Cover_TypeDbl", col("Cover_Type").cast("double")).drop("Cover_Type")
-      .withColumnRenamed("Cover_TypeDbl", "Cover_Type")
-
-    withCoverTypeDoubled
-  	**/
+    data
   }
-  
 
   def unencodeOneHot(data: DataFrame): DataFrame = {
     val wildernessCols = (0 until 4).map(i => s"Wilderness_Area_$i").toArray
@@ -116,11 +99,11 @@ object DecisionTreeExampleMLHotEncoding {
     val withWilderness = wildernessAssembler.transform(data)
 
     var droppedDf = withWilderness
-    println("Before we have:" + droppedDf.columns.size)
+    logger.info("Before we have:" + droppedDf.columns.size)
     for (col <- wildernessCols)
       droppedDf = droppedDf.drop(col)
-    println("After we haveL" + droppedDf.columns.size)
-    println(droppedDf.columns.mkString(","))
+    logger.info("After we haveL" + droppedDf.columns.size)
+    logger.info(droppedDf.columns.mkString(","))
 
     val withAddedWilderness = droppedDf.withColumn("wilderness", unhotUDF(col("wilderness")))
 
@@ -132,24 +115,26 @@ object DecisionTreeExampleMLHotEncoding {
     val transformedWilderness = soilAssembler.transform(withAddedWilderness)
     var noSoilDf = transformedWilderness
 
-    println("Before we have:" + noSoilDf.columns.size)
+    logger.info("Before we have:" + noSoilDf.columns.size)
     for (soilCol <- soilCols)
       noSoilDf = noSoilDf.drop(soilCol)
 
-    println("After we have:" + noSoilDf.columns.size)
+    logger.info("After we have:" + noSoilDf.columns.size)
 
     val withOneHotSoil = noSoilDf.withColumn("soil", unhotUDF(col("soil")))
 
     withOneHotSoil
   }
-	
 
   def evaluate(trainData: DataFrame, testData: DataFrame): Unit = {
 
+    
+    // NEEDED FOR PIPELINE
     val assembler = new VectorAssembler().
       setInputCols(trainData.columns.filter(_ != "Cover_Type")).
       setOutputCol("featureVector")
 
+    // NEEDED FOR PIPELINE  
     val classifier = new DecisionTreeClassifier().
       setSeed(Random.nextLong()).
       setLabelCol("Cover_Type").
@@ -158,6 +143,11 @@ object DecisionTreeExampleMLHotEncoding {
 
     val pipeline = new Pipeline().setStages(Array(assembler, classifier))
 
+    // DONE. NOW ALL THE STUFF BELOW IS NEEDED
+    // TO FIND  THE BEST MODEL
+    
+    // WE NEED TO CREATE A PARAM GRID USING CLASSIFIER AND
+    // FEW PARAMETERS
     val paramGrid = new ParamGridBuilder().
       addGrid(classifier.impurity, Seq("gini", "entropy")).
       addGrid(classifier.maxDepth, Seq(1, 20)).
@@ -165,11 +155,24 @@ object DecisionTreeExampleMLHotEncoding {
       addGrid(classifier.minInfoGain, Seq(0.0, 0.05)).
       build()
 
+    // THEN WE NEED A MULTICLASSIFICATION EVALUATOR WITH LABELCOL,
+    // PREDICT COL AND METRIC AME
     val multiclassEval = new MulticlassClassificationEvaluator().
       setLabelCol("Cover_Type").
       setPredictionCol("prediction").
       setMetricName("accuracy")
 
+    // THEN WE NEED A VALIDATOR USING PIPELINE, MULTICLASS EVAL AND
+    // PARAMGRID
+      
+    // SO PERHAPS OUR BEST MODEL UTILITY WILL JUST ACCEPT AS INPUT PARAMETER
+    // 4 ITEMS:
+    // 1.PIPELINE
+    // 2.MULTICLASS EVAL
+    // 3. PARAMGRID
+    // 4. TRAINDATA.
+    // AS EVERTHING BEFORE THIS IS CUSTOM TO THE SPECIFIC MODEL  
+     
     val validator = new TrainValidationSplit().
       setSeed(Random.nextLong()).
       setEstimator(pipeline).
@@ -191,31 +194,30 @@ object DecisionTreeExampleMLHotEncoding {
 
     val bestModel = validatorModel.bestModel
 
-    println("============== BEST MODEL ")
-    println(bestModel.asInstanceOf[PipelineModel].stages.last.extractParamMap)
+    logger.info("============== BEST MODEL ")
+    logger.info(bestModel.asInstanceOf[PipelineModel].stages.last.extractParamMap)
 
-    println("============== VALIDATION METRICS ")
-    println(validatorModel.validationMetrics.max)
+    logger.info("============== VALIDATION METRICS ")
+    logger.info(validatorModel.validationMetrics.max)
 
     val testAccuracy = multiclassEval.evaluate(bestModel.transform(testData))
-    println("============== TEST ACCURACY MODEL ")
-    println(testAccuracy)
+    logger.info("============== TEST ACCURACY MODEL ")
+    logger.info(testAccuracy)
     val trainAccuracy = multiclassEval.evaluate(bestModel.transform(trainData))
-    println("============== TRAIN ACCURACY MODEL ")
-    
-    println(trainAccuracy)
+    logger.info("============== TRAIN ACCURACY MODEL ")
+
+    logger.info(trainAccuracy)
   }
-  
-  
+
   def generateDecisionTree(sconf: SparkConf, args: Array[String]): Unit = {
 
     SparkUtil.disableSparkLogging
-    println(s"Attempting to load:${args(0)}")
+    logger.info(s"Attempting to load:${args(0)}")
 
     val sc = new SparkContext("local[*]", "DecisionTreeExampleML")
     val df = getDataFrame(sc, args)
 
-    println("InputData:" + df.count())
+    logger.info("InputData:" + df.count())
     val reduced = args.size match {
       case 1 => df
       case 2 => df.sample(false, 0.001)

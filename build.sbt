@@ -16,13 +16,13 @@ libraryDependencies +=    "org.specs2" %% "specs2" % "2.3.11" % "test"
 libraryDependencies += "org.apache.spark"%%"spark-core"   % sparkVersion 
 libraryDependencies += "org.apache.spark"%%"spark-streaming"   % sparkVersion 
 libraryDependencies += "org.apache.spark"%%"spark-mllib"   % sparkVersion 
-libraryDependencies += "org.apache.spark"%%"spark-streaming-flume-sink" % sparkVersion     
-libraryDependencies += "org.apache.spark"%%"spark-streaming-kafka-0-10" % sparkVersion     
+libraryDependencies += "org.apache.spark"%%"spark-streaming-flume-sink" % sparkVersion      
+libraryDependencies += "org.apache.spark"%%"spark-streaming-kafka-0-10" % sparkVersion 
 
 libraryDependencies += "org.apache.spark"%%"spark-sql"   % sparkVersion 
 libraryDependencies += "org.mongodb.spark" % "mongo-spark-connector_2.11" % "2.0.0"
 libraryDependencies += "com.holdenkarau" %% "spark-testing-base" % "2.1.0_0.6.0" % "test"
-libraryDependencies += "org.apache.spark" %% "spark-hive"  % sparkVersion % "test"
+libraryDependencies += "org.apache.spark" %% "spark-hive"  % sparkVersion % "test" 
 
 resolvers += "MavenRepository" at "https://mvnrepository.com/"
 

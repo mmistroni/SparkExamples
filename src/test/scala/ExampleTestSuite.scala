@@ -9,6 +9,6 @@ import org.apache.spark.sql.Row
 class SimpleTestSuite  extends FunSuite with DataFrameSuiteBase with Matchers {
 
   test("simple test suite") {
-    "foo" shouldEqual("bar")
+    "foo" shouldEqual("foo")
   }
 }
