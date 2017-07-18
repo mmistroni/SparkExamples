@@ -4,7 +4,7 @@
 		module="sparkexamples-build"
 		revision="0.1-SNAPSHOT"
 		status="integration"
-		publication="20170717212315"
+		publication="20170718220429"
 		e:sbtVersion="0.13" e:scalaVersion="2.10"
 	>
 		<description>

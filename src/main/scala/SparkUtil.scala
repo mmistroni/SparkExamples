@@ -8,9 +8,12 @@ import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql.{DataFrame, Row, SparkSession}
+import org.apache.log4j.{Level, Logger} 
 
 object SparkUtil {
 
+  val logger: Logger = Logger.getLogger("SparkUtil")
+  
   def findBestModel(pipeline: Pipeline,
                     paramGrid: Array[ParamMap],
                     multiclassEval: MulticlassClassificationEvaluator,
@@ -26,16 +29,22 @@ object SparkUtil {
 
     val validatorModel = validator.fit(trainData)
     val bestModel = validatorModel.bestModel
-    println("============== BEST MODEL ")
-    println(bestModel.asInstanceOf[PipelineModel].stages.last.extractParamMap)
-    println("============== VALIDATION METRICS ")
-    println(validatorModel.validationMetrics.max)
+    logger.info("============== BEST MODEL ")
+    logger.info(bestModel.asInstanceOf[PipelineModel].stages.last.extractParamMap)
+
+    logger.info("============== VALIDATION METRICS ")
+    logger.info(validatorModel.validationMetrics.max)
+
     val testAccuracy = multiclassEval.evaluate(bestModel.transform(testData))
-    println("============== TEST ACCURACY MODEL ")
-    println(testAccuracy)
+    logger.info("============== TEST ACCURACY MODEL ")
+    logger.info(testAccuracy)
     val trainAccuracy = multiclassEval.evaluate(bestModel.transform(trainData))
-    println("============== TRAIN ACCURACY MODEL ")
-    bestModel
+    logger.info("============== TRAIN ACCURACY MODEL ")
+
+    logger.info(trainAccuracy)
+    
+    (bestModel.asInstanceOf[PipelineModel], trainAccuracy, testAccuracy)
+
   }
 
   def disableSparkLogging = {
@@ -47,6 +56,7 @@ object SparkUtil {
     Logger.getLogger("org").setLevel(Level.ERROR)
     Logger.getLogger("akka").setLevel(Level.ERROR)
 
+    
   }
 
   def createVectorRDD(row: Row): Seq[Double] = {

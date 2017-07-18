@@ -129,12 +129,10 @@ object DecisionTreeExampleMLHotEncoding {
   def evaluate(trainData: DataFrame, testData: DataFrame): Unit = {
 
     
-    // NEEDED FOR PIPELINE
     val assembler = new VectorAssembler().
       setInputCols(trainData.columns.filter(_ != "Cover_Type")).
       setOutputCol("featureVector")
 
-    // NEEDED FOR PIPELINE  
     val classifier = new DecisionTreeClassifier().
       setSeed(Random.nextLong()).
       setLabelCol("Cover_Type").
@@ -143,11 +141,6 @@ object DecisionTreeExampleMLHotEncoding {
 
     val pipeline = new Pipeline().setStages(Array(assembler, classifier))
 
-    // DONE. NOW ALL THE STUFF BELOW IS NEEDED
-    // TO FIND  THE BEST MODEL
-    
-    // WE NEED TO CREATE A PARAM GRID USING CLASSIFIER AND
-    // FEW PARAMETERS
     val paramGrid = new ParamGridBuilder().
       addGrid(classifier.impurity, Seq("gini", "entropy")).
       addGrid(classifier.maxDepth, Seq(1, 20)).
@@ -155,55 +148,17 @@ object DecisionTreeExampleMLHotEncoding {
       addGrid(classifier.minInfoGain, Seq(0.0, 0.05)).
       build()
 
-    // THEN WE NEED A MULTICLASSIFICATION EVALUATOR WITH LABELCOL,
-    // PREDICT COL AND METRIC AME
     val multiclassEval = new MulticlassClassificationEvaluator().
       setLabelCol("Cover_Type").
       setPredictionCol("prediction").
       setMetricName("accuracy")
 
-    // THEN WE NEED A VALIDATOR USING PIPELINE, MULTICLASS EVAL AND
-    // PARAMGRID
+    val (bestModel, trainAccuracy, testAccuracy) = SparkUtil.findBestModel(pipeline, paramGrid, multiclassEval, trainData, testData)
       
-    // SO PERHAPS OUR BEST MODEL UTILITY WILL JUST ACCEPT AS INPUT PARAMETER
-    // 4 ITEMS:
-    // 1.PIPELINE
-    // 2.MULTICLASS EVAL
-    // 3. PARAMGRID
-    // 4. TRAINDATA.
-    // AS EVERTHING BEFORE THIS IS CUSTOM TO THE SPECIFIC MODEL  
-     
-    val validator = new TrainValidationSplit().
-      setSeed(Random.nextLong()).
-      setEstimator(pipeline).
-      setEvaluator(multiclassEval).
-      setEstimatorParamMaps(paramGrid).
-      setTrainRatio(0.9)
+    logger.info(bestModel.stages.last.extractParamMap)
 
-    //spark.sparkContext.setLogLevel("DEBUG")
-    val validatorModel = validator.fit(trainData)
-    /*
-    DEBUG TrainValidationSplit: Got metric 0.6315930234779452 for model trained with {
-      dtc_ca0f064d06dd-impurity: gini,
-      dtc_ca0f064d06dd-maxBins: 10,
-      dtc_ca0f064d06dd-maxDepth: 1,
-      dtc_ca0f064d06dd-minInfoGain: 0.0
-    }.
-    */
-    //spark.sparkContext.setLogLevel("WARN")
-
-    val bestModel = validatorModel.bestModel
-
-    logger.info("============== BEST MODEL ")
-    logger.info(bestModel.asInstanceOf[PipelineModel].stages.last.extractParamMap)
-
-    logger.info("============== VALIDATION METRICS ")
-    logger.info(validatorModel.validationMetrics.max)
-
-    val testAccuracy = multiclassEval.evaluate(bestModel.transform(testData))
     logger.info("============== TEST ACCURACY MODEL ")
     logger.info(testAccuracy)
-    val trainAccuracy = multiclassEval.evaluate(bestModel.transform(trainData))
     logger.info("============== TRAIN ACCURACY MODEL ")
 
     logger.info(trainAccuracy)
