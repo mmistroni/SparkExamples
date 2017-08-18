@@ -42,10 +42,8 @@ import org.apache.log4j.{Level, Logger}
  *
  *
  * Run it like this
- * C:\Users\marco\SparkExamples>spark-submit
- * --class RamdomForestExampleML
- * target\scala-2.11\sparkexamples.jar
- * <path to tree_addhealth.csv>
+ * spark-submit  --class DecisionTreeExampleMLHotEncoding target\scala-2.11\sparkexamples.jar 1 2
+ * 
  *
  *
  *
@@ -58,7 +56,8 @@ object DecisionTreeExampleMLHotEncoding {
   
   def getDataFrame(sc: SparkContext, args: Array[String]): DataFrame = {
 
-    val filename = args.size match {
+    val filename = 
+      args.size match {
       case 1 => args(0)
       case 2 => "file:///c:/Users/marco/SparkExamples/src/main/resources/covtype.data.gz"
     }
@@ -153,7 +152,12 @@ object DecisionTreeExampleMLHotEncoding {
       setPredictionCol("prediction").
       setMetricName("accuracy")
 
-    val (bestModel, trainAccuracy, testAccuracy) = SparkUtil.findBestModel(pipeline, paramGrid, multiclassEval, trainData, testData)
+    val (bestModel, trainAccuracy, testAccuracy) = 
+      SparkUtil.findBestDecisionTree2(assembler, "Cover_Type", "featureVector", 
+                       "prediction", trainData, testData)
+      //SparkUtil.findBestDecisionTree(
+      //  pipeline, 
+      //  paramGrid, multiclassEval, trainData, testData)
       
     logger.info(bestModel.stages.last.extractParamMap)
 
