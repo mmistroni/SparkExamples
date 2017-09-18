@@ -71,10 +71,7 @@ object EdgarForm13Task {
     val accessKey = session.conf.get("spark.hadoop.fs.s3.access.key")
     val secretKey = session.conf.get("spark.hadoop.fs.s3.secret.key")
     val hadoopConf = session.conf.get("spark.hadoop.fs.s3.impl")
-    //logger.info(s"HadoopConf is $hadoopConf")
     session.sparkContext.hadoopConfiguration.set("fs.s3.impl", "org.apache.hadoop.fs.s3native.NativeS3FileSystem")
-    //session.sparkContext.hadoopConfiguration.set("fs.s3.awsAccessKeyId", args(1))
-    //session.sparkContext.hadoopConfiguration.set("fs.s3.awsSecretAccessKey", args(2))
     session.sparkContext
 
   }
