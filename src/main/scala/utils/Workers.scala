@@ -6,7 +6,7 @@ import org.apache.spark.sql._
 import org.apache.log4j.{ Level, Logger }
 
 trait DataSource extends Serializable{
-
+ 
   val logger: Logger = Logger.getLogger("Spark.Processor")
   def readInput[OUT](location:String, sparkContext:SparkContext):OUT
 }
@@ -14,6 +14,7 @@ trait DataSource extends Serializable{
 trait Step extends Serializable {
   @transient
   val logger: Logger = Logger.getLogger("Spark.Processor")
+  
   def processData[A,B](sparkContext: SparkContext, input: A): B 
 
 }

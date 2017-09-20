@@ -17,7 +17,7 @@ import utils.Step
  *
  * Run the code like this:
  *
- * spark-submit --class EdgarFilingReaderTask sparkexamples.jar <fileName> <formType> <debugFlag>
+ * spark-submit --packages org.mongodb.spark:mongo-spark-connector_2.10:2.2.0 --class EdgarFilingReaderTask sparkexamples.jar <fileName> <formType> <debugFlag>
  *
  */
 
@@ -37,6 +37,10 @@ object Transaction {
       input.getOrElse('Z', 0), input.getOrElse('J', 0), input.getOrElse('K', 0), input.getOrElse('U', 0))
   }
 }
+
+case class Form4Filing(transactionType:String, transactionCount:Long)
+  
+  
 
 class DataReaderStep(input: String, formType: String, sampleData: Boolean) extends Serializable {
 
@@ -58,7 +62,6 @@ class DataReaderStep(input: String, formType: String, sampleData: Boolean) exten
   }
 
   private def normalize(linesRdd: RDD[String], formType: String): RDD[String] = {
-    // cik|xxx
     val filtered = linesRdd.map(l => l.split('|')).filter(arr => arr.length > 2).map(arr => (arr(0), arr(2), arr(4))).zipWithIndex
     val noHeaders = filtered.filter(tpl => tpl._2 > 0).map(tpl => tpl._1).filter(tpl => tpl._2 == formType).map(tpl => tpl._3)
     noHeaders.cache()
@@ -75,7 +78,7 @@ object ProcessorStep extends Serializable {
     Try(ftpClient.retrieveFile(fileName))
   }
 
-  def processData(sparkContext: SparkContext, inputDataSet: Dataset[String]): DataFrame = {
+  def processData(sparkContext: SparkContext, inputDataSet: Dataset[String]): Dataset[(String, Long)] = {
     import org.apache.spark.sql.Encoders
     val sqlContext = new SQLContext(sparkContext)
     import sqlContext.implicits._
@@ -85,8 +88,7 @@ object ProcessorStep extends Serializable {
     logger.info(s"Obtained:$edgarXmlContent")
     val flatMapped = edgarXmlContent.flatMap { tpl => tpl._2.map(_.toString) }
     val res = flatMapped.groupByKey(identity).count
-    res.foreach(tpl => println(tpl))
-    null
+    res
   }
 
   private def parseXMLFile(fileContent: String): (String, String) = {
@@ -116,9 +118,13 @@ object ProcessorStep extends Serializable {
 
 object Persister extends Serializable {
   // Persist DataFrame 
-
-  def persistDataFrame(inputDataFrame: DataFrame, sc: SparkContext): Int = {
-    0
+  val logger: Logger = Logger.getLogger("EdgarFilingReader.Persiste")
+  def persistDataFrame(sc: SparkContext, inputDataSet:Dataset[(String, Long)]): Unit = {
+    implicit val myObjEncoder = org.apache.spark.sql.Encoders.kryo[Form4Filing]
+    val mapped = inputDataSet.toDF("filingType", "count")
+    logger.info(mapped.head())
+    mapped.printSchema()
+    SparkUtil.storeDataInMongo("mongodb://localhost:27017/test", "Form4Filing", mapped, appendMode = true)
   }
 }
 
@@ -179,7 +185,13 @@ object EdgarFilingReaderTask {
     // Now downloading the data.... this  should result in a DataFrame of Transactions
 
     logger.info("Now processing the retrieved data..")
-    ProcessorStep.processData(sparkContext, dataSet) //
+    
+    val processedDataFrame = ProcessorStep.processData(sparkContext, dataSet) //
+    
+    logger.info("Now persisting...")
+    
+    Persister.persistDataFrame(sparkContext, processedDataFrame)
+    
     //processorStep.processData(sparkContext, dataSet)
 
     // And then persisting it somewhere so that we can re-read it
