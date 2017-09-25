@@ -6,18 +6,19 @@ import org.apache.commons.io.IOUtils
 import java.io._
 import org.apache.log4j.{ Level, Logger }
 
-class HttpsFtpClient(baseDir: String) extends Serializable {
+object HttpsFtpClient extends Serializable {
   // This module reads file using Https. 
   // This replaces the FTP client as Edgar no longer serves files via FTP
   // more work as we need to replace reading from stream to read zipped files
+  @transient
   val logger: Logger = Logger.getLogger("HttpsFtpClient")
   // 
   val ftpConfig = null
   val edgarDir = "https://www.sec.gov/Archives/"
   
   def retrieveFile(fileName: String): String = {
-    logger.info(s"baseDir is:$edgarDir")
-    logger.info(s"filename is:$fileName")
+    logger.debug(s"baseDir is:$edgarDir")
+    logger.debug(s"filename is:$fileName")
     val fullPath = fileName.indexOf("http") match {
       case 0 => fileName
       case _  => s"$edgarDir/$fileName"

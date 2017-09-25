@@ -16,6 +16,7 @@ import org.apache.spark.sql.types._
 import org.apache.spark.ml.{ Pipeline, PipelineModel }
 import org.apache.spark.sql.functions._
 import scala.util.Random
+import utils.SparkUtil
 
 /**
  * This example builds a random forest tree and it's based on this video

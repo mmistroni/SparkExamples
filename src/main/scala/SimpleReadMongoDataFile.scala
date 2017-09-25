@@ -2,14 +2,13 @@
 
 
 import org.apache.spark.SparkContext
-
 import org.apache.spark.SparkContext._
-
 import org.apache.spark.SparkConf
 import org.apache.spark.sql._
 import org.apache.spark.rdd._
 import org.apache.spark.sql.functions._
-import SparkUtil._
+import utils.SparkUtil._
+
 object SimpleReadMongoDataFile {
 
   def createDataFrameFromRDD(existingRdd:RDD[String]):DataFrame = null

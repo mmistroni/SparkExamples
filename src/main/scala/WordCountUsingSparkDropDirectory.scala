@@ -1,6 +1,7 @@
 
-/**
- * WordCount example similar to SparkFlumeIntegration, but instead of reading
+import utils.SparkUtil
+
+/* WordCount example similar to SparkFlumeIntegration, but instead of reading
  * a Stream from flume, uses ssc.textFileStream to read files dropped
  * from a directory on your pc.
  */

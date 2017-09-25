@@ -4,6 +4,7 @@ import org.apache.spark.mllib.recommendation.ALS
 import org.apache.spark.mllib.recommendation.MatrixFactorizationModel
 import org.apache.spark.mllib.recommendation.Rating
 import org.apache.spark.broadcast.Broadcast
+import utils.SparkUtil
 
 object MovieRecommendations {
   

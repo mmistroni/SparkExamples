@@ -18,8 +18,8 @@ import org.apache.spark.SparkContext
 import org.apache.spark.sql.functions._
 import org.apache.spark.mllib.tree.RandomForest
 import org.apache.spark.mllib.tree.model.RandomForestModel
-import SparkUtil._
 import org.apache.spark.mllib.evaluation._
+import utils.SparkUtil._
 
 /**
  * THis example attempts to predict european championship semifinalists based on following past data(back to euro 1992)

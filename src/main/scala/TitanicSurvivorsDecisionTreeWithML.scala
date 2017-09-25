@@ -14,7 +14,7 @@ import org.apache.spark.sql.SQLImplicits
 import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
 import org.apache.spark.sql.functions._
-import SparkUtil._
+import utils.SparkUtil
 
 
 /**
@@ -236,7 +236,7 @@ object TitanicSurvivorsDecisionTreeWithML {
 
   def titanicSurvivors(sconf: SparkConf, fileName: String): Unit = {
 
-    disableSparkLogging
+    SparkUtil.disableSparkLogging
 
     val sc = new SparkContext(sconf)
     val sqlContext = new SQLContext(sc)

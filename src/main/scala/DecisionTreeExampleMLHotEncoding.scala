@@ -17,6 +17,7 @@ import org.apache.spark.ml.{ Pipeline, PipelineModel }
 import org.apache.spark.sql.functions._
 import scala.util.Random
 import org.apache.log4j.{Level, Logger}    
+import utils.SparkUtil
  
 
 

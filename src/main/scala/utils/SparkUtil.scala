@@ -1,3 +1,5 @@
+package utils
+
 import org.apache.log4j.Level
 import org.apache.spark.ml.Pipeline
 import org.apache.spark.ml.PipelineModel
@@ -13,7 +15,7 @@ import scala.util.Random
 import org.apache.spark.ml.{ Pipeline, PipelineModel }
 import org.apache.spark.ml.tuning.{ ParamGridBuilder, TrainValidationSplit }
 import org.apache.spark.ml.classification._
-import org.apache.spark.ml.tuning.{ CrossValidator, ParamGridBuilder }
+import org.apache.spark.ml.tuning.ParamGridBuilder
 import org.apache.spark.ml.feature.VectorAssembler
 
 class Extractor extends java.io.Serializable {
@@ -188,12 +190,12 @@ object SparkUtil {
       case false => "insert"
     }
 
-    println(s"$mode data into $mongoUrl for table $tableName.AppendMode:$appendMode")
+    logger.info(s"$mode data into $mongoUrl for table $tableName.AppendMode:$appendMode")
 
     dfWriter.option("spark.mongodb.output.uri", s"$mongoUrl")
       .option("collection", tableName)
       .mode(mode)
-    println(s"$mode ${dataFrame.count}  into $tableName")
+    logger.info(s"$mode ${dataFrame.count}  into $tableName")
     MongoSpark.save(dfWriter)
 
   }

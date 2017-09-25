@@ -4,7 +4,7 @@ import org.apache.spark.rdd._
 import org.apache.spark._
 import org.apache.spark.sql.{ DataFrame, SparkSession }
 import org.apache.log4j.{ Level, Logger }
-import SparkUtil._
+import utils.SparkUtil._
 
 case class Form13Tuple(companyName: String, count: Int)
 
@@ -38,7 +38,7 @@ class DataTransformer extends java.io.Serializable {
 
     def persist(inputData: DataFrame, tableName:String): Unit = {
       logger.info("Persisting DataFrame into Mongo..")
-      SparkUtil.storeDataInMongo("mongodb://localhost:27017/test", tableName, inputData, appendMode = true)
+      storeDataInMongo("mongodb://localhost:27017/test", tableName, inputData, appendMode = true)
 
     }
   }

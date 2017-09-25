@@ -12,6 +12,7 @@ import org.apache.spark.mllib.linalg.Vectors
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql._
 import org.apache.spark.sql.SQLImplicits
+import utils.SparkUtil
 
 /**
  * This example builds a decision tree based on patient health data, 

@@ -1,6 +1,5 @@
 
 import org.apache.spark.mllib.linalg.{ Vector, Vectors }
-
 import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.ml.classification._
 import org.apache.spark.mllib.tree.DecisionTree
@@ -18,7 +17,7 @@ import org.apache.spark.SparkContext
 import org.apache.spark.sql.functions._
 import org.apache.spark.mllib.tree.RandomForest
 import org.apache.spark.mllib.tree.model.RandomForestModel
-import SparkUtil._
+import utils.SparkUtil._
 
 
 /**

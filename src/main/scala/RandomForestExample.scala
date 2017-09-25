@@ -14,6 +14,7 @@ import org.apache.spark.mllib.evaluation.MulticlassMetrics
 import org.apache.spark.rdd.RDD
 import org.apache.spark.sql._
 import org.apache.spark.sql.SQLImplicits
+import utils.SparkUtil
 
 /**
  * This example builds a random forest tree and it's based on this video

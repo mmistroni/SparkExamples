@@ -4,6 +4,7 @@ import org.apache.spark.mllib.regression.LabeledPoint
 import org.apache.spark.ml.classification._
 import org.apache.spark.SparkConf
 import org.apache.spark.SparkContext
+import utils.SparkUtil
 
 
 /**
