@@ -34,13 +34,23 @@ trait Loader[IN] extends Serializable {
  * INPUT is the input data of the pipeline (after reading sourcedata from an URL
  * OUTPUT is the output data of the pipelie, which will be persisted to storate
  */
-trait Pipeline[INPUT,OUTPUT] {
+class Pipeline[T,U,V](extractor:Extractor[T,U],
+                               transformer:Transformer[U,V],
+                               loader:Loader[V])
+                               {
   
-  def extract(sparkContext:SparkContext, inputData:String):INPUT
+  def runPipeline(sparkContext:SparkContext, input:T):Unit = {
+    
+    val extractFun:T =>U = input => extractor.extract(sparkContext, input)
+    val transformFun:U=>V = inputDataSet => transformer.transform(sparkContext, inputDataSet)
+    val loadFun:V=>Unit = transformedData => loader.load(sparkContext, transformedData)
+    
+    val executorFunction = extractFun andThen transformFun andThen loadFun
+    
+    executorFunction(input)
+    
+  }
   
-  def transform(sparkContext:SparkContext, inputData:INPUT):OUTPUT
-  
-  def load(sparkContext:SparkContext, format:OUTPUT):Unit
 }
   
 
