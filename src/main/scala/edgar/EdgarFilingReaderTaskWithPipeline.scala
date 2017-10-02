@@ -16,7 +16,11 @@ import scala.util.Try
  *
  * Run the code like this:
  *
- * * spark-submit --packages org.mongodb.spark:mongo-spark-connector_2.10:2.2.0 --class edgar.EdgarFilingReaderTask sparkexamples.jar <fileName> <formType> <debugFlag>
+ * * spark-submit --packages org.mongodb.spark:mongo-spark-connector_2.10:2.2.0 
+ *                --packages org.apache.hadoop:hadoop-aws:2.6.0
+ *                --class edgar.EdgarFilingReaderTask 
+ *                sparkexamples.jar <fileName> <formType> <debugFlag> <outputFile>
+ *                For saving in S3, use URI such as s3://<bucketName/<fileName>
  
  *
  */
@@ -33,14 +37,29 @@ object EdgarFilingReaderTaskWithPipeline {
       .appName("Spark Edgar Filing Reader task")
       .getOrCreate()
     session.conf.set("spark.driver.memory", "4g")
+    session.sparkContext.hadoopConfiguration.set("fs.s3.impl", "org.apache.hadoop.fs.s3native.NativeS3FileSystem")
     session.sparkContext
   }
 
-  def startComputation(sparkContext:SparkContext, fileName:String,
-                       formType:String, debugMode:Boolean) = {
-    val dataReaderStep = new DataReaderStep(fileName, formType, debugMode)
+  def startComputation(sparkContext:SparkContext, args:Array[String]) = {
+    
+    val fileName = args(0)
+    val formType = args(1)
+    val debug = args(2).toBoolean
+    val outputFile = args(3)
+
+    logger.info("------------ Edgar Filing Reader Task -----------------")
+    logger.info(s"FileName:$fileName")
+    logger.info(s"FormType:$formType")
+    logger.info(s"debug:$debug")
+    logger.info(s"Outputfile:$outputFile")
+    logger.info("-------------------------------------------------------")
+
+    logger.info(s"Fetching Data from Edgar file $fileName")
+
+    val dataReaderStep = new DataReaderStep(fileName, formType, debug)
     val processor = new Form4Processor()
-    val persister = new MongoPersister()    
+    val persister = new PlainTextPersister(s"$outputFile")    
     
     val form4Pipeline = new Pipeline(dataReaderStep, processor, persister)
     form4Pipeline.runPipeline(sparkContext, fileName)
@@ -53,24 +72,13 @@ object EdgarFilingReaderTaskWithPipeline {
     disableSparkLogging
     logger.info(s"Input Args:" + args.mkString(","))
 
-    if (args.size < 3) {
-      println("Usage: spark-submit --class edgar.spark.EdgarFilingReaaderTask <fileName> <formType> <debug>")
+    if (args.size < 4) {
+      println("Usage: spark-submit --class edgar.spark.EdgarFilingReaaderTask <fileName> <formType> <debug> <fileName>")
       System.exit(0)
     }
 
     val sparkContext = configureContext(args)
-    val fileName = args(0)
-    val formType = args(1)
-    val debug = args(2).toBoolean
-
-    logger.info("------------ Edgar Filing Reader Task -----------------")
-    logger.info(s"FileName:$fileName")
-    logger.info(s"FormType:$formType")
-    logger.info(s"debug:$debug")
-    logger.info("-------------------------------------------------------")
-
-    logger.info(s"Fetching Data from Edgar file $fileName")
-    startComputation(sparkContext, fileName, formType, debug)
+    startComputation(sparkContext, args)
     
   }
 
