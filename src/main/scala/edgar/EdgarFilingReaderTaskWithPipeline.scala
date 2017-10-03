@@ -13,16 +13,16 @@ import scala.util.Try
  * Edgar task to Read a Form4 spark-stord file, and classify each
  * company based on the number of transaction being executed
  * TODO: Add a decision tree in the mix
- *
+ * Hadoop 2.7.1 is needed for accessing s3a filesystem
  * Run the code like this:
  *
- * * spark-submit --packages org.mongodb.spark:mongo-spark-connector_2.10:2.2.0 
- *                --packages org.apache.hadoop:hadoop-aws:2.6.0
- *                --class edgar.EdgarFilingReaderTask 
+ * * spark-submit --packages org.mongodb.spark:mongo-spark-connector_2.10:2.2.0,org.apache.hadoop:hadoop-aws:2.7.1
+ *                --class edgar.EdgarFilingReaderTaskWithPipeline 
  *                sparkexamples.jar <fileName> <formType> <debugFlag> <outputFile>
  *                For saving in S3, use URI such as s3://<bucketName/<fileName>
  
- *
+ * to read the parquet file simply do  sqlContext.read.parquet("/tmp/testParquet")
+ * 
  */
 
 
@@ -37,7 +37,8 @@ object EdgarFilingReaderTaskWithPipeline {
       .appName("Spark Edgar Filing Reader task")
       .getOrCreate()
     session.conf.set("spark.driver.memory", "4g")
-    session.sparkContext.hadoopConfiguration.set("fs.s3.impl", "org.apache.hadoop.fs.s3native.NativeS3FileSystem")
+    session.sparkContext.hadoopConfiguration.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
+    session.sparkContext.hadoopConfiguration.set("fs.s3n.impl", "org.apache.hadoop.fs.s3native.NativeS3FileSystem")
     session.sparkContext
   }
 

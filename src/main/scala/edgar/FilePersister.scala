@@ -23,10 +23,26 @@ class PlainTextPersister(fileName:String) extends Loader[Dataset[(String, Long)]
   def persistDataFrame(sc: SparkContext, inputDataSet:Dataset[(String, Long)]): Unit = {
     implicit val myObjEncoder = org.apache.spark.sql.Encoders.kryo[Form4Filing]
     val mapped = inputDataSet.toDF("filingType", "count")
-    logger.info("Persisting data to $fileName.")
+    logger.info(s"Persisting data to $fileName.")
     mapped.foreach { x => println(x) }
     logger.info(s"Persisting data to text file: $fileName")
-    mapped.repartition(1).rdd.saveAsTextFile(fileName)
+    mapped.repartition(1).write.csv(fileName) // rdd.saveAsTextFile(fileName)
   }
 }
+
+class ParquetPersister(fileName:String) extends PlainTextPersister(fileName) {
+  @transient
+  override val logger: Logger = Logger.getLogger("EdgarFilingReader.ParquetPersister")
+  
+  override def persistDataFrame(sc: SparkContext, inputDataSet:Dataset[(String, Long)]): Unit = {
+    implicit val myObjEncoder = org.apache.spark.sql.Encoders.kryo[Form4Filing]
+    val mapped = inputDataSet.toDF("filingType", "count")
+    logger.info(s"Persisting data to:" + fileName)
+    mapped.foreach { x => println(x) }
+    logger.info(s"Persisting data to text file: $fileName")
+    mapped.write.parquet(fileName)
+  }
+}
+
+
 
