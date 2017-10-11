@@ -23,6 +23,13 @@ import scala.util.Try
  
  * to read the parquet file simply do  sqlContext.read.parquet("/tmp/testParquet")
  * 
+ * spark-submit --packages org.mongodb.spark:mongo-spark-connector_2.10:2.2.0,org.apache.hadoop:hadoop-aws:2.7.1 
+ *    --class edgar.EdgarFilingReaderTaskWithPipeline 
+ *    target\scala-2.11\sparkexamples_2.11-1.0.jar 
+ *    s3a://ec2-bucket-mm-spark/master.idx 4 true s3a://ec2-bucket-mm-spark/Form4Output.txt
+ * 
+ * 
+ * 
  */
 
 
@@ -39,6 +46,7 @@ object EdgarFilingReaderTaskWithPipeline {
     session.conf.set("spark.driver.memory", "4g")
     session.sparkContext.hadoopConfiguration.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
     session.sparkContext.hadoopConfiguration.set("fs.s3n.impl", "org.apache.hadoop.fs.s3native.NativeS3FileSystem")
+    session.sparkContext.hadoopConfiguration.set("fs.s3a.fast.upload", "true")
     session.sparkContext
   }
 

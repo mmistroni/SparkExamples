@@ -26,7 +26,8 @@ class PlainTextPersister(fileName:String) extends Loader[Dataset[(String, Long)]
     logger.info(s"Persisting data to $fileName.")
     mapped.foreach { x => println(x) }
     logger.info(s"Persisting data to text file: $fileName")
-    mapped.repartition(1).write.csv(fileName) // rdd.saveAsTextFile(fileName)
+    mapped.coalesce(1).write.csv(fileName) //rdd.saveAsTextFile(fileName)
+    //repartition(1).write.csv(fileName) // rdd.saveAsTextFile(fileName)
   }
 }
 

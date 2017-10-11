@@ -22,6 +22,7 @@ trait Transformer[IN,OUT] extends Serializable {
   def transform(sparkContext: SparkContext, inputDataSet: IN): OUT 
 }
 
+
 /**
  * Trait for a Persister, which will persist the processed data
  */
@@ -38,6 +39,16 @@ class Pipeline[T,U,V](extractor:Extractor[T,U],
                                transformer:Transformer[U,V],
                                loader:Loader[V])
                                {
+  
+  def extractFunction = 
+    (sc:SparkContext, input:T) => extractor.extract(sc, input) 
+  
+  def transformFunction = 
+    (sc:SparkContext, inputDataSet:U) => transformer.transform(sc, inputDataSet)
+  
+  def loadFunction = 
+    (sc:SparkContext, transformedData:V) => loader.load(sc, transformedData)
+  
   
   def runPipeline(sparkContext:SparkContext, input:T):Unit = {
     
