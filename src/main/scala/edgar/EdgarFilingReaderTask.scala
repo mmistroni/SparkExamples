@@ -43,9 +43,10 @@ object EdgarFilingReaderTask {
     val dataSet = dataReaderStep.processData(sparkContext)
     logger.info(s"Simpl.ified  has ${dataSet.count}")
     logger.info("Now processing the retrieved data..")
-    val processedDataFrame = processor.processData(sparkContext, dataSet) //
+    //val processedDataFrame = processor.processData(sparkContext, dataSet) //
     logger.info("Now persisting...")
-    persister.persistDataFrame(sparkContext, processedDataFrame)
+    //persister.persistDataFrame(sparkContext, processedDataFrame)
+    null
   }
   
   
