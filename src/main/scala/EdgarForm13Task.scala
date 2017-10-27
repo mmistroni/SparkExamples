@@ -13,7 +13,7 @@ case class Form13Tuple(companyName: String, count: Int)
  * Fund Manageres invest to
  * All these files have been stored in a S3 bucket
  * Run file like this
- * spark-submit --packages org.apache.hadoop:hadoop-aws:2.6.0
+ * spark-submit --packages org.apache.hadoop:hadoop-aws:2.6.0,org.mongodb.spark:mongo-spark-connector_2.10:2.2.0
  *              --class EdgarForm13Task target\scala-2.11\sparkexamples_2.11-1.0.jar *securit*txt <accessKey> <secretAccessKey>
  
  * 
@@ -38,7 +38,8 @@ class DataTransformer extends java.io.Serializable {
 
     def persist(inputData: DataFrame, tableName:String): Unit = {
       logger.info("Persisting DataFrame into Mongo..")
-      storeDataInMongo("mongodb://localhost:27017/test", tableName, inputData, appendMode = true)
+      inputData.coalesce(1).write.csv("Form13-Results.csv")
+      //storeDataInMongo("mongodb://localhost:27017/test", tableName, inputData, appendMode = true)
 
     }
   }
@@ -66,11 +67,11 @@ object EdgarForm13Task {
       .getOrCreate()
     session.conf.set("spark.driver.memory", "4g")
     // Replace with SparkContext
-    logger.info(s"AccessKey:${args(1)}, secretKey:${args(2)}")
+    //logger.info(s"AccessKey:${args(1)}, secretKey:${args(2)}")
     logger.info(session.sparkContext.hadoopConfiguration)
-    val accessKey = session.conf.get("spark.hadoop.fs.s3.access.key")
-    val secretKey = session.conf.get("spark.hadoop.fs.s3.secret.key")
-    val hadoopConf = session.conf.get("spark.hadoop.fs.s3.impl")
+    //val accessKey = session.conf.get("spark.hadoop.fs.s3.access.key")
+    //val secretKey = session.conf.get("spark.hadoop.fs.s3.secret.key")
+    //val hadoopConf = session.conf.get("spark.hadoop.fs.s3.impl")
     session.sparkContext.hadoopConfiguration.set("fs.s3.impl", "org.apache.hadoop.fs.s3native.NativeS3FileSystem")
     session.sparkContext
 

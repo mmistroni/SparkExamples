@@ -25,17 +25,19 @@ class DataReaderStep(input: String, formType: String, sampleData: Boolean) exten
     val masterFile = sparkContext.textFile(input)
     val generatedRdd = normalize(masterFile, formType).toDF("fileName")
     val dataSet = generatedRdd.map(row => row.getAs[String](0))
-    sampleData match {
-      case true  => dataSet.sample(false, 0.0001, System.currentTimeMillis().toInt)
+    val ds = sampleData match {
+      case true  => dataSet.sample(false, 0.0002, System.currentTimeMillis().toInt)
       case false => dataSet
     }
-
+    ds.foreach { x => println(x) }
+    ds
   }
 
   private def normalize(linesRdd: RDD[String], formType: String): RDD[String] = {
     val filtered = linesRdd.map(l => l.split('|')).filter(arr => arr.length > 2).map(arr => (arr(0), arr(2), arr(4))).zipWithIndex
     val noHeaders = filtered.filter(tpl => tpl._2 > 0).map(tpl => tpl._1).filter(tpl => tpl._2 == formType).map(tpl => tpl._3)
     noHeaders.cache()
+    logger.info("Found:" + noHeaders.count())
     noHeaders
   }
 }

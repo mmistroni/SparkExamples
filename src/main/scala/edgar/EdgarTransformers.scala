@@ -16,6 +16,7 @@ import utils.HttpsFtpClient
 abstract class EdgarProcessor[A]  extends Transformer[Dataset[String], Dataset[A]] {
   
   private[edgar] def downloadFtpFile(fileName: String): Try[String] = {
+    println(s"Downloding:${fileName}")
     Try(HttpsFtpClient.retrieveFile(fileName))
   }
   
@@ -37,7 +38,8 @@ abstract class EdgarFilingProcessor[A] extends EdgarProcessor[A] {
     val sqlContext = new SQLContext(sparkContext)
     import sqlContext.implicits._
     val edgarXmlContent = inputDataSet.flatMap(item => downloadFtpFile(item).toOption)
-    parseFile(sqlContext)(edgarXmlContent)
+    val res = parseFile(sqlContext)(edgarXmlContent)
+    res
   }
   
   def parseFile(implicit sqlContext:SQLContext):Dataset[String] =>Dataset[A] = {

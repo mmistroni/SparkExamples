@@ -45,5 +45,28 @@ class ParquetPersister(fileName:String) extends PlainTextPersister(fileName) {
   }
 }
 
+class DebugPersister(fileName:String) extends PlainTextPersister(fileName) {
+  @transient
+  override val logger: Logger = Logger.getLogger("EdgarFilingReader.ParquetPersister")
+  
+  override def persistDataFrame(sc: SparkContext, inputDataSet:Dataset[(String, Long)]): Unit = {
+    println(inputDataSet.columns.mkString("|"))
+    val sqlCtx = new SQLContext(sc)
+    import sqlCtx.implicits._
+    //dsMapped.orderBy(desc("transactionCount")).take(10).foreach(println)
+    //mapped.coalesce(1).rdd.saveAsTextFile(fileName)
+    val ordered = inputDataSet.orderBy($"count(1)".desc)
+    ordered.take(10).foreach(println)
+    
+    println("----schena---")
+    ordered.printSchema()
+    
+    //ordered.coalesce(1).rdd.saveAsTextFile(fileName)
+    inputDataSet.coalesce(1).write.json(fileName)
+    
+  }
+}
+
+
 
 
