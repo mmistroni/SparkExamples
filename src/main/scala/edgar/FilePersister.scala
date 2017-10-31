@@ -27,7 +27,7 @@ class PlainTextPersister(fileName:String) extends Loader[Dataset[(String, Long)]
     mapped.foreach { x => println(x) }
     logger.info(s"Persisting data to text file: $fileName")
     mapped.coalesce(1).write.csv(fileName) //rdd.saveAsTextFile(fileName)
-    //repartition(1).write.csv(fileName) // rdd.saveAsTextFile(fileName)
+    
   }
 }
 
@@ -45,24 +45,32 @@ class ParquetPersister(fileName:String) extends PlainTextPersister(fileName) {
   }
 }
 
-class DebugPersister(fileName:String) extends PlainTextPersister(fileName) {
+class DebugPersister(fileName:String) extends Loader[Dataset[Form4Filing]] {
   @transient
-  override val logger: Logger = Logger.getLogger("EdgarFilingReader.ParquetPersister")
+  val logger: Logger = Logger.getLogger("EdgarFilingReader.DebugPersister")
   
-  override def persistDataFrame(sc: SparkContext, inputDataSet:Dataset[(String, Long)]): Unit = {
-    println(inputDataSet.columns.mkString("|"))
+  override def load(sc:SparkContext, inputData:Dataset[Form4Filing]):Unit = {
+    persistDataFrame(sc, inputData)
+  }
+  
+  
+  def persistDataFrame(sc: SparkContext, inputDataSet:Dataset[Form4Filing]): Unit = {
     val sqlCtx = new SQLContext(sc)
     import sqlCtx.implicits._
-    //dsMapped.orderBy(desc("transactionCount")).take(10).foreach(println)
-    //mapped.coalesce(1).rdd.saveAsTextFile(fileName)
-    val ordered = inputDataSet.orderBy($"count(1)".desc)
-    ordered.take(10).foreach(println)
     
-    println("----schena---")
-    ordered.printSchema()
+    inputDataSet.take(5).foreach(println)
     
-    //ordered.coalesce(1).rdd.saveAsTextFile(fileName)
-    inputDataSet.coalesce(1).write.json(fileName)
+    val mapped = inputDataSet.map(fff => (fff.transactionType, fff.transactionCount))
+    
+    
+    
+    println("again...")
+    val toDataFrame = mapped.toDF("company", "count")
+    
+    toDataFrame.printSchema()
+    
+    val ordered = toDataFrame.orderBy($"count".desc)
+    ordered.coalesce(1).write.format("csv").save(fileName)
     
   }
 }

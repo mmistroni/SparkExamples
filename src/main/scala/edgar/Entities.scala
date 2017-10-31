@@ -18,6 +18,6 @@ object Transaction {
 }
 
 
-case class Form4Filing(transactionType:String, transactionCount:Long)
+case class Form4Filing(transactionType:String, transactionCount:Long) extends Serializable
   
   
