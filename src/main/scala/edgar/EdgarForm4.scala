@@ -7,6 +7,7 @@ import org.apache.spark.sql.Encoders
 import org.apache.log4j.Logger
 import scala.util._
 import scala.xml._
+import common.Transformer
 
 /**
  * Transformer to parse form4 filing

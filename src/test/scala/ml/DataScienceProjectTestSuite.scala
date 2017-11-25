@@ -5,7 +5,8 @@ import com.holdenkarau.spark.testing._
 import org.apache.spark.sql.types.{ StructField, StringType, StructType , IntegerType, BooleanType}
 import org.apache.spark.sql._
 import utils.SparkUtil
-
+import org.apache.spark.sql.functions._
+    
 
 class DataScienceProjectTestSuite extends FreeSpec with DataFrameSuiteBase {
   
@@ -40,7 +41,8 @@ class DataScienceProjectTestSuite extends FreeSpec with DataFrameSuiteBase {
         val sqlCtx = sqlContext
         import sqlCtx.implicits._
 
-        val baseDataFrame = sqlCtx.read.csv("file:///c:/Users/marco/SparkExamples/src/main/resources/mammographic_masses.data.txt")
+        val baseDataFrame = sqlCtx.read
+                .csv("file:///c:/Users/marco/SparkExamples2/SparkExamples/src/main/resources/mammographic_masses.data.txt")
     
         
         val properDf = generateProperDataFrame(baseDataFrame)
@@ -59,24 +61,85 @@ class DataScienceProjectTestSuite extends FreeSpec with DataFrameSuiteBase {
     }
   }
   
+  private def findMostCommonValue[A](colName:String, df:DataFrame)(f:Row =>A):A = {
+    println(s"Finding most common value for $colName")
+    val result = df.groupBy(colName).count().sort(desc("count")).first()
+    f(result)    
+  }
+  
+  private def findMean(colName:String, df:DataFrame):Row = {
+    import org.apache.spark.sql.functions._
+    println(s"Finding most common value for $colName")
+    df.groupBy(colName).mean(colName).first()
+  }
+  
+  
+  private def findAverage[A](colName:String, df:DataFrame)(f:Row=>A):A = {
+    import org.apache.spark.sql.functions._
+    println(s"Finding most common value for $colName")
+    val res = df.select(avg(colName)).first()
+    f(res)
+  }
+  
+  
+  
+  
+  
   "The DataScienceTransformer" - {
     "when selecting most common age" - {
       "should return the most common age" in {
   
         val sqlCtx = sqlContext
         import sqlCtx.implicits._
-
-        val df = sqlCtx.read.csv("file:///c:/Users/marco/SparkExamples/src/main/resources/mammographic_masses.data.txt")
         
+        val df = sqlCtx.read
+        .csv("file:///c:/Users/marco/SparkExamples2/SparkExamples/src/main/resources/mammographic_masses.data.txt")
+    
+        SparkUtil.disableSparkLogging
+
         val properDf = generateProperDataFrame(df)
       
         // dropping null values
-        val groupedAge = properDf.groupBy("Age").count().show()
+        val mostCommonAge = findMostCommonValue("Age", properDf) {row:Row => row.getInt(0)}
+        println(s"--------- The MOst Common age is:$mostCommonAge")
         
-        // finding median
+        val averageAge = findAverage("Age", properDf){_.getDouble(0)}
+        
+        println(s"----------- Average Age is:$averageAge")
+        
+        
+        
       }
     }
   }
+  
+  "The DataScienceTransformer" - {
+    "when filling null age columns" - {
+      "should return a dataframe with no null columns the most common age" in {
+  
+        val sqlCtx = sqlContext
+        import sqlCtx.implicits._
+        
+        
+        val df = sqlCtx.read
+        .csv("file:///c:/Users/marco/SparkExamples2/SparkExamples/src/main/resources/mammographic_masses.data.txt")
+    
+        SparkUtil.disableSparkLogging
+
+        val properDf = generateProperDataFrame(df)
+
+        val mostCommonAge = findMostCommonValue("Age", properDf) {row:Row => row.getInt(0)}
+        
+        val noNullDf = properDf.na.fill(mostCommonAge, Seq("Age"))
+        
+        val nullAgeCols = noNullDf.filter(col("Age").isNull).count()
+        
+        assert(nullAgeCols == 0)
+      }
+    }
+  }
+  
+  
   
   
 }

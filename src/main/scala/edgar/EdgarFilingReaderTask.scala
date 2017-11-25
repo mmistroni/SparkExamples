@@ -8,6 +8,8 @@ import org.apache.log4j.Logger
 import utils.SparkUtil._
 import scala.xml._
 import scala.util.Try
+import common.DataReaderStep
+
 
 /**
  * Edgar task to Read a Form4 spark-stord file, and classify each

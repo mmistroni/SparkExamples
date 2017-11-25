@@ -9,6 +9,7 @@ import org.apache.log4j.Logger
 import scala.util._
 import scala.xml._
 import utils.HttpsFtpClient
+import common.Transformer
 
 
 // This class contains template steps that applies to all form types being

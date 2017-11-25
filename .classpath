@@ -14,18 +14,18 @@
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.apache.avro\avro-ipc\jars\avro-ipc-1.7.7-tests.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.apache.avro\avro-ipc\jars\avro-ipc-1.7.7.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.apache.avro\avro\jars\avro-1.7.7.jar"/>
-  <classpathentry kind="lib" path="C:\activator-dist-1.3.10\repository\org.codehaus.jackson\jackson-core-asl\1.9.13\jars\jackson-core-asl.jar"/>
-  <classpathentry kind="lib" path="C:\activator-dist-1.3.10\repository\org.codehaus.jackson\jackson-mapper-asl\1.9.13\jars\jackson-mapper-asl.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.codehaus.jackson\jackson-core-asl\jars\jackson-core-asl-1.9.13.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.codehaus.jackson\jackson-mapper-asl\jars\jackson-mapper-asl-1.9.13.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.xerial.snappy\snappy-java\bundles\snappy-java-1.1.2.6.jar"/>
-  <classpathentry kind="lib" path="C:\activator-dist-1.3.10\repository\org.apache.commons\commons-compress\1.4.1\jars\commons-compress.jar"/>
-  <classpathentry kind="lib" path="C:\activator-dist-1.3.10\repository\org.tukaani\xz\1.0\jars\xz.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.apache.commons\commons-compress\jars\commons-compress-1.4.1.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.tukaani\xz\jars\xz-1.0.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\com.twitter\chill_2.11\jars\chill_2.11-0.8.0.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\com.twitter\chill-java\jars\chill-java-0.8.0.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\com.esotericsoftware\kryo-shaded\bundles\kryo-shaded-3.0.3.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\com.esotericsoftware\minlog\bundles\minlog-1.3.0.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.objenesis\objenesis\jars\objenesis-2.1.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.apache.xbean\xbean-asm5-shaded\bundles\xbean-asm5-shaded-4.4.jar"/>
-  <classpathentry kind="lib" path="C:\activator-dist-1.3.10\repository\com.google.code.findbugs\jsr305\1.3.9\jars\jsr305.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\com.google.code.findbugs\jsr305\jars\jsr305-1.3.9.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\commons-cli\commons-cli\jars\commons-cli-1.2.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\xmlenc\xmlenc\jars\xmlenc-0.52.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\commons-httpclient\commons-httpclient\jars\commons-httpclient-3.1.jar"/>
@@ -35,7 +35,7 @@
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\commons-digester\commons-digester\jars\commons-digester-1.8.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\commons-beanutils\commons-beanutils\jars\commons-beanutils-1.7.0.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\commons-beanutils\commons-beanutils-core\jars\commons-beanutils-core-1.8.0.jar"/>
-  <classpathentry kind="lib" path="C:\activator-dist-1.3.10\repository\com.google.protobuf\protobuf-java\2.5.0\bundles\protobuf-java.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\com.google.protobuf\protobuf-java\bundles\protobuf-java-2.5.0.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.mortbay.jetty\jetty-util\jars\jetty-util-6.1.26.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\com.google.inject\guice\jars\guice-3.0.jar"/>
   <classpathentry kind="lib" path="C:\activator-dist-1.3.10\repository\javax.inject\javax.inject\1\jars\javax.inject.jar"/>
@@ -146,7 +146,7 @@
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.mongodb.spark\mongo-spark-connector_2.11\jars\mongo-spark-connector_2.11-2.0.0.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.mongodb\mongo-java-driver\jars\mongo-java-driver-3.2.2.jar"/>
   <classpathentry kind="lib" path="C:\activator-dist-1.3.10\repository\org.specs2\specs2_2.11\2.3.11\jars\specs2_2.11.jar"/>
-  <classpathentry kind="lib" path="C:\activator-dist-1.3.10\repository\org.hamcrest\hamcrest-core\1.3\jars\hamcrest-core.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.hamcrest\hamcrest-core\jars\hamcrest-core-1.3.jar"/>
   <classpathentry kind="lib" path="C:\activator-dist-1.3.10\repository\org.scala-sbt\test-interface\1.0\jars\test-interface.jar"/>
   <classpathentry kind="lib" path="C:\activator-dist-1.3.10\repository\org.specs2\classycle\1.4.3\jars\classycle.jar"/>
   <classpathentry kind="lib" path="C:\activator-dist-1.3.10\repository\org.mockito\mockito-core\1.9.5\jars\mockito-core.jar"/>
@@ -173,7 +173,7 @@
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\com.sun.jersey\jersey-core\bundles\jersey-core-1.9.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\com.sun.jersey\jersey-server\bundles\jersey-server-1.9.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\asm\asm\jars\asm-3.1.jar"/>
-  <classpathentry kind="lib" path="C:\activator-dist-1.3.10\repository\commons-io\commons-io\2.4\jars\commons-io.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\commons-io\commons-io\jars\commons-io-2.4.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\commons-lang\commons-lang\jars\commons-lang-2.6.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\commons-daemon\commons-daemon\jars\commons-daemon-1.0.13.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\javax.servlet.jsp\jsp-api\jars\jsp-api-2.1.jar"/>
