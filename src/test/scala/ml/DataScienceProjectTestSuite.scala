@@ -82,9 +82,6 @@ class DataScienceProjectTestSuite extends FreeSpec with DataFrameSuiteBase {
   }
   
   
-  
-  
-  
   "The DataScienceTransformer" - {
     "when selecting most common age" - {
       "should return the most common age" in {
@@ -106,12 +103,65 @@ class DataScienceProjectTestSuite extends FreeSpec with DataFrameSuiteBase {
         val averageAge = findAverage("Age", properDf){_.getDouble(0)}
         
         println(s"----------- Average Age is:$averageAge")
+        println(s"--------------- Finding Most Common Values for all Integer columns...")
+        val intCols = Seq("BI-RADS", "Age", "Shape", "Margin", "Density")
+        
+        val mostCommonColMap = intCols.foldLeft(Map[String, Int]())((accumulator, key) => {
+          val mostCommonVal = findMostCommonValue(key, properDf){row:Row => row.getInt(0)}
+          accumulator + {key -> mostCommonVal}
+        })
+              
+        
+        println("*** Filling all columns....")
+        
+        val cleanDf = mostCommonColMap.toList.foldLeft(properDf)((acc, tpl) => {
+          println("Replacing:" + tpl._1 + " with " + tpl._2)
+          acc.na.fill(tpl._2, Seq(tpl._1))
+          
+        })
+        
+        for (colName <- intCols) {
+          val nullColDf = cleanDf.filter(col(colName).isNull).count()
+          assert(nullColDf == 0)
+          
+        }
+        
+      }
+      
+    }
         
         
+      
+    
+  }
+  
+  /**
+  "The DataScienceTransformer" - {
+    "when selecting most common shape" - {
+      "should return the most common shape" in {
+  
+        val sqlCtx = sqlContext
+        import sqlCtx.implicits._
         
+        val df = sqlCtx.read
+        .csv("file:///c:/Users/marco/SparkExamples2/SparkExamples/src/main/resources/mammographic_masses.data.txt")
+    
+        SparkUtil.disableSparkLogging
+
+        val properDf = generateProperDataFrame(df)
+      
+        // dropping null values
+        val mostCommonShape = findMostCommonValue("Shape", properDf) {row:Row => row.getInt(0)}
+        println(s"--------- The MOst Common shape is:$mostCommonShape")
+        
+        val averageShape = findAverage("Shape", properDf){_.getDouble(0)}
+        
+        println(s"----------- Average Age is:$averageShape")
       }
     }
   }
+  
+  
   
   "The DataScienceTransformer" - {
     "when filling null age columns" - {
@@ -140,7 +190,7 @@ class DataScienceProjectTestSuite extends FreeSpec with DataFrameSuiteBase {
   }
   
   
-  
+  */
   
 }
 
