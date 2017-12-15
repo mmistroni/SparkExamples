@@ -25,11 +25,11 @@ class DataScienceProjectTestSuite extends FreeSpec with DataFrameSuiteBase {
     
     
     val reversedNames = fieldNames.reverse 
-    val updatedDf = reversedNames.tail.foldLeft(dfWithHeader)((dfWithHeader, colName) => {
+    fieldNames.foldLeft(dfWithHeader)((dfWithHeader, colName) => {
                   dfWithHeader.withColumn(colName, dfWithHeader.col(colName).cast(IntegerType))
                   })
-    updatedDf.withColumn(reversedNames.head, dfWithHeader.col(reversedNames.head).cast(BooleanType))
-        
+    
+    
     
   }
   

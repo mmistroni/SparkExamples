@@ -1,4 +1,4 @@
-package edgar
+package ml
 
 import org.apache.spark._
 import org.apache.spark.sql._
@@ -14,11 +14,10 @@ import utils.SparkUtil
 import org.apache.spark.sql.functions._
 
 
-
 /**
  * Transformer to perform some data cleaning
  */
-class DataCleaningTransformer extends Transformer[DataFrame,DataFrame]  {
+class DataCleaningTransformer(colNames:Seq[String]) extends Transformer[DataFrame,DataFrame]  {
   @transient
   val logger: Logger = Logger.getLogger("MLPipeline.DataCleaning")
 
@@ -30,19 +29,15 @@ class DataCleaningTransformer extends Transformer[DataFrame,DataFrame]  {
   }
   
   private def cleanUpData(inputDataFrame:DataFrame):DataFrame = {
-    null
+    val mostCommonColMap = colNames.foldLeft(Map[String, Int]())((accumulator, key) => {
+      val mostCommonVal = findMostCommonValue(key, inputDataFrame){row:Row => row.getInt(0)}
+      accumulator + {key -> mostCommonVal}
+    })
     
-    /**
-    BI-RADS assessment:    2
-    - Age:                   5
-    - Shape:                31
-    - Margin:               48
-    - Density:              76
-    **/
-    
-    
-    
-    
+    mostCommonColMap.toList.foldLeft(inputDataFrame)((acc, tpl) => {
+          println("Replacing:" + tpl._1 + " with " + tpl._2)
+          acc.na.fill(tpl._2, Seq(tpl._1))
+        })
   }
   
   

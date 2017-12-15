@@ -21,7 +21,7 @@ libraryDependencies += "org.apache.spark"%%"spark-streaming-kafka-0-10" % sparkV
 
 libraryDependencies += "org.apache.spark"%%"spark-sql"   % sparkVersion  % "provided"
 libraryDependencies += "org.mongodb.spark" % "mongo-spark-connector_2.11" % "2.0.0"
-libraryDependencies += "com.holdenkarau" %% "spark-testing-base" % "2.1.0_0.6.0" % "test"
+libraryDependencies += "com.holdenkarau" %% "spark-testing-base" % "2.2.0_0.8.0" % "test"
 libraryDependencies += "org.apache.spark" %% "spark-hive"  % sparkVersion % "test" 
 
 resolvers += "MavenRepository" at "https://mvnrepository.com/"
