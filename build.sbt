@@ -19,7 +19,8 @@ libraryDependencies += "org.apache.spark"%%"spark-mllib"   % sparkVersion % "pro
 libraryDependencies += "org.apache.spark"%%"spark-streaming-flume-sink" % sparkVersion % "provided"      
 libraryDependencies += "org.apache.spark"%%"spark-streaming-kafka-0-10" % sparkVersion % "provided"
 
-libraryDependencies += "org.apache.spark"%%"spark-sql"   % sparkVersion  % "provided"
+libraryDependencies += "org.apache.spark"%%"spark-sql"   % sparkVersion  % "test,provided"
+libraryDependencies += "org.apache.spark"%%"spark-catalyst"   % sparkVersion  % "test,provided"
 libraryDependencies += "org.mongodb.spark" % "mongo-spark-connector_2.11" % "2.0.0"
 libraryDependencies += "com.holdenkarau" %% "spark-testing-base" % "2.2.0_0.8.0" % "test"
 libraryDependencies += "org.apache.spark" %% "spark-hive"  % sparkVersion % "test" 

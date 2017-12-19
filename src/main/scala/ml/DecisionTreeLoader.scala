@@ -33,49 +33,44 @@ class DecisionTreeLoader(label: String, dataSplit: Array[Double] = Array(0.7, 0.
   def load(sparkContext: SparkContext, inputData: DataFrame): Unit = {
     logger.info("Generating Decisiontree...")
     logger.info("Preparing indexes and classifiers....")
-    
+    val assembler = new VectorAssembler().
+      setInputCols(inputData.columns.filter(_ != "Severity")).
+      setOutputCol("features")
+    val data = assembler.transform(inputData)  
     val labelIndexer = new StringIndexer()
       .setInputCol("Severity")
       .setOutputCol("indexedLabel")
-      .fit(inputData)
-    
-    val assembler = new VectorAssembler().
-      setInputCols(inputData.columns.filter(_ != "Severity")).
-      setOutputCol("indexedFeatures")
-
-    
-    /**  
+      .fit(data)
     val featureIndexer =      
       new VectorIndexer()
       .setInputCol("features")
       .setOutputCol("indexedFeatures")
       .setMaxCategories(5) // features with > 4 distinct values are treated as continuous.
-      .fit(inputData)
-    **/
+      .fit(data)
+    
+    val Array(trainingData, testData) = data.randomSplit(Array(0.8, 0.2))
     
     println("^^^^^^^^ TRAINING CLASSIFIER.......")
     // Train a DecisionTree model.
     val dt = new DecisionTreeClassifier()
       .setLabelCol("indexedLabel")
       .setFeaturesCol("indexedFeatures")
-      .setPredictionCol("prediction")
+      
+      //.setPredictionCol("prediction")
 
 
     // Convert indexed labels back to original labels.
-    val labelConverter = new IndexToString()
+      val labelConverter = new IndexToString()
       .setInputCol("prediction")
       .setOutputCol("predictedLabel")
       .setLabels(labelIndexer.labels)
 
     // Chain indexers and tree in a Pipeline.
     val pipeline = new Pipeline()
-      .setStages(Array(labelIndexer, assembler,  dt, labelConverter))
+      .setStages(Array(labelIndexer, featureIndexer, dt, labelConverter))
 
-    val Array(trainingData, testData) = inputData.randomSplit(Array(0.7, 0.3))
     trainingData.cache()
     testData.cache()  
-      
-      
     // Train model. This also runs the indexers.
     val model = pipeline.fit(trainingData)
 
@@ -92,10 +87,14 @@ class DecisionTreeLoader(label: String, dataSplit: Array[Double] = Array(0.7, 0.
       .setMetricName("accuracy")
     val accuracy = evaluator.evaluate(predictions)
     println("Test Error = " + (1.0 - accuracy))
-
+    
     val treeModel = model.stages(2).asInstanceOf[DecisionTreeClassificationModel]
     println("Learned classification tree model:\n" + treeModel.toDebugString)
-
+    
+    
+    
   }
+  
+  
 
 }

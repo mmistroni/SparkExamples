@@ -135,7 +135,6 @@ class DataScienceProjectTestSuite extends FreeSpec with DataFrameSuiteBase {
     
   }
   
-  /**
   "The DataScienceTransformer" - {
     "when selecting most common shape" - {
       "should return the most common shape" in {
@@ -189,8 +188,55 @@ class DataScienceProjectTestSuite extends FreeSpec with DataFrameSuiteBase {
     }
   }
   
+  "The DataScienceTransformer" - {
+    "when categorizing age" - {
+      "should return a dataframe where age is groped in 3 distinct ages" in {
   
-  */
+        val sqlCtx = sqlContext
+        import sqlCtx.implicits._
+        
+        
+        val df = sqlCtx.read
+        .csv("file:///c:/Users/marco/SparkExamples2/SparkExamples/src/main/resources/mammographic_masses.data.txt")
+    
+        SparkUtil.disableSparkLogging
+
+        val properDf = generateProperDataFrame(df)
+
+        val ageToCategoryFunc:(Int=>Int) = age => age match {
+          case teen if teen <= 30 => 1
+          case adult if (adult > 30) && (adult < 60) => 2
+          case midage if (midage >= 60) => 3
+          
+        }
+        
+        val ageFunc = udf(ageToCategoryFunc)
+    
+        val mostCommonAge = findMostCommonValue("Age", properDf) {row:Row => row.getInt(0)}
+        val noNullDf = properDf.na.fill(mostCommonAge, Seq("Age"))
+        val nullAgeCols = noNullDf.filter(col("Age").isNull).count()
+        assert(nullAgeCols == 0)
+        val ageCategorizedDf = noNullDf.withColumn("AgeCategory",ageFunc(col("Age")))
+                            .drop("Age").withColumnRenamed("AgeCategory", "Age")
+                            
+                            
+        val uniques = ageCategorizedDf.select("Age").distinct().collect()
+        
+        val values = uniques.map { row => row.getInt(0) }.toList
+        
+        println("**** VALUES ARE:" + values.mkString(","))
+        
+        for (i <- 1 to 3) {
+          assert(values.exists { item => item == i })
+        }
+      }
+    }
+  }
+  
+  
+  
+  
+  
   
 }
 

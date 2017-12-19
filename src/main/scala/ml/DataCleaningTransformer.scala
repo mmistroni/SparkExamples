@@ -34,16 +34,34 @@ class DataCleaningTransformer(colNames:Seq[String]) extends Transformer[DataFram
       accumulator + {key -> mostCommonVal}
     })
     
-    mostCommonColMap.toList.foldLeft(inputDataFrame)((acc, tpl) => {
+    val nonEmptyDf = mostCommonColMap.toList.foldLeft(inputDataFrame)((acc, tpl) => {
           println("Replacing:" + tpl._1 + " with " + tpl._2)
           acc.na.fill(tpl._2, Seq(tpl._1))
         })
+    nonEmptyDf
+    //categorizeData(nonEmptyDf)
   }
+  
+  private[ml] def categorizeData(inputDf:DataFrame):DataFrame = {
+    val ageToCategoryFunc:(Int=>Int) = age => age match {
+          case teen if teen <= 40 => 1
+          case adult if (adult > 40) => 2
+          
+        }
+        
+    val ageFunc = udf(ageToCategoryFunc)
+    
+    inputDf.withColumn("AgeCategory",ageFunc(col("Age")))
+                            .drop("Age").withColumnRenamed("AgeCategory", "Age")  
+    
+  }
+  
   
   
   override def transform(sc: SparkContext, inputDataSet: DataFrame):DataFrame = {
     implicit val sparkContext = sc
-    cleanUpData(inputDataSet)
+    val res = cleanUpData(inputDataSet)
+    categorizeData(res)
   }
     
   

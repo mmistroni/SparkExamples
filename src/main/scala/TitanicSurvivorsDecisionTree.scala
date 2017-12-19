@@ -94,6 +94,8 @@ object TitanicSurvivorsDecisionTree {
           embarkedFunc(col("Embarked")))
     
     
+          
+          
     withBinaryEmbarked.show()      
     /**      
     val binFunc:(Double => Double) = ageDbl => if (ageDbl>medianAge) 1.0 else 0.0
