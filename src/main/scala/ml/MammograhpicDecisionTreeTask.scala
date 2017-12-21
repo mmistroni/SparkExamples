@@ -47,10 +47,10 @@ object MammographicDecisionTreeTask {
     
     val extractor = new MammographicDataFrameReader()
     val transformer = new DataCleaningTransformer(Seq("BI-RADS", "Age", "Shape", "Margin", "Density", "Severity"))
-    val loader = new DecisionTreeLoader("Severity")    
+    val loader =new RandomForestLoader("Severity") // new DecisionTreeLoader("Severity")    
     
-    val form4Pipeline = new Pipeline(extractor, transformer, loader)
-    form4Pipeline.runPipeline(sparkContext, fileName)
+    val mammograpicPipeline = new Pipeline(extractor, transformer, loader)
+    mammograpicPipeline.runPipeline(sparkContext, fileName)
     
   }
   

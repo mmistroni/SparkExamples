@@ -8,7 +8,7 @@ import org.apache.spark.storage.StorageLevel
 import java.util.regex.Pattern
 import java.util.regex.Matcher
 
-import Utilities._
+
 
 import org.apache.spark.streaming.kafka010.KafkaUtils
 import kafka.serializer.StringDecoder
@@ -19,6 +19,11 @@ import org.apache.spark.streaming.kafka010.ConsumerStrategies.Subscribe
 /** Working example of listening for log data from Kafka's testLogs topic on port 9092. */
 object KafkaExample {
   
+  /**
+   *  to refactor using structured streaming
+   *  import Utilities._
+   *  
+   *
   def main(args: Array[String]) {
 
     // Create the context with a 1 second batch size
@@ -65,6 +70,9 @@ object KafkaExample {
     ssc.checkpoint("C:/checkpoint/")
     ssc.start()
     ssc.awaitTermination()
-  }
+  
+  * 
+  * }
+  */
 }
 

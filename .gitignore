@@ -1,2 +1,5 @@
 testkeys.txt
 bin
+.settings
+spark-warehouse
+metastore_db
