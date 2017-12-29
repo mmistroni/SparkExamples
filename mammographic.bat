@@ -1,1 +1,1 @@
-spark-submit  --class ml.MammographicDecisionTreeTask target\scala-2.11\sparkexamples_2.11-1.0.jar file:///c:/Users/marco/SparkExamples2/SparkExamples/src/main/resources/mammographic_masses.data.txt
+spark-submit  --class ml.MammographicMLearningTask target\scala-2.11\sparkexamples_2.11-1.0.jar file:///c:/Users/marco/SparkExamples2/SparkExamples/src/main/resources/mammographic_masses.data.txt %1

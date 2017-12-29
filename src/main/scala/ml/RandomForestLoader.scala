@@ -39,7 +39,14 @@ class RandomForestLoader(label: String, dataSplit: Array[Double] = Array(0.7, 0.
       setInputCols(inputData.columns.filter(_ != "Severity")).
       setOutputCol("featureVector")
 
-    val classifier = new DecisionTreeClassifier().
+    val classifier =  new RandomForestClassifier()
+                .setLabelCol("Severity")
+                .setFeaturesCol("featureVector")
+                .setNumTrees(10)
+                .setPredictionCol("prediction")
+      
+      
+      new DecisionTreeClassifier().
       setSeed(Random.nextLong()).
       setLabelCol("Severity").
       setFeaturesCol("featureVector").
