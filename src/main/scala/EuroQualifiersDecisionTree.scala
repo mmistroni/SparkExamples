@@ -31,10 +31,15 @@ import utils.SparkUtil._
  * - number of nominations in previous Ballon d'Or prize
  * 
  * I have some mixed results which i need to analyze.....
+ * There are two input files to supply
+ * - a TrainData <Euro2008-2.csv which contains statistics for the last 5 Eurcup
+ * - a Testdata, which is data related to Euro2016 finalists
+ * 
+ * 
  * * C:\Users\marco\SparkExamples>spark-submit
  * --packages com.databricks:spark-csv_2.10:1.4.0   --class EuroQualifierDecisionTree
  * target\scala-2.11\sparkexamples.jar
- * <path to train.csv>
+ * <Euro2008-2.csv>  <Euro2016-2.csv>
  *
  *
  */
