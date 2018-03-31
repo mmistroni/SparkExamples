@@ -1,4 +1,4 @@
-package  utils
+package utils
 
 import scala.io._
 import java.util.zip.ZipInputStream
@@ -15,16 +15,30 @@ object HttpsFtpClient extends Serializable {
   // 
   val ftpConfig = null
   val edgarDir = "https://www.sec.gov/Archives/"
-  
+
   def retrieveFile(fileName: String): String = {
-    logger.debug(s"baseDir is:$edgarDir")
-    logger.debug(s"filename is:$fileName")
+    logger.info(s"baseDir is:$edgarDir")
+    logger.info(s"filename is:$fileName")
     val fullPath = fileName.indexOf("http") match {
       case 0 => fileName
-      case _  => s"$edgarDir/$fileName"
+      case _ => s"$edgarDir/$fileName"
     }
-    logger.debug(s"Retrieving file:$fullPath")
+    logger.info(s"Retrieving file:$fullPath")
     readFileContent(fullPath)
+  }
+
+  
+  def retrieveFileStream(fileName: String): Iterator[String] = {
+    logger.debug(s"baseDir is:$edgarDir")
+    logger.info(s"filename is:$fileName")
+    val fullPath = fileName.indexOf("http") match {
+      case 0 => fileName
+      case _ => s"$edgarDir/$fileName"
+    }
+    logger.info(s"Retrieving file:$fullPath")
+    Source.fromURL(fullPath).getLines()
+    
+    
   }
 
   def retrieveZippedStream(fileName: String): List[(String, String)] = {
@@ -39,9 +53,8 @@ object HttpsFtpClient extends Serializable {
 
   def disconnect: Unit = {}
 
-  private def readFileContent(fileName:String) = Source.fromURL(fileName).mkString
-  
-  
+  private def readFileContent(fileName: String) = Source.fromURL(fileName).mkString
+
   private def getInputStreamFromURL(urlString: String): InputStream = {
     new java.net.URL(urlString).openStream();
   }

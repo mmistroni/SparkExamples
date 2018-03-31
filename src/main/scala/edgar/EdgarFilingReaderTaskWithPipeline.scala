@@ -25,10 +25,7 @@ import common.DataReaderStep
  
  * to read the parquet file simply do  sqlContext.read.parquet("/tmp/testParquet")
  * 
- * spark-submit --packages org.mongodb.spark:mongo-spark-connector_2.10:2.2.0,org.apache.hadoop:hadoop-aws:2.7.1 
- *    --class edgar.EdgarFilingReaderTaskWithPipeline 
- *    target\scala-2.11\sparkexamples_2.11-1.0.jar 
- *    s3a://ec2-bucket-mm-spark/master.idx 4 true s3a://ec2-bucket-mm-spark/Form4Output.txt
+ * EdgarFilingReaderTaskWithPipeline.scala
  * 
  * 
  * 

@@ -31,6 +31,8 @@ Steps to create and populate docker container
     
 12. Mount host directory on container
       docker run -v /host/directory:/container/directory -other -options image_name command_to_ru
+      
+# Docker machine running at 192.168.99.100
      
       
  

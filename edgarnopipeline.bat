@@ -1,0 +1,1 @@
+spark-submit --packages org.mongodb.spark:mongo-spark-connector_2.10:2.2.0,org.apache.hadoop:hadoop-aws:2.7.1 --class edgar.EdgarFilingReaderTaskNoPipeline  target\scala-2.11\spark-examples.jar master.idx 4  true

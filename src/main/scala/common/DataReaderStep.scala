@@ -29,7 +29,6 @@ class DataReaderStep(input: String, formType: String, sampleData: Boolean) exten
       case true  => dataSet.sample(false, 0.0002, System.currentTimeMillis().toInt)
       case false => dataSet
     }
-    ds.foreach { x => println(x) }
     ds
   }
 

@@ -1,0 +1,58 @@
+-- Create Cluster
+
+
+
+-- file and examples are available from this bucket
+  ec2-bucket-mm-spark\master.idx.2017.q1
+
+-- to copy data to s3 use this command
+
+aws s3 cp ./spark-examples.jar s3://ec2-bucket-mm-spark
+
+-- copy jar and master file from bucket to EMR
+
+aws s3 cp s3://ec2-bucket-mm-spark/spark-examples.jar .
+
+aws s3 cp s3://ec2-bucket-mm-spark/master.idx.2017.q1 .
+
+
+
+[spark-submit --master yarn --deploy-mode client --packages org.mongodb.spark:mongo-spark-connector_2.10:2.2.0,org.apache.hadoop:hadoop-aws:2.7.1 
+--class edgar.EdgarFilingReaderTaskWithPipeline spark-examples.jar master.idx.2017.q1  4 false s3a://ec2-bucket-mm-spark/Form4OutputFromYarn.txt
+
+spark-submit --master yarn --deploy-mode cluster --packages org.mongodb.spark:mongo-spark-connector_2.10:2.2.0,org.apache.hadoop:hadoop-aws:2.7.1 
+--class edgar.EdgarFilingReaderTaskWithPipeline spark-examples.jar s3a://ec2-bucket-mm-spark/master.idx.2017.q1  4 false s3a://ec2-bucket-mm-spark/Form4OutputFromYarn2.txt
+
+
+-- to try: 
+1 - deploy on cluster
+2 - go back to  app based only on one scala module and see how it behaves
+3 - consistently be able to read informations from edgar
+
+-- instructions on how to run on EMR are here
+
+https://stackoverflow.com/questions/43424540/submit-a-spark-application-via-aws-emr
+
+spark-submit --master yarn  --deploy-mode cluster \
+    --class cc.Main /home/ubuntu/MySparkCode.jar 3 [arguments] 
+    
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
