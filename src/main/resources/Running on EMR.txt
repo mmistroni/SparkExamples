@@ -17,11 +17,8 @@ aws s3 cp s3://ec2-bucket-mm-spark/master.idx.2017.q1 .
 
 
 
-[spark-submit --master yarn --deploy-mode client --packages org.mongodb.spark:mongo-spark-connector_2.10:2.2.0,org.apache.hadoop:hadoop-aws:2.7.1 
---class edgar.EdgarFilingReaderTaskWithPipeline spark-examples.jar master.idx.2017.q1  4 false s3a://ec2-bucket-mm-spark/Form4OutputFromYarn.txt
-
 spark-submit --master yarn --deploy-mode cluster --packages org.mongodb.spark:mongo-spark-connector_2.10:2.2.0,org.apache.hadoop:hadoop-aws:2.7.1 
---class edgar.EdgarFilingReaderTaskWithPipeline spark-examples.jar s3a://ec2-bucket-mm-spark/master.idx.2017.q1  4 false s3a://ec2-bucket-mm-spark/Form4OutputFromYarn2.txt
+--class edgar.EdgarFilingReaderTaskNoPipeline spark-examples.jar s3a://ec2-bucket-mm-spark/master.idx.2017.q1  4  0.003 false
 
 
 -- to try: 
@@ -33,8 +30,46 @@ spark-submit --master yarn --deploy-mode cluster --packages org.mongodb.spark:mo
 
 https://stackoverflow.com/questions/43424540/submit-a-spark-application-via-aws-emr
 
-spark-submit --master yarn  --deploy-mode cluster \
-    --class cc.Main /home/ubuntu/MySparkCode.jar 3 [arguments] 
+    
+    ---output from EMR
+    
+    18/04/06 22:09:59 INFO Client:
+         client token: N/A
+         diagnostics: Application application_1523051902495_0002 failed 2 times due to AM Container for appattempt_1523051902495_0002_000002 exited with  exitCode: 13
+Failing this attempt.Diagnostics: Exception from container-launch.
+Container id: container_1523051902495_0002_02_000001
+Exit code: 13
+Stack trace: ExitCodeException exitCode=13:
+        at org.apache.hadoop.util.Shell.runCommand(Shell.java:972)
+        at org.apache.hadoop.util.Shell.run(Shell.java:869)
+        at org.apache.hadoop.util.Shell$ShellCommandExecutor.execute(Shell.java:1170)
+        at org.apache.hadoop.yarn.server.nodemanager.DefaultContainerExecutor.launchContainer(DefaultContainerExecutor.java:236)
+        at org.apache.hadoop.yarn.server.nodemanager.containermanager.launcher.ContainerLaunch.call(ContainerLaunch.java:305)
+        at org.apache.hadoop.yarn.server.nodemanager.containermanager.launcher.ContainerLaunch.call(ContainerLaunch.java:84)
+        at java.util.concurrent.FutureTask.run(FutureTask.java:266)
+        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
+        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
+        at java.lang.Thread.run(Thread.java:748)
+
+
+Container exited with a non-zero exit code 13
+For more detailed output, check the application tracking page: http://ip-172-31-15-90.us-west-2.compute.internal:8088/cluster/app/application_1523051902495_0002 Then click on links to logs of each attempt.
+. Failing the application.
+         ApplicationMaster host: N/A
+         ApplicationMaster RPC port: -1
+         queue: default
+         start time: 1523052382838
+         final status: FAILED
+         tracking URL: http://ip-172-31-15-90.us-west-2.compute.internal:8088/cluster/app/application_1523051902495_0002
+         user: hadoop
+Exception in thread "main" org.apache.spark.SparkException: Application application_1523051902495_0002 finished with failed status
+        at org.apache.spark.deploy.yarn.Client.run(Client.scala:1159)
+        at org.apache.spark.deploy.yarn.YarnClusterApplication.start(Client.scala:1518)
+        at org.apache.spark.deploy.SparkSubmit$.org$apache$spark$deploy$SparkSubmit$$runMain(SparkSubmit.scala:879)
+        at org.apache.spark.deploy.SparkSubmit$.doRunMain$1(SparkSubmit.scala:197)
+        at org.apache.spark.deploy.SparkSubmit$.submit(SparkSubmit.scala:227)
+        at org.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:136)
+        at org.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)
     
   
   

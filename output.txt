@@ -1,2 +1,12 @@
-EdgarFilingProcessor obtained:0
-We got:0
+
+C:\Users\marco\SparkExamples2\SparkExamples>spark-submit --packages org.mongodb.spark:mongo-spark-connector_2.10:2.2.0,org.apache.hadoop:hadoop-aws:2.7.1 --class edgar.EdgarFilingReaderTaskNoPipeline  target\scala-2.11\spark-examples.jar master.idx 4  0.0003 false 
+(0000104894,A)
+(0000827871,A)
+(0001059386,)
+(0001059556,A)
+(0000924822,A)
+(0000073124,FF)
+(0001158449,A)
+(0001169445,S)
+(0001366340,MM)
+(0001211351,P)

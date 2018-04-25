@@ -12,7 +12,7 @@ import common.Loader
  * Persist DataFrames/DataSet to plain text files
  */
 
-class PlainTextPersister(fileName:String) extends Loader[Dataset[(String, Long)]] {
+class PlainTextPersister(fileName:String, coalesce:Boolean=true) extends Loader[Dataset[(String, Long)]] {
   @transient
   val logger: Logger = Logger.getLogger("EdgarFilingReader.Persiste")
   
@@ -21,13 +21,19 @@ class PlainTextPersister(fileName:String) extends Loader[Dataset[(String, Long)]
     persistDataFrame(sc, inputData)
   }
   
+  def coalesceDs(inputDs:DataFrame):DataFrame = {
+    if (coalesce) {
+      inputDs.coalesce(1)
+    } else inputDs
+  }
+  
   def persistDataFrame(sc: SparkContext, inputDataSet:Dataset[(String, Long)]): Unit = {
     implicit val myObjEncoder = org.apache.spark.sql.Encoders.kryo[Form4Filing]
     val mapped = inputDataSet.toDF("filingType", "count")
     logger.info(s"Persisting data to $fileName.")
     mapped.foreach { x => println(x) }
-    logger.info(s"Persisting data to text file: $fileName")
-    mapped.coalesce(1).write.csv(fileName) //rdd.saveAsTextFile(fileName)
+    logger.info(s"Persisting data to text file: $fileName.Coalescing?$coalesce")
+    coalesceDs(mapped).write.format("com.databricks.spark.csv").save(fileName) //rdd.saveAsTextFile(fileName)
     
   }
 }

@@ -39,19 +39,12 @@ class DebugPersister(fileName:String) extends Loader[Dataset[Form4Filing]] {
   def persistDataFrame(sc: SparkContext, inputDataSet:Dataset[Form4Filing]): Unit = {
     val sqlCtx = new SQLContext(sc)
     import sqlCtx.implicits._
-    
     inputDataSet.take(5).foreach(println)
-    
     val mapped = inputDataSet.map(fff => (fff.transactionType, fff.transactionCount))
-    
-    
-    
     println("again...")
     val toDataFrame = mapped.toDF("company", "count")
     
     toDataFrame.printSchema()
-    
-    
     val ordered = toDataFrame.orderBy($"count".desc)
     
     ordered.show()

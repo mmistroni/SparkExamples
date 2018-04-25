@@ -48,6 +48,14 @@ class Pipeline[T,U,V](extractor:Extractor[T,U],
     (sc:SparkContext, transformedData:V) => loader.load(sc, transformedData)
   
   
+  // Implementing a Pipeline
+  // https://stackoverflow.com/questions/24883765/function-composition-dynamically?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
+    
+  // refine this to make it more dynamic. Perhaps follow how the spark ML Pipeline is implemented to add more 
+  // than one transformers. Stantard ETL involve extracting transforming and loading
+  // ML pipeline involves also ETSL. try to genreralize and reuse Function chain
+    
+    
   def runPipeline(sparkContext:SparkContext, input:T):Unit = {
     
     val extractFun:T =>U = input => extractor.extract(sparkContext, input)

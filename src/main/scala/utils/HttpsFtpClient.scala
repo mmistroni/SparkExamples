@@ -17,25 +17,25 @@ object HttpsFtpClient extends Serializable {
   val edgarDir = "https://www.sec.gov/Archives/"
 
   def retrieveFile(fileName: String): String = {
-    logger.info(s"baseDir is:$edgarDir")
-    logger.info(s"filename is:$fileName")
+    logger.debug(s"baseDir is:$edgarDir")
+    logger.debug(s"filename is:$fileName")
     val fullPath = fileName.indexOf("http") match {
       case 0 => fileName
       case _ => s"$edgarDir/$fileName"
     }
-    logger.info(s"Retrieving file:$fullPath")
+    logger.debug(s"Retrieving file:$fullPath")
     readFileContent(fullPath)
   }
 
   
   def retrieveFileStream(fileName: String): Iterator[String] = {
     logger.debug(s"baseDir is:$edgarDir")
-    logger.info(s"filename is:$fileName")
+    logger.debug(s"filename is:$fileName")
     val fullPath = fileName.indexOf("http") match {
       case 0 => fileName
       case _ => s"$edgarDir/$fileName"
     }
-    logger.info(s"Retrieving file:$fullPath")
+    logger.debug(s"Retrieving file:$fullPath")
     Source.fromURL(fullPath).getLines()
     
     

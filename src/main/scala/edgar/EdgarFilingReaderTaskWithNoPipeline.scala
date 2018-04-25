@@ -21,18 +21,17 @@ import utils.HttpsFtpClient
  * Run the code like this:
  *
  * * spark-submit --packages org.mongodb.spark:mongo-spark-connector_2.10:2.2.0,org.apache.hadoop:hadoop-aws:2.7.1
- *                --class edgar.EdgarFilingReaderTaskNoPipeline 
+ *                --class edgar.EdgarFilingReaderTaskNoPipeline
  *                target/scala-2.11/sparkexamples.jar  <formType> <debugFlag> <outputFile>
  *                For saving in S3, use URI such as s3://<bucketName/<fileName>
- 
+ *
  * to read the parquet file simply do  sqlContext.read.parquet("/tmp/testParquet")
- * 
+ *
  * EdgarFilingReaderTaskWithPipeline.scala
- * 
- * 
- * 
+ *
+ *
+ *
  */
-
 
 object EdgarFilingReaderTaskNoPipeline {
 
@@ -48,22 +47,21 @@ object EdgarFilingReaderTaskNoPipeline {
       }
     }
   }
-  
-  private def form4Function(lines:Iterator[String]):String = {
+
+  private def form4Function(lines: Iterator[String]): String = {
     createXml(lines, "", 2)
   }
-  
-  
+
   private[edgar] def downloadFtpFile(fileName: String): Option[String] = {
-    println(s"Downloding:${fileName}")
-    val result = Try{
+    val result = Try {
       val lines = HttpsFtpClient.retrieveFileStream(fileName)
       createXml(lines, "", 2)
-      
-      }
+
+    }
+    logger.info(s"$fileName downloaded")
     result.toOption
   }
-  
+
   def parseForm4(fileContent: String): (String, String) = {
     if (fileContent.length() > 0) {
       val xml = XML.loadString(fileContent)
@@ -78,11 +76,11 @@ object EdgarFilingReaderTaskNoPipeline {
       ("Unknown", "-1")
     }
   }
-  
+
   def configureContext(args: Array[String]): SparkSession = {
     val session = SparkSession
       .builder()
-      .master("local")
+      //.master("local")
       .appName("Spark Edgar Filing Reader task")
       .getOrCreate()
     session.sparkContext.hadoopConfiguration.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
@@ -91,17 +89,20 @@ object EdgarFilingReaderTaskNoPipeline {
     session
   }
 
-  def parseFile(input:String, sparkContext:SparkContext, formType:String, sampleData:Boolean):Dataset[String] = {
+  def parseFile(input: String, sparkContext: SparkContext, formType: String, samplePercentage: Double): Dataset[String] = {
     val sqlContext = new SQLContext(sparkContext)
     import sqlContext.implicits._
     val masterFile = sparkContext.textFile(input)
     val dataSet = normalize(masterFile, formType).toDF("fileName").as[String]
-    sampleData match {
-      case true  => dataSet.sample(false, 0.005, System.currentTimeMillis().toInt)
-      case false => dataSet
-    }
+    logger.info("Original DAtaSet has:" + dataSet.count())
+
+    val sampleDataSet = dataSet.sample(false, samplePercentage, System.currentTimeMillis().toInt)
+
+    logger.info("##########Sampled data has:" + sampleDataSet.count())
+    sampleDataSet
+
   }
-  
+
   def normalize(linesRdd: RDD[String], formType: String): RDD[String] = {
     val filtered = linesRdd.map(l => l.split('|')).filter(arr => arr.length > 2).map(arr => (arr(0), arr(2), arr(4))).zipWithIndex
     val noHeaders = filtered.filter(tpl => tpl._2 > 0).map(tpl => tpl._1).filter(tpl => tpl._2 == formType).map(tpl => tpl._3)
@@ -109,68 +110,80 @@ object EdgarFilingReaderTaskNoPipeline {
     logger.info("Found:" + noHeaders.count())
     noHeaders
   }
-  
+
   // checklut this thread
   // https://stackoverflow.com/questions/47174344/using-spark-to-download-file-distributed-and-upload-to-s3
-  
-  def startComputation(sparkSession:SparkSession, args:Array[String]) = {
-    
+  // also check this for setting master
+  // https://stackoverflow.com/questions/33504798/how-to-find-the-master-url-for-an-existing-spark-cluster
+
+  def startComputation(sparkSession: SparkSession, args: Array[String]) = {
+
     implicit val optionEncoder = org.apache.spark.sql.Encoders.kryo[Option[String]]
     implicit val tplEncoder = org.apache.spark.sql.Encoders.kryo[(String, String)]
-    
+
     val fileName = args(0)
     val formType = args(1)
-    val debug = args(2).toBoolean
-    
+    val samplePercentage = args(2).toFloat
+    val outputFile = args(3)
 
     logger.info("------------ Edgar Filing Reader Task -----------------")
     logger.info(s"FileName:$fileName")
     logger.info(s"FormType:$formType")
-    logger.info(s"debug:$debug")
+    logger.info(s"samplePercentage:$samplePercentage")
+    logger.info(s"downloadFile:$outputFile")
+
     logger.info("-------------------------------------------------------")
 
     logger.info(s"Fetching Data from Edgar file $fileName")
 
-    val sampleDataSet = parseFile(fileName, sparkSession.sparkContext, formType, debug)
+    val sampleDataSet = parseFile(fileName, sparkSession.sparkContext, formType, samplePercentage)
     logger.info(s"We have found ${sampleDataSet.count()} available filings")
-    
-    
-    val downloadFunc:String => Option[String] = item => downloadFtpFile(item)
-    val parseContentFun:Option[String] => (String, String) = op => op match {
+
+    val downloadFunc: String => Option[String] = item => downloadFtpFile(item)
+    val parseContentFun: Option[String] => (String, String) = op => op match {
       case Some(content) => parseForm4(content)
-      case _  => ("", "-1")
+      case _             => ("", "-1")
     }
-    val filingTypeFun:(String, String)  => String = (cik, filingType) => filingType
-    
+    val filingTypeFun: (String, String) => String = (cik, filingType) => filingType
+
     // dowloading file contents
-    val form4Contents = sampleDataSet.map{downloadFunc}
+    val form4Contents = sampleDataSet.map { downloadFunc }
     // extracting data from contents , that will map to company, form type
+    logger.info("####.......Now extracting file content......")
+
     val results = form4Contents.map(parseContentFun)
+
+    logger.info("Now Grouping...")
     // now we might want to ignore  the company and focus just on the filings
     import sparkSession.implicits._
+    logger.info("..... Now Grouping....")
     val res = results.flatMap { tpl => tpl._2.map(_.toString) }.groupByKey(identity).count
-    
+
     res.take(20).foreach(println)
-    
+    val s3File = s"s3a://ec2-bucket-mm-spark/$outputFile"
+
+    logger.info("Now Persisting:" + s3File);
+
+    val filePersister = new PlainTextPersister(s3File);
+    filePersister.persistDataFrame(sparkSession.sparkContext, res);
+
     // you can use reduce to combine multiple functions together
-    
-    
+
   }
-  
-  
+
   def main(args: Array[String]) {
     logger.info("Keeping only error logs..")
-    disableSparkLogging
+    //disableSparkLogging
     logger.info(s"Input Args:" + args.mkString(","))
 
-    if (args.size < 3) {
-      println("Usage: spark-submit --class edgar.spark.EdgarFilingReaderTaskNoPipeline <fileName> <formType> <debug> <fileName>")
+    if (args.size < 4) {
+      println("Usage: spark-submit --class edgar.spark.EdgarFilingReaderTaskNoPipeline <fileName> <formType> <samplePercentage> <outputfile> ")
       System.exit(0)
     }
 
     val sparkSession = configureContext(args)
     startComputation(sparkSession, args)
-    
+
   }
 
 }
