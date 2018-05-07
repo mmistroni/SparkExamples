@@ -1,0 +1,1 @@
+aws s3 cp %1 s3://ec2-bucket-mm-spark

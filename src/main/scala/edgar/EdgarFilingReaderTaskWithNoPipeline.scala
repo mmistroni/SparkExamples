@@ -94,11 +94,8 @@ object EdgarFilingReaderTaskNoPipeline {
     import sqlContext.implicits._
     val masterFile = sparkContext.textFile(input)
     val dataSet = normalize(masterFile, formType).toDF("fileName").as[String]
-    logger.info("Original DAtaSet has:" + dataSet.count())
-
     val sampleDataSet = dataSet.sample(false, samplePercentage, System.currentTimeMillis().toInt)
-
-    logger.info("##########Sampled data has:" + sampleDataSet.count())
+    sampleDataSet.cache()
     sampleDataSet
 
   }
@@ -148,18 +145,20 @@ object EdgarFilingReaderTaskNoPipeline {
 
     // dowloading file contents
     val form4Contents = sampleDataSet.map { downloadFunc }
+    form4Contents.cache()
     // extracting data from contents , that will map to company, form type
     logger.info("####.......Now extracting file content......")
 
     val results = form4Contents.map(parseContentFun)
+    results.cache()
 
     logger.info("Now Grouping...")
     // now we might want to ignore  the company and focus just on the filings
     import sparkSession.implicits._
     logger.info("..... Now Grouping....")
     val res = results.flatMap { tpl => tpl._2.map(_.toString) }.groupByKey(identity).count
+    res.cache()
 
-    res.take(20).foreach(println)
     val s3File = s"s3a://ec2-bucket-mm-spark/$outputFile"
 
     logger.info("Now Persisting:" + s3File);

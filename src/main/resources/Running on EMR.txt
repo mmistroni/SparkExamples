@@ -9,16 +9,17 @@
 
 aws s3 cp ./spark-examples.jar s3://ec2-bucket-mm-spark
 
+
 -- copy jar and master file from bucket to EMR
 
 aws s3 cp s3://ec2-bucket-mm-spark/spark-examples.jar .
 
-aws s3 cp s3://ec2-bucket-mm-spark/master.idx.2017.q1 .
+
+aws s3 cp s3://ec2-bucket-mm-spark/run_on_emr.sh .
 
 
 
-spark-submit --master yarn --deploy-mode cluster --packages org.mongodb.spark:mongo-spark-connector_2.10:2.2.0,org.apache.hadoop:hadoop-aws:2.7.1 
---class edgar.EdgarFilingReaderTaskNoPipeline spark-examples.jar s3a://ec2-bucket-mm-spark/master.idx.2017.q1  4  0.003 false
+spark-submit --master yarn --deploy-mode cluster --packages org.mongodb.spark:mongo-spark-connector_2.10:2.2.0,org.apache.hadoop:hadoop-aws:2.7.1 --class edgar.EdgarFilingReaderTaskNoPipeline spark-examples.jar s3a://ec2-bucket-mm-spark/master.idx.2017.q1  4  0.003 form4-results-cluster28.4.results
 
 
 -- to try: 
