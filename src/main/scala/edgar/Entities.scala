@@ -18,6 +18,8 @@ object Transaction {
 }
 
 
+case class EdgarFiling(cik:String, companyName:String, formType:String, fileName:String)
+
 case class Form4Filing(transactionType:String, transactionCount:Long) extends Serializable
   
   

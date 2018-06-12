@@ -71,6 +71,11 @@ Exception in thread "main" org.apache.spark.SparkException: Application applicat
         at org.apache.spark.deploy.SparkSubmit$.submit(SparkSubmit.scala:227)
         at org.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:136)
         at org.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)
+        
+        
+        
+        
+- Ken 07915063766 - alan waltham forest
     
   
   

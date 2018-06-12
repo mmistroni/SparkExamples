@@ -64,6 +64,7 @@ class Form4Processor extends Transformer[Dataset[String], Dataset[(String, Long)
       
   override def transform(sc: SparkContext, inputDataSet: Dataset[String]):Dataset[(String, Long)] = {
     implicit val sparkContext = sc
+    inputDataSet.cache()  // caching
     val composed = parseFunction andThen aggregateFunction
     composed(inputDataSet)
   }

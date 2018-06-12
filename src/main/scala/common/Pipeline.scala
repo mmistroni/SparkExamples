@@ -35,19 +35,30 @@ trait Loader[IN] extends Serializable {
  */
 class Pipeline[T,U,V](extractor:Extractor[T,U],
                                transformer:Transformer[U,V],
-                               loader:Loader[V])
+                               loader:Loader[V],
+                               sparkContext:SparkContext)
                                {
+  def this(extractor:Extractor[T,U],
+           transformer:Transformer[U,V],
+           loader:Loader[V]) = {
+          this(extractor, transformer, loader, null)
+          
+  }
+                     
   
-  def extractFunction = 
-    (sc:SparkContext, input:T) => extractor.extract(sc, input) 
+  private def extractFunction:T => U = 
+    input => extractor.extract(sparkContext, input) 
   
-  def transformFunction = 
-    (sc:SparkContext, inputDataSet:U) => transformer.transform(sc, inputDataSet)
+  private def transformFunction:U => V = 
+    inputDataSet => transformer.transform(sparkContext, inputDataSet)
   
-  def loadFunction = 
-    (sc:SparkContext, transformedData:V) => loader.load(sc, transformedData)
+  private def loadFunction:V=>Unit = 
+    transformedData => loader.load(sparkContext, transformedData)
   
+  private def dataPipelineFunction = 
+    extractFunction andThen transformFunction andThen loadFunction
   
+    
   // Implementing a Pipeline
   // https://stackoverflow.com/questions/24883765/function-composition-dynamically?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
     
@@ -67,7 +78,13 @@ class Pipeline[T,U,V](extractor:Extractor[T,U],
     executorFunction(input)
     
   }
-  
+   
+  def runPipeline2(input:T):Unit = {
+    dataPipelineFunction(input)
+  }  
+    
+    
+    
 }
   
 

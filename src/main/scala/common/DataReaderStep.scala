@@ -11,7 +11,6 @@ class DataReaderStep(input: String, formType: String, sampleData: Boolean) exten
 
   @transient
   val logger: Logger = Logger.getLogger("EdgarFilingReader.DataReaderSTep")
-
   
   override def extract(sparkContext:SparkContext, input:String):Dataset[String] = {
     processData(sparkContext)
@@ -25,12 +24,19 @@ class DataReaderStep(input: String, formType: String, sampleData: Boolean) exten
     val masterFile = sparkContext.textFile(input)
     val generatedRdd = normalize(masterFile, formType).toDF("fileName")
     val dataSet = generatedRdd.map(row => row.getAs[String](0))
-    val ds = sampleData match {
+    
+    trimData(dataSet)
+  }
+  
+  private[common] def trimData(dataSet:Dataset[String]):Dataset[String] = {
+    sampleData match {
       case true  => dataSet.sample(false, 0.0002, System.currentTimeMillis().toInt)
       case false => dataSet
     }
-    ds
+    
   }
+  
+  
 
   private def normalize(linesRdd: RDD[String], formType: String): RDD[String] = {
     val filtered = linesRdd.map(l => l.split('|')).filter(arr => arr.length > 2).map(arr => (arr(0), arr(2), arr(4))).zipWithIndex
@@ -40,3 +46,14 @@ class DataReaderStep(input: String, formType: String, sampleData: Boolean) exten
     noHeaders
   }
 }
+
+class DebuggableDataReaderStep(input: String, formType: String, sampleSize: Float) 
+          extends DataReaderStep(input, formType, true) {
+
+  private[common] override def trimData(dataSet:Dataset[String]):Dataset[String] = {
+    dataSet.sample(false, sampleSize, System.currentTimeMillis().toInt)
+    
+  }
+}
+
+

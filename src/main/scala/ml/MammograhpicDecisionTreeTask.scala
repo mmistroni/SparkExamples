@@ -41,6 +41,8 @@ object MammographicMLearningTask {
     val fileName = args(0)
     val mlLoader = args(1)
     
+    // TODO refactor using pipeliine, create more trnasformers to amend initial data
+    
     logger.info("------------ MammographicDecisionTreeTask -----------------")
     logger.info(s"FileName:$fileName")
     logger.info(s"MLLoader:$mlLoader")
