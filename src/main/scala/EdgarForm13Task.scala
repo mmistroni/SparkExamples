@@ -13,9 +13,7 @@ case class Form13Tuple(companyName: String, count: Int)
  * Fund Manageres invest to
  * All these files have been stored in a S3 bucket
  * Run file like this
- * spark-submit --packages org.apache.hadoop:hadoop-aws:2.6.0,org.mongodb.spark:mongo-spark-connector_2.10:2.2.0
- *              --class EdgarForm13Task target\scala-2.11\sparkexamples_2.11-1.0.jar *securit*txt <accessKey> <secretAccessKey>
- 
+ * spark-submit --packages org.mongodb.spark:mongo-spark-connector_2.10:2.2.0,org.apache.hadoop:hadoop-aws:2.7.1 --class EdgarForm13Task target\scala-2.11\spark-examples.jar 2016*01*securit*txt,2016*02*securit*txt  q1out.result
  * 
  * 
  * */
@@ -37,10 +35,10 @@ class DataTransformer extends java.io.Serializable {
 
 
     def persist(inputData: DataFrame, tableName:String): Unit = {
-      logger.info("Persisting DataFrame into Mongo..")
-      inputData.coalesce(1).write.csv("Form13-Results.csv")
-      //storeDataInMongo("mongodb://localhost:27017/test", tableName, inputData, appendMode = true)
-
+      logger.info("Persisting DataFrame to $tableName")
+      logger.info("DataFrame has:" + inputData.count() + " items");
+      inputData.coalesce(1).write.csv(s"$tableName")
+      
     }
   }
 
@@ -53,9 +51,13 @@ object EdgarForm13Task {
   
   def getFile(filePattern: String, sc: SparkContext): RDD[String] = {
     logger.info(s"fetching file:$filePattern")
-    val s3Url = s"s3://edgar-bucket-mm/$filePattern"
-    logger.info(s"Fetching data from $s3Url")
-    sc.textFile(s3Url)
+    
+    val s3Url = s"s3://edgar-bucket-mm/"
+    
+    val listOfArgs = filePattern.split(",").map { item => s3Url + item }.mkString(",")
+    
+    logger.info(s"Fetching data from $listOfArgs")
+    sc.textFile(listOfArgs)
   }
 
   def configureContext(args: Array[String]): SparkContext = {
@@ -87,30 +89,31 @@ object EdgarForm13Task {
     mapped.reduceByKey(_ + _)
   }
 
-  def storeInMongo(inputData: RDD[(String, Int)], sc: SparkContext): Unit = {
-
-    logger.info("Storing in mongo/.///")
-    val sqlContext = new org.apache.spark.sql.SQLContext(sc)
-    import sqlContext.implicits._
-
-    val toDataFrame = inputData.map { case (name, counts) => Form13Tuple(name, counts) }.toDF
-    logger.info("########DataFrame has ;" + toDataFrame.count())
-  }
+  
 
   def main(args: Array[String]) {
     logger.info("Keeping only error logs..")
     loggingDisabled
     logger.info(s"Input Args:" + args.mkString(","))
 
+    /* Use this pattern to load multiple files
+     * sc.textFile("/my/dir1,/my/paths/part-00[0-5]*,/another/dir,/a/specific/file")
+     */
+    
+    
+    
     val transformer = new DataTransformer()
     val persister = new DataFramePersister()
     
-    if (args.size < 1) {
-      println("Usage: spark-submit --class edgar.spark.EdgarAggregatorTask <filePattern> <accessKeyId> <secretAccessKey>")
+    if (args.size < 2) {
+      println("Usage: spark-submit --class edgar.spark.EdgarAggregatorTask <filePattern> <outputFileName>")
     }
 
+    args.foreach { x => println(x) }
+    
     val sparkContext = configureContext(args)
     val fileName = args(0)
+    val output = args(1)
 
     val rdd = getFile(fileName, sparkContext)
 
@@ -124,9 +127,9 @@ object EdgarForm13Task {
 
     val dataFrame = transformer.transform(sortedRdd, sparkContext)
     
-    logger.info("Persisting..")
+    logger.info(s"Persisting..to $output ")
     
-    persister.persist(dataFrame, "FORM13f")
+    persister.persist(dataFrame, s"FORM13f-$output-Results.csv")
     
     logger.info("OUtta here..")
   }

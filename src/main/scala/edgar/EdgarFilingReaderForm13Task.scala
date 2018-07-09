@@ -55,13 +55,11 @@ object EdgarFilingReaderForm13K {
   def startComputation(sparkContext:SparkContext, args:Array[String]) = {
     
     val fileName = args(0)
-    val formType = args(1)
     val debug = args(2).toBoolean
     val outputFile = args(3)
 
     logger.info("------------ Edgar Filing Reader Task -----------------")
     logger.info(s"FileName:$fileName")
-    logger.info(s"FormType:$formType")
     logger.info(s"debug:$debug")
     logger.info(s"Outputfile:$outputFile")
     logger.info("-------------------------------------------------------")
@@ -83,8 +81,8 @@ object EdgarFilingReaderForm13K {
     disableSparkLogging
     logger.info(s"Input Args:" + args.mkString(","))
 
-    if (args.size < 4) {
-      println("Usage: spark-submit --class edgar.spark.EdgarFilingReaaderTask <fileName> <formType> <debug> <fileName>")
+    if (args.size < 3) {
+      println("Usage: spark-submit --class edgar.spark.EdgarFilingReaaderTask <inputFileName>  <debug> <outputFileName>")
       System.exit(0)
     }
 
