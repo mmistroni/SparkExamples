@@ -15,10 +15,16 @@ import common.Transformer
 // This class contains template steps that applies to all form types being
 // downloaded
 abstract class EdgarProcessor[A]  extends Transformer[Dataset[String], Dataset[A]] {
+  @transient
+  val logger: Logger = Logger.getLogger("EdgarProcessor.GenericEdgarProcessor")
+  
   
   private[edgar] def downloadFtpFile(fileName: String): Try[String] = {
-    println(s"Downloding:${fileName}")
-    Try(HttpsFtpClient.retrieveFile(fileName))
+    Try {
+      val res = HttpsFtpClient.retrieveFile(fileName)
+      res
+    }
+  
   }
   
   override def transform(sparkContext: SparkContext, inputDataSet: Dataset[String]):Dataset[A] = {
@@ -34,22 +40,25 @@ abstract class EdgarProcessor[A]  extends Transformer[Dataset[String], Dataset[A
  */
 abstract class EdgarFilingProcessor[A] extends EdgarProcessor[A] {
   
+  
+  
   def processData(sparkContext: SparkContext, inputDataSet: Dataset[String]): Dataset[A] = {
     import org.apache.spark.sql.Encoders
     val sqlContext = new SQLContext(sparkContext)
     import sqlContext.implicits._
+    logger.info("About to process an edgar filing,....")
     val edgarXmlContent = inputDataSet.flatMap(item => downloadFtpFile(item).toOption)
-    val res = parseFile(sqlContext)(edgarXmlContent)
-    res
+    logger.info("aBout to parse" + edgarXmlContent.count())
+    
+    parseFile(sqlContext, edgarXmlContent)
+    
   }
   
-  def parseFile(implicit sqlContext:SQLContext):Dataset[String] =>Dataset[A] = {
+  def parseFile(sqlContext:SQLContext, inputDataSet:Dataset[String]):Dataset[A] = {
      // Standard parsing file. Should return
-      inputDataSet:Dataset[String] => {
-            import sqlContext.implicits._
-            implicit val tupleEncoder = edgarEncoder
-            inputDataSet.map(parseXML)
-      }
+    import sqlContext.implicits._
+    implicit val tupleEncoder = edgarEncoder
+    inputDataSet.map(parseXML) 
   }  
     
   def parseXML:String => A

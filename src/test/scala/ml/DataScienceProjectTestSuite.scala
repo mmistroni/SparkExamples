@@ -8,7 +8,8 @@ import utils.SparkUtil
 import org.apache.spark.sql.functions._
     
 
-class DataScienceProjectTestSuite extends FreeSpec with DataFrameSuiteBase {
+class DataScienceProjectTestSuite extends FreeSpec with DataFrameSuiteBase
+        with SharedSparkContext {
   
   
   override def beforeAll() {

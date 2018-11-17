@@ -12,6 +12,7 @@ import scala.util.Try
 import common.Pipeline
 import common.DebuggableDataReaderStep
 import utils.HttpsFtpClient
+import common.{PlainTextPersister, NoOpPersister}
 
 
 object EdgarFilingReaderTaskNoPipeline {
@@ -62,18 +63,18 @@ object EdgarFilingReaderTaskNoPipeline {
     
     
     val dataReaderStep = new DebuggableDataReaderStep(fileName, formType, samplePercentage)
-    val processor = new Form4Processor()
-    val persister = new PlainTextPersister(s"$outputFile")    
+    val processor = new Form10QNoOpFileParser()
     
-    val form4Pipeline = new Pipeline(dataReaderStep, processor, persister, 
-                                      sparkSession.sparkContext)
-    form4Pipeline.runPipeline2(fileName)
-    
-        
-    //https://stackoverflow.com/questions/22343918/how-do-i-use-hdfs-with-emr    
-    
-    // you can use reduce to combine multiple functions together
+    val ds = dataReaderStep.extract(sparkSession.sparkContext, fileName)
 
+    val transformed = processor.transform(sparkSession.sparkContext, ds)
+    
+    println("########### RESULTS ###############")
+    
+    // TODO: Add Process that will read from a directory
+    
+    
+    
   }
 
   def main(args: Array[String]) {
@@ -86,7 +87,7 @@ object EdgarFilingReaderTaskNoPipeline {
     // alternative store data on HDFS
     // https://www.slideshare.net/AmazonWebServices/spark-and-the-hadoop-ecosystem-best-practices-for-amazon-emr-80673533
     if (args.size < 4) {
-      println("Usage: spark-submit --class edgar.spark.EdgarFilingReaderTaskNoPipeline <fileName> <formType> <samplePercentage> <outputfile> ")
+      println("Usage: spark-submit --class edgar.EdgarFilingReaderTaskNoPipeline <fileName> <formType> <samplePercentage> <outputfile> ")
       System.exit(0)
     }
 

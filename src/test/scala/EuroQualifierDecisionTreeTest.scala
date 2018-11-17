@@ -5,7 +5,8 @@ import EuroQualifierDecisionTree.cleanUpData
 import org.apache.spark.sql.types.{ StructField, StringType, StructType }
 import org.apache.spark.sql.Row
 
-class EuroQualifierDecisionTreeTest extends FreeSpec with DataFrameSuiteBase {
+class EuroQualifierDecisionTreeTest extends FreeSpec with DataFrameSuiteBase
+        with SharedSparkContext {
 
   "The EuroQualifierDecisionTree" - {
     "when calling cleanUpData with a DataFrame" - {

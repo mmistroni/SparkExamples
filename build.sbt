@@ -24,8 +24,10 @@ libraryDependencies += "org.apache.spark"%%"spark-catalyst"   % sparkVersion  % 
 libraryDependencies += "org.mongodb.spark" % "mongo-spark-connector_2.11" % "2.0.0"
 libraryDependencies += "com.holdenkarau" %% "spark-testing-base" % "2.2.0_0.8.0" % "test"
 libraryDependencies += "org.apache.spark" %% "spark-hive"  % sparkVersion % "test" 
-
+libraryDependencies += "org.json4s" % "json4s-native_2.11" % "3.3.0"
+libraryDependencies += "org.apache.poi" % "poi-ooxml" % "3.17"
 resolvers += "MavenRepository" at "https://mvnrepository.com/"
+resolvers += "sprest snapshots" at "http://markschaake.github.com/releases"
 
 // Assembly settings
 mainClass in Global := Some("SimpleReadMongoDataFile")

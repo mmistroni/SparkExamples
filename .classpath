@@ -11,6 +11,12 @@
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.clapper\grizzled-slf4j_2.11\jars\grizzled-slf4j_2.11-1.0.2.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.mongodb.spark\mongo-spark-connector_2.11\jars\mongo-spark-connector_2.11-2.0.0.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.mongodb\mongo-java-driver\jars\mongo-java-driver-3.2.2.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.json4s\json4s-native_2.11\jars\json4s-native_2.11-3.3.0.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.json4s\json4s-core_2.11\jars\json4s-core_2.11-3.3.0.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.json4s\json4s-ast_2.11\jars\json4s-ast_2.11-3.3.0.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.json4s\json4s-scalap_2.11\jars\json4s-scalap_2.11-3.3.0.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\com.thoughtworks.paranamer\paranamer\bundles\paranamer-2.8.jar"/>
+  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.scala-lang.modules\scala-xml_2.11\bundles\scala-xml_2.11-1.0.5.jar"/>
   <classpathentry kind="lib" path="C:\activator-dist-1.3.10\repository\org.specs2\specs2_2.11\2.3.11\jars\specs2_2.11.jar"/>
   <classpathentry kind="con" path="org.scala-ide.sdt.launching.SCALA_COMPILER_CONTAINER"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.scala-lang.modules\scala-parser-combinators_2.11\bundles\scala-parser-combinators_2.11-1.0.4.jar"/>
@@ -109,10 +115,6 @@
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\net.jpountz.lz4\lz4\jars\lz4-1.3.0.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.roaringbitmap\RoaringBitmap\bundles\RoaringBitmap-0.5.11.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.json4s\json4s-jackson_2.11\jars\json4s-jackson_2.11-3.2.11.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.json4s\json4s-core_2.11\jars\json4s-core_2.11-3.2.11.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.json4s\json4s-ast_2.11\jars\json4s-ast_2.11-3.2.11.jar"/>
-  <classpathentry kind="lib" path="C:\activator-dist-1.3.10\repository\com.thoughtworks.paranamer\paranamer\2.6\jars\paranamer.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.scala-lang\scalap\jars\scalap-2.11.8.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.glassfish.jersey.core\jersey-client\jars\jersey-client-2.22.2.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\javax.ws.rs\javax.ws.rs-api\jars\javax.ws.rs-api-2.0.1.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.glassfish.jersey.core\jersey-common\jars\jersey-common-2.22.2.jar"/>
@@ -155,7 +157,6 @@
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\com.holdenkarau\spark-testing-base_2.11\jars\spark-testing-base_2.11-2.2.0_0.8.0.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.scalatest\scalatest_2.11\bundles\scalatest_2.11-3.0.1.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.scalactic\scalactic_2.11\bundles\scalactic_2.11-3.0.1.jar"/>
-  <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.scala-lang.modules\scala-xml_2.11\bundles\scala-xml_2.11-1.0.5.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\io.github.nicolasstucki\multisets_2.11\jars\multisets_2.11-0.4.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\org.scalacheck\scalacheck_2.11\jars\scalacheck_2.11-1.13.4.jar"/>
   <classpathentry kind="lib" path="C:\Users\marco\.ivy2\cache\junit\junit\jars\junit-4.12.jar"/>

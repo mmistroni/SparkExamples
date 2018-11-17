@@ -1,0 +1,177 @@
+##URL to download files
+
+private[service] val nasdaqCompaniesUrl = "https://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nasdaq&render=download"
+    private[service] val nyseCompaniesUrl = "https://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=nyse&render=download"
+    private[service] val amexCompaniesUrl = "https://www.nasdaq.com/screening/companies-by-name.aspx?letter=0&exchange=amex&render=download"
+    
+    
+ file downloaded as .csv in same directory
+ 
+ json format
+ 
+ {u'volume': 34068180, 
+  u'changeOverTime': 0, 
+  u'changePercent': 0.181, 
+  u'label': u'May 3, 18', 
+  u'high': 176.8182, 
+  u'low': 173.7711, 
+  u'date': u'2018-05-03', 
+  u'close': 176.2106, 
+  u'vwap': 175.4037, 
+  u'open': 175.2044, 
+  u'unadjustedVolume': 34068180, 
+  u'change': 0.318771}
+ 
+ res11: org.json4s.JValue = JArray(
+    List(     JObject(List((date,JString(2018-05-03)), (open,JDouble(175.2044)), (high,JDouble(176.8182)),            
+                      (low,JDouble(173.7711)), (close,JDouble(176.2106)), (volume,JInt(34068180)), 
+                      (unadjustedVolume,JInt(34068180)), (change,JDouble(0.318771)), (changePercent,JDouble(0.181)), 
+                      (vwap,JDouble(175.4037)), (label,JString(May 3, 18)), (changeOverTime,JInt(0)))), 
+              JObject(List((date,JString(2018-05-04)), (open,JDouble(177.5653)), (high,JDouble(183.5423)), 
+                      (low,JDouble(177.4856)), (close,JDouble(183.1239)), (volume,JInt(56201317)), 
+                      (unadjustedVolume,JInt(56201317)), (change,JDouble(6.9133)), (changePercent,JDouble(3.923)), 
+                      (vwap,JDouble(181.8654)), (label,JString(May 4, 18)), (changeOverTime,JDouble(0.03923316758469691)))), 
+                      
+                      
+              JObject(List((date,JString(2018-05-07)), (
+ 
+ 
+ 
+ 
+ to parse Json content use this code
+ 
+import org.json4s._
+import org.json4s.native.JsonMethods._
+import org.json4s.native.JsonMethods._
+implicit val formats = DefaultFormats
+
+// other historicals
+/stock/aapl/chart/6m
+/stock/aapl/chart/3m
+/stock/aapl/chart/1m
+
+val historicalUrl = "https://api.iextrading.com/1.0/stock/{ticker}/chart/3m"
+case class StockData(close:Double, date:String)
+val appleUrl = historicalUrl.replace("{ticker}", "AAPL")
+val jsonString = Source.fromURL(appleUrl).mkString
+val jVal = parse(jsonString)
+val closes  = ((jVal \\ "close") \ "close") .children.map(item => item.extract[Double])
+closes(0) // oldest
+closes(closes.length -1) // most recent
+    
+Idea behind this is , for every month, check best performing stocks of last 1m, 3m and 6m and cross reference them to find emerging stocks    
+    
+-- ALL DONE. STORED 3M AND 1M
+
+import org.apache.spark.sql._
+val sqlCtx = new SQLContext(sc)
+import sqlCtx.implicits._
+val df = sqlCtx.read.format("com.databricks.spark.csv").option("inferSchema", "true").
+        load("file:///c:/Users/marco/SparkExamples2/SparkExamples/StockPerformance.result.3m")
+val fieldNames = Seq("symbol", "name", "lastSale", "marketCap", "ipoYear", "sector","industry", "summaryQuote", "performance3m")
+val renamed3m = df.toDF(fieldNames:_*).drop("lastSale").drop("marketCap").drop("summaryQuote")
+val df1m = sqlCtx.read.format("com.databricks.spark.csv").option("inferSchema", "true").
+     | load("file:///c:/Users/marco/SparkExamples2/SparkExamples/StockPerformance.result")
+val fieldNames = Seq("symbol", "name", "lastSale", "marketCap", "ipoYear", "sector","industry", "summaryQuote", "performance1m")
+val renamed1m = df1m.toDF(fieldNames:_*).drop("lastSale").drop("marketCap").drop("summaryQuote")
+val filtered3m = renamed3m.filter($"performance3m" > 0.0)
+val filtered1m = renamed1m.filter($"performance1m" > 1.0).drop("name").drop("sector").drop("industry")
+val joined = filtered3m.join(filtered1m,"symbol")
+joined: org.apache.spark.sql.DataFrame = [symbol: string, name: string ... 9 more fields]
+
+val grouped = joined.groupBy($"industry").agg(count("*")).withColumnRenamed("count(1)", "count").orderBy($"count".desc).show()
+
+joined.orderBy($"performance3m".desc).show()
+
+
++------+--------------------+-------+--------------------+--------------------+------------------+-------+------------------+
+|symbol|                name|ipoYear|              sector|            industry|     performance3m|ipoYear|     performance1m|
++------+--------------------+-------+--------------------+--------------------+------------------+-------+------------------+
+|  SDRL|    Seadrill Limited|   2018|              Energy|Oil & Gas Production| 78.43450479233226|   2018|192.54901960784315|
+|  WMLP|Westmoreland Reso...|   2015|              Energy|         Coal Mining| 4.009615384615384|   2015| 3.043795620437956|
+|   EGY| VAALCO Energy, Inc.|    n/a|              Energy|Oil & Gas Production| 3.048965169106512|    n/a| 1.157088122605364|
+|  NGVC|Natural Grocers b...|   2012|   Consumer Services|         Food Chains| 2.482117310443491|   2012|1.3802704852824186|
+|   BPI|Bridgepoint Educa...|   2009|   Consumer Services|Other Consumer Se...|2.3392857142857144|   2009| 2.006125574272588|
+|   DDE|Dover Downs Gamin...|    n/a|   Consumer Services|Services-Misc. Am...|2.2167832167832167|    n/a|1.7322404371584699|
+|   MED|        MEDIFAST INC|    n/a|Consumer Non-Dura...|      Packaged Foods| 2.210159539120726|    n/a|1.3375368592759898|
+|   XRM|Xerium Technologi...|   2005|    Basic Industries|            Textiles|2.0793157076205286|   2005|1.0098187311178246|
+|   WWE|World Wrestling E...|    n/a|   Consumer Services|Movies/Entertainment|1.9787063583640279|    n/a|1.0502808237496657|
+|  VNCE| Vince Holding Corp.|   2013|   Consumer Services|Clothing/Shoe/Acc...|1.9766666666666666|   2013|1.0601907032181166|
+|   SVU|      SuperValu Inc.|    n/a|Consumer Non-Dura...|   Food Distributors| 1.882593457943925|    n/a|1.5260416666666665|
+|   VSI| Vitamin Shoppe, Inc|   2009|Consumer Non-Dura...|         Food Chains|1.8804347826086958|   2009|1.2627737226277373|
+|  INSP|Inspire Medical S...|   1998|         Health Care|Medical/Dental In...|1.8598879103282626|   1998| 1.228775456228511|
+|   TCS|Container Store (...|   2013|   Consumer Services|    Home Furnishings|1.7495987158908506|   2013|1.3132530120481927|
+|   WOW|  WideOpenWest, Inc.|   2017|   Consumer Services| Television Services| 1.720820189274448|   2017|1.1109979633401221|
+|   ATV|Acorn Internation...|   2007|   Consumer Services|Other Specialty S...|1.7036039768019886|   2007|1.4973992197659298|
+|  CVNA|         Carvana Co.|   2017|   Consumer Durables|Automotive Afterm...|1.6702482400889218|   2017|1.0569753810082063|
+|     I|       Intelsat S.A.|   2013|   Consumer Services|Telecommunication...|1.6692248656945512|   2013|1.2900355871886122|
+|  YEXT|          Yext, Inc.|   2017|          Technology|        EDP Services| 1.641711229946524|   2017|  1.09923273657289|
+|   GNW|Genworth Financia...|   2004|             Finance|      Life Insurance|1.6126760563380282|   2004|1.0065934065934066|
++------+--------------------+-------+--------------------+--------------------+------------------+-------+------------------+
+
+
+scala> val withExtraPerf = joined.withColumn("diffs", $"performance1m" - $"performance3m")
+withExtraPerf: org.apache.spark.sql.DataFrame = [symbol: string, name: string ... 7 more fields]
+
+withExtraPerf.filtered($"diffs" > 0).orderBy($"diffs".desc).take(30).foreach(println)
+
+
+[SDRL,Seadrill Limited,2018,Energy,Oil & Gas Production,78.43450479233226,2018,192.54901960784315,114.11451481551089]
+[ARC,ARC Document Solutions, Inc.,2004,Consumer Services,Professional Services,1.2420091324200915,2004,1.5454545454545456,0.30344541303445416]
+[SID,National Steel Company,n/a,Capital Goods,Steel/Iron Ore,1.016,n/a,1.2893401015228427,0.2733401015228427]
+[VLRS,Controladora Vuela Compania de Aviacion, S.A.B. de C.V.,2013,Transportation,Air Freight/Delivery Services,1.198019801980198,2013,1.4549098196392785,0.2568900176590805]
+[CIR,CIRCOR International, Inc.,n/a,Capital Goods,Metal Fabrications,1.0420348698352044,n/a,1.1823848238482386,0.14034995401303418]
+[TALO,Talos Energy, Inc.,2018,Energy,Oil & Gas Production,1.0156808803301238,2018,1.1483670295489892,0.13268614921886535]
+[PAYC,Paycom Software, Inc.,2014,Technology,Computer Software: Prepackaged Software,1.1796784794386712,2014,1.3119320426708811,0.13225356323220994]
+[ASR,Grupo Aeroportuario del Sureste, S.A. de C.V.,n/a,Transportation,Aerospace,1.0510484554082322,n/a,1.170130869899923,0.11908241449169088]
+[BSMX,Banco Santander (Mexico), S.A., Institucion de Ban,2012,Finance,Commercial Banks,1.1507753401289205,2012,1.268104776579353,0.11732943645043248]
+[CNO,CNO Financial Group, Inc.,n/a,Finance,Accident &Health Insurance,1.0485020724556948,n/a,1.1634363541121007,0.11493428165640585]
+[FLS,Flowserve Corporation,n/a,Capital Goods,Fluid Controls,1.0082705129155185,n/a,1.1197007481296757,0.11143023521415718]
+[CBD,Companhia Brasileira de Distribuicao,1997,Consumer Services,Food Chains,1.0484029450342536,1997,1.1550855991943607,0.10668265416010714]
+[CHS,Chico&#39;s FAS, Inc.,n/a,Consumer Services,Clothing/Shoe/Accessory Stores,1.0024898440571355,n/a,1.1073582629674308,0.1048684189102953]
+[FMX,Fomento Economico Mexicano S.A.B. de C.V.,n/a,Consumer Non-Durables,Beverages (Production/Distribution),1.033604295937675,n/a,1.134733666009052,0.1011293700713769]
+[CCU,Compania Cervecerias Unidas, S.A.,n/a,Consumer Non-Durables,Beverages (Production/Distribution),1.0080763582966228,n/a,1.1085991118288252,0.10052275353220241]
+[BLL,Ball Corporation,n/a,Consumer Durables,Containers/Packaging,1.0578254051762448,n/a,1.1582774049217004,0.1004519997454556]
+[DM,Dominion Energy Midstream Partners, LP,2014,Public Utilities,Natural Gas Distribution,1.091597127886668,2014,1.1894692323958553,0.09787210450918726]
+[SUN,Sunoco LP,2012,Energy,Oil Refining/Marketing,1.0348387000607413,2012,1.1325448613376836,0.09770616127694232]
+[INT,World Fuel Services Corporation,n/a,Energy,Oil Refining/Marketing,1.2673751181392774,n/a,1.3595450049455984,0.09216988680632099]
+[CSTM,Constellium N.V.,2013,Basic Industries,Metal Fabrications,1.1121076233183858,2013,1.203883495145631,0.09177587182724523]
+[VALE,VALE S.A.,n/a,Basic Industries,Precious Metals,1.0785133389070456,n/a,1.1691810788764656,0.09066773996942001]
+[MXF,Mexico Fund, Inc. (The),n/a,n/a,n/a,1.0325655281969819,n/a,1.1222589284500457,0.08969340025306383]
+[SJM,J.M. Smucker Company (The),n/a,Consumer Non-Durables,Packaged Foods,1.0176709133824076,n/a,1.105363255990871,0.08769234260846348]
+[FOR,Forestar Group Inc,2017,Finance,Real Estate,1.0315315315315314,2017,1.1116504854368932,0.08011895390536172]
+[JCI,Johnson Controls International plc,n/a,Consumer Services,Other Consumer Services,1.063704517800369,n/a,1.138655462184874,0.07495094438450489]
+[MXE,Mexico Equity and Income Fund, Inc. (The),n/a,n/a,n/a,1.0570377184912605,n/a,1.1309055118110236,0.07386779331976312]
+[PH,Parker-Hannifin Corporation,n/a,Capital Goods,Metal Fabrications,1.0316109120765633,n/a,1.1051957204177076,0.07358480834114434]
+[MFG,Mizuho Financial Group, Inc.,n/a,Finance,Major Banks,1.0027932960893855,n/a,1.0748502994011977,0.0720570033118122]
+[IBA,Industrias Bachoco, S.A. de C.V.,1997,Consumer Non-Durables,Meat/Poultry/Fish,1.0035607026409232,1997,1.0746117887650528,0.07105108612412958]
+[HCLP,Hi-Crush Partners LP,2012,Basic Industries,Mining & Quarrying of Nonmetallic Minerals (No Fuels),1.1479315572882824,2012,1.2181107791312342,0.07017922184295178]    
+
+#TODO:Group by sector and pick the emerging ones
+
+--- We need now to measure the performane against the sector
+Sectors can be downloaded using Beautiful Soup and this script
+
+def test_djiSectors(self):
+        url2 = 'https://www.etfscreen.com/s_selects.php'
+        url1 = 'https://www.etfscreen.com/s_ishares-sectors.php'
+        r = requests.get(url1)
+        #https://en.wikipedia.org/wiki/List_of_American_exchange-traded_funds#Sector_ETFs')
+        data = r.text
+        soup = BeautifulSoup(data)    
+        # find H3 corresponding to sectors
+        dts = [(link.text, link.get('href')) for link in soup.find_all('a') if link.text.find('iShares') >=0 and 
+                    link.get('href').find('price-chart') >=0]
+        pprint(dts)
+        sectorToTicker = map(lambda tpl: (tpl[0], tpl[1][tpl[1].find('=')+1:]), dts)
+        pprint(sectorToTicker)
+
+Plan is to have a script that downloads these sectors every week.
+Then we need a process to upload their best performance for last 3 months
+And then we cross check this against stock performances    
+
+
+
+
+    
+    

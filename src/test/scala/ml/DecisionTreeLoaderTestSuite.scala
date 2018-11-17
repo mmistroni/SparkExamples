@@ -9,7 +9,8 @@ import org.apache.spark.sql.functions._
 import utils.SparkUtil.disableSparkLogging
     
 
-class DecisionTreeLoaderTestSuite extends FreeSpec with DataFrameSuiteBase {
+class DecisionTreeLoaderTestSuite extends FreeSpec with DataFrameSuiteBase
+        with SharedSparkContext {
   
   
   override def beforeAll() {

@@ -1,0 +1,340 @@
+<?xml version="1.0" encoding="US-ASCII" ?>
+    <!-- Field: Doc-Info; Name: Generator; Value: GoFiler Complete; Version: 4.21a -->
+    <!-- Field: Doc-Info; Name: VendorURI; Value: http://www.novaworks.co -->
+    <!-- Field: Doc-Info; Name: Source; Value: 20170930 10Q Q3 DFN.xfr; Date: 2018%2D01%2D08T17:58:36Z -->
+    <!-- Field: Doc-Info; Name: Status; Value: 0x80080020 -->
+    <!-- Field: Doc-Info; Name: Misc; Value: 96Mps7xRiXgen8uDanwsWaGFSbP9z5Z8uekhvWB1bRmaHyshCbu/dygY1cbm8TcA -->
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:link="http://www.xbrl.org/2003/linkbase" xmlns:xbrli="http://www.xbrl.org/2003/instance" xmlns:xbrldt="http://xbrl.org/2005/xbrldt" xmlns:xbrldi="http://xbrl.org/2006/xbrldi" xmlns:dei="http://xbrl.sec.gov/dei/2014-01-31" xmlns:us-gaap="http://fasb.org/us-gaap/2017-01-31" xmlns:us-roles="http://fasb.org/us-roles/2017-01-31" xmlns:nonnum="http://www.xbrl.org/dtr/type/non-numeric" xmlns:num="http://www.xbrl.org/dtr/type/numeric" xmlns:us-types="http://fasb.org/us-types/2017-01-31" xmlns:KSIX="http://ksix.com/20170930" elementFormDefault="qualified" targetNamespace="http://ksix.com/20170930">
+    <annotation>
+      <appinfo>
+	<link:roleType roleURI="http://ksix.com/role/DocumentAndEntityInformation" id="DocumentAndEntityInformation">
+	  <link:definition>00000001 - Document - Document and Entity Information</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/BalanceSheets" id="BalanceSheets">
+	  <link:definition>00000002 - Statement - Consolidated Balance Sheets (Unaudited)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/BalanceSheetsParenthetical" id="BalanceSheetsParenthetical">
+	  <link:definition>00000003 - Statement - Consolidated Balance Sheets (Unaudited) (Parenthetical)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/StatementsOfOperations" id="StatementsOfOperations">
+	  <link:definition>00000004 - Statement - Consolidated Statements of Operations (Unaudited)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/StatementsOfCashFlows" id="StatementsOfCashFlows">
+	  <link:definition>00000005 - Statement - Consolidated Statements of Cash Flows (Unaudited)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/BasisOfPresentationAndBusiness" id="BasisOfPresentationAndBusiness">
+	  <link:definition>00000006 - Disclosure - Basis of Presentation and Business</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/SummaryOfSignificantAccountingPolicies" id="SummaryOfSignificantAccountingPolicies">
+	  <link:definition>00000007 - Disclosure - Summary of Significant Accounting Policies</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/GoingConcern" id="GoingConcern">
+	  <link:definition>00000008 - Disclosure - Going Concern</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/CreditCardLiability" id="CreditCardLiability">
+	  <link:definition>00000009 - Disclosure - Credit Card Liability</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/NotesPayableAndLong-termDebt-RelatedParty" id="NotesPayableAndLong-termDebt-RelatedParty">
+	  <link:definition>00000010 - Disclosure - Notes Payable and Long-Term Debt - Related Party</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/NotesPayableAndLong-termDebt" id="NotesPayableAndLong-termDebt">
+	  <link:definition>00000011 - Disclosure - Notes Payable and Long-Term Debt</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/StockholdersEquity" id="StockholdersEquity">
+	  <link:definition>00000012 - Disclosure - Stockholder's Equity</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/RelatedPartyTransactions" id="RelatedPartyTransactions">
+	  <link:definition>00000013 - Disclosure - Related Party Transactions</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/CommitmentsAndContingencies" id="CommitmentsAndContingencies">
+	  <link:definition>00000014 - Disclosure - Commitments and Contingencies</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/SubsequentEvents" id="SubsequentEvents">
+	  <link:definition>00000015 - Disclosure - Subsequent Events</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/SummaryOfSignificantAccountingPoliciesPolicies" id="SummaryOfSignificantAccountingPoliciesPolicies">
+	  <link:definition>00000016 - Disclosure - Summary of Significant Accounting Policies (Policies)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/SummaryOfSignificantAccountingPoliciesTables" id="SummaryOfSignificantAccountingPoliciesTables">
+	  <link:definition>00000017 - Disclosure - Summary of Significant Accounting Policies (Tables)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/NotesPayableAndLong-termDebt-RelatedPartyTables" id="NotesPayableAndLong-termDebt-RelatedPartyTables">
+	  <link:definition>00000018 - Disclosure - Notes Payable and Long-Term Debt - Related Party (Tables)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/NotesPayableAndLong-termDebtTables" id="NotesPayableAndLong-termDebtTables">
+	  <link:definition>00000019 - Disclosure - Notes Payable and Long-Term Debt (Tables)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/RelatedPartyTransactionsTables" id="RelatedPartyTransactionsTables">
+	  <link:definition>00000020 - Disclosure - Related Party Transactions (Tables)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/CommitmentsAndContingenciesTables" id="CommitmentsAndContingenciesTables">
+	  <link:definition>00000021 - Disclosure - Commitments and Contingencies (Tables)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/SummaryOfSignificantAccountingPolicies-ScheduleOfChangeInLevel3FinancialInstrumentDetails" id="SummaryOfSignificantAccountingPolicies-ScheduleOfChangeInLevel3FinancialInstrumentDetails">
+	  <link:definition>00000022 - Disclosure - Summary of Significant Accounting Policies - Schedule of Change in Level 3 Financial Instrument (Details)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/SummaryOfSignificantAccountingPolicies-ScheduleOfEstimatedFairValueOfDerivativeInstrumentsAssumptionsDetails" id="SummaryOfSignificantAccountingPolicies-ScheduleOfEstimatedFairValueOfDerivativeInstrumentsAssumptionsDetails">
+	  <link:definition>00000023 - Disclosure - Summary of Significant Accounting Policies - Schedule of Estimated Fair Value of Derivative Instruments Assumptions (Details)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/GoingConcernDetailsNarrative" id="GoingConcernDetailsNarrative">
+	  <link:definition>00000024 - Disclosure - Going Concern (Details Narrative)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/CreditCardLiabilityDetailsNarrative" id="CreditCardLiabilityDetailsNarrative">
+	  <link:definition>00000025 - Disclosure - Credit Card Liability (Details Narrative)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/NotesPayableAndLong-termDebt-RelatedPartyDetailsNarrative" id="NotesPayableAndLong-termDebt-RelatedPartyDetailsNarrative">
+	  <link:definition>00000026 - Disclosure - Notes Payable and Long-Term Debt - Related Party (Details Narrative)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/NotesPayableAndLong-termDebt-RelatedParty-ScheduleOfNotesPayableAndLongTermDebtRelatedPartyDetails" id="NotesPayableAndLong-termDebt-RelatedParty-ScheduleOfNotesPayableAndLongTermDebtRelatedPartyDetails">
+	  <link:definition>00000027 - Disclosure - Notes Payable and Long-Term Debt - Related Party - Schedule of Notes Payable and Long Term Debt Related Party (Details)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/NotesPayableAndLong-termDebt-RelatedParty-ScheduleOfNotesPayableAndLongTermDebtRelatedPartyDetailsParenthetical" id="NotesPayableAndLong-termDebt-RelatedParty-ScheduleOfNotesPayableAndLongTermDebtRelatedPartyDetailsParenthetical">
+	  <link:definition>00000028 - Disclosure - Notes Payable and Long-Term Debt - Related Party - Schedule of Notes Payable and Long Term Debt Related Party (Details) (Parenthetical)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/NotesPayableAndLong-termDebtDetailsNarrative" id="NotesPayableAndLong-termDebtDetailsNarrative">
+	  <link:definition>00000029 - Disclosure - Notes Payable and Long-Term Debt (Details Narrative)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/NotesPayableAndLong-termDebt-ScheduleOfNotesPayableAndLong-termDebtDetails" id="NotesPayableAndLong-termDebt-ScheduleOfNotesPayableAndLong-termDebtDetails">
+	  <link:definition>00000030 - Disclosure - Notes Payable and Long-Term Debt - Schedule of Notes Payable and Long-Term Debt (Details)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/NotesPayableAndLong-termDebt-ScheduleOfNotesPayableAndLong-termDebtDetailsParenthetical" id="NotesPayableAndLong-termDebt-ScheduleOfNotesPayableAndLong-termDebtDetailsParenthetical">
+	  <link:definition>00000031 - Disclosure - Notes Payable and Long-Term Debt - Schedule of Notes Payable and Long-Term Debt (Details) (Parenthetical)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/NotesPayableAndLong-termDebt-ScheduleOfEstimatedFairValueAssumptionsUsedInBlack-scholesOptionPricingModelDetails" id="NotesPayableAndLong-termDebt-ScheduleOfEstimatedFairValueAssumptionsUsedInBlack-scholesOptionPricingModelDetails">
+	  <link:definition>00000032 - Disclosure - Notes Payable and Long-Term Debt - Schedule of Estimated Fair Value Assumptions used in Black-Scholes Option Pricing Model (Details)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/StockholdersEquityDetailsNarrative" id="StockholdersEquityDetailsNarrative">
+	  <link:definition>00000033 - Disclosure - Stockholder's Equity (Details Narrative)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/RelatedPartyTransactionsDetailsNarrative" id="RelatedPartyTransactionsDetailsNarrative">
+	  <link:definition>00000034 - Disclosure - Related Party Transactions (Details Narrative)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/RelatedPartyTransactions-SummaryOfRelatedPartyTransactionDetails" id="RelatedPartyTransactions-SummaryOfRelatedPartyTransactionDetails">
+	  <link:definition>00000035 - Disclosure - Related Party Transactions - Summary of Related Party Transaction (Details)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/CommitmentsAndContingenciesDetailsNarrative" id="CommitmentsAndContingenciesDetailsNarrative">
+	  <link:definition>00000036 - Disclosure - Commitments and Contingencies (Details Narrative)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/CommitmentsAndContingencies-ScheduleOfContingentConsiderationDetails" id="CommitmentsAndContingencies-ScheduleOfContingentConsiderationDetails">
+	  <link:definition>00000037 - Disclosure - Commitments and Contingencies - Schedule of Contingent Consideration (Details)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:roleType roleURI="http://ksix.com/role/SubsequentEventsDetailsNarrative" id="SubsequentEventsDetailsNarrative">
+	  <link:definition>00000038 - Disclosure - Subsequent Events (Details Narrative)</link:definition>
+	  <link:usedOn>link:presentationLink</link:usedOn>
+	  <link:usedOn>link:calculationLink</link:usedOn>
+	  <link:usedOn>link:definitionLink</link:usedOn>
+	</link:roleType>
+	<link:linkbaseRef xlink:type="simple" xlink:href="ksix-20170930_pre.xml" xlink:role="http://www.xbrl.org/2003/role/presentationLinkbaseRef" xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase" xlink:title="Presentation Links" />
+	<link:linkbaseRef xlink:type="simple" xlink:href="ksix-20170930_lab.xml" xlink:role="http://www.xbrl.org/2003/role/labelLinkbaseRef" xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase" xlink:title="Label Links" />
+	<link:linkbaseRef xlink:type="simple" xlink:href="ksix-20170930_cal.xml" xlink:role="http://www.xbrl.org/2003/role/calculationLinkbaseRef" xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase" xlink:title="Calculation Links" />
+	<link:linkbaseRef xlink:type="simple" xlink:href="ksix-20170930_def.xml" xlink:role="http://www.xbrl.org/2003/role/definitionLinkbaseRef" xlink:arcrole="http://www.w3.org/1999/xlink/properties/linkbase" xlink:title="Definition Links" />
+      </appinfo>
+    </annotation>
+    <import namespace="http://www.xbrl.org/2003/instance" schemaLocation="http://www.xbrl.org/2003/xbrl-instance-2003-12-31.xsd" />
+    <import namespace="http://www.xbrl.org/2003/linkbase" schemaLocation="http://www.xbrl.org/2003/xbrl-linkbase-2003-12-31.xsd" />
+    <import namespace="http://xbrl.sec.gov/dei/2014-01-31" schemaLocation="http://xbrl.sec.gov/dei/2014/dei-2014-01-31.xsd" />
+    <import namespace="http://fasb.org/us-gaap/2017-01-31" schemaLocation="http://xbrl.fasb.org/us-gaap/2017/elts/us-gaap-2017-01-31.xsd" />
+    <import namespace="http://fasb.org/us-types/2017-01-31" schemaLocation="http://xbrl.fasb.org/us-gaap/2017/elts/us-types-2017-01-31.xsd" />
+    <import namespace="http://www.xbrl.org/dtr/type/non-numeric" schemaLocation="http://www.xbrl.org/dtr/type/nonNumeric-2009-12-16.xsd" />
+    <import namespace="http://www.xbrl.org/dtr/type/numeric" schemaLocation="http://www.xbrl.org/dtr/type/numeric-2009-12-16.xsd" />
+    <element id="KSIX_ScheduleOfContingentConsiderationTableTextBlock" name="ScheduleOfContingentConsiderationTableTextBlock" nillable="true" xbrli:periodType="duration" type="nonnum:textBlockItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_CreditCardLiability" name="CreditCardLiability" nillable="true" xbrli:periodType="instant" xbrli:balance="credit" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_DebtDiscountPercentage" name="DebtDiscountPercentage" nillable="true" xbrli:periodType="instant" type="num:percentItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_PaymentsForPenalties" name="PaymentsForPenalties" nillable="true" xbrli:periodType="duration" xbrli:balance="credit" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_MaximumInvestOfCommonStockValue" name="MaximumInvestOfCommonStockValue" nillable="true" xbrli:periodType="duration" xbrli:balance="credit" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_OfferedIndividualPurchaseOfWarrants" name="OfferedIndividualPurchaseOfWarrants" nillable="true" xbrli:periodType="instant" type="xbrli:sharesItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_IndividualPruchaseOfWarrantsValue" name="IndividualPruchaseOfWarrantsValue" nillable="true" xbrli:periodType="instant" xbrli:balance="credit" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_ProceedsFromNewAdvances" name="ProceedsFromNewAdvances" nillable="true" xbrli:periodType="duration" xbrli:balance="debit" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_CreditCardLiabilityTextBlock" name="CreditCardLiabilityTextBlock" nillable="true" xbrli:periodType="duration" type="nonnum:textBlockItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_ScheduleOfLongTermDebtRelatedPartyTableTextBlock" name="ScheduleOfLongTermDebtRelatedPartyTableTextBlock" nillable="true" xbrli:periodType="duration" type="nonnum:textBlockItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_CashPayment" name="CashPayment" nillable="true" xbrli:periodType="duration" xbrli:balance="debit" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_DepositsOnInvestments" name="DepositsOnInvestments" nillable="true" xbrli:periodType="instant" xbrli:balance="debit" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_CommonStockIssuedForLoanCosts" name="CommonStockIssuedForLoanCosts" nillable="true" xbrli:periodType="duration" xbrli:balance="credit" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_CommonStockIssuedForSettlementOfAccruedExpenses" name="CommonStockIssuedForSettlementOfAccruedExpenses" nillable="true" xbrli:periodType="duration" xbrli:balance="credit" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_CommonStockIssuedForServicesInPrepaidExpenses" name="CommonStockIssuedForServicesInPrepaidExpenses" nillable="true" xbrli:periodType="duration" xbrli:balance="credit" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_CommonStockIssuedForDepositOnAcquisition" name="CommonStockIssuedForDepositOnAcquisition" nillable="true" xbrli:periodType="duration" xbrli:balance="credit" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_WorkingCapitalDeficiency" name="WorkingCapitalDeficiency" nillable="true" xbrli:periodType="instant" xbrli:balance="credit" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_PurchaseOfWarrants" name="PurchaseOfWarrants" nillable="true" xbrli:periodType="instant" type="xbrli:sharesItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_WarrantTerms" name="WarrantTerms" nillable="true" xbrli:periodType="duration" type="xbrli:durationItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_StockIssuedDuringPeriodSharesIssuedForLegalAndConsultingFees" name="StockIssuedDuringPeriodSharesIssuedForLegalAndConsultingFees" nillable="true" xbrli:periodType="duration" type="xbrli:sharesItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_StockIssuedDuringPeriodValueIssuedForLegalAndConsultingFees" name="StockIssuedDuringPeriodValueIssuedForLegalAndConsultingFees" nillable="true" xbrli:periodType="duration" xbrli:balance="debit" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_FairMarketValue" name="FairMarketValue" nillable="true" xbrli:periodType="instant" xbrli:balance="debit" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_BusinessCombinationContingentConsiderationLiabilityShares" name="BusinessCombinationContingentConsiderationLiabilityShares" nillable="true" xbrli:periodType="instant" type="xbrli:sharesItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_CommonStockToBeIssuedAtClosing" name="CommonStockToBeIssuedAtClosing" nillable="true" xbrli:periodType="duration" xbrli:balance="credit" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_CommonStockToBeIssuedAtClosingShares" name="CommonStockToBeIssuedAtClosingShares" nillable="true" xbrli:periodType="duration" type="xbrli:sharesItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_NumberOfUnitSubscriptionAgreement" name="NumberOfUnitSubscriptionAgreement" nillable="true" xbrli:periodType="duration" type="xbrli:integerItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_CommonStockIssuedForDebtConversionsIncludingAccruedInterest" name="CommonStockIssuedForDebtConversionsIncludingAccruedInterest" nillable="true" xbrli:periodType="duration" xbrli:balance="credit" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_ExchangeOfAccruedInterestForConvertibleNotePayable" name="ExchangeOfAccruedInterestForConvertibleNotePayable" nillable="true" xbrli:periodType="duration" xbrli:balance="credit" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_CommonStockIssuedForPrepaidConsultingAgreements" name="CommonStockIssuedForPrepaidConsultingAgreements" nillable="true" xbrli:periodType="duration" xbrli:balance="credit" type="xbrli:monetaryItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_NumberOfUnrelatedParties" name="NumberOfUnrelatedParties" nillable="true" xbrli:periodType="duration" type="xbrli:integerItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_LongTermDebtOneMember" name="LongTermDebtOneMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_LongTermDebtTwoMember" name="LongTermDebtTwoMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_LongTermDebtThreeMember" name="LongTermDebtThreeMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_LongTermDebtFourMember" name="LongTermDebtFourMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_LongTermDebtFiveMember" name="LongTermDebtFiveMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_NonInterestBearingPromissoryNotePayableMember" name="NonInterestBearingPromissoryNotePayableMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_SecondNonInterestBearingPromissoryNotePayableMember" name="SecondNonInterestBearingPromissoryNotePayableMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_ThirdNonInterestBearingPromissoryNotePayableMember" name="ThirdNonInterestBearingPromissoryNotePayableMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_SeniorSecuredCreditFacilityAgreementMember" name="SeniorSecuredCreditFacilityAgreementMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_TCAGlobalCreditMasterFundLPMember" name="TCAGlobalCreditMasterFundLPMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_NotesPayableMember" name="NotesPayableMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_KSIXandBMGMember" name="KSIXandBMGMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_WithinSixtyDaysMember" name="WithinSixtyDaysMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_FirstAndFifteenthMonthMember" name="FirstAndFifteenthMonthMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_WithinNinetyDaysofJanuaryNinetyTwoThousandAndSixteenMember" name="WithinNinetyDaysofJanuaryNinetyTwoThousandAndSixteenMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_WithinSixteenDaysofMarchTwentyThreeTwoThousandAndSixteenMember" name="WithinSixteenDaysofMarchTwentyThreeTwoThousandAndSixteenMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_CalvaryFundILPMember" name="CalvaryFundILPMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_LongTermDebtSixMember" name="LongTermDebtSixMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_LongTermDebtSevenMember" name="LongTermDebtSevenMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_LongTermDebtEightMember" name="LongTermDebtEightMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_RiverNorthEquityLLCMember" name="RiverNorthEquityLLCMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_SellerMember" name="SellerMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_NotesMember" name="NotesMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_SalksannaLLCMember" name="SalksannaLLCMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_ConvertibleNoteOneMember" name="ConvertibleNoteOneMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_FourWorkingCapitalNotesMember" name="FourWorkingCapitalNotesMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_WorkingCapitalNotesMember" name="WorkingCapitalNotesMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_NotesPayableAndLongTermDebtMember" name="NotesPayableAndLongTermDebtMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_TrueWirelessLLCMember" name="TrueWirelessLLCMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_OneYearPromissoryNoteMember" name="OneYearPromissoryNoteMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_DueWithinNinetyDaysMember" name="DueWithinNinetyDaysMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_FirstAndFifteenthOfEachMonthMember" name="FirstAndFifteenthOfEachMonthMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_ConvertibleNoteTwoMember" name="ConvertibleNoteTwoMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_ConvertibleNoteThreeMember" name="ConvertibleNoteThreeMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_LongTermDebtNineMember" name="LongTermDebtNineMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_DerivativeLiabilityMember" name="DerivativeLiabilityMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_PublicRelationsAgreementMember" name="PublicRelationsAgreementMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_ConsultingAgreementMember" name="ConsultingAgreementMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_AnthonyP.NuzzoMember" name="AnthonyP.NuzzoMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_MasterAgreementMember" name="MasterAgreementMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_UnitSubscriptionAgreementMember" name="UnitSubscriptionAgreementMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_UnrelatedPartiesMember" name="UnrelatedPartiesMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_BrianCoxMember" name="BrianCoxMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_SettlementAgreementMember" name="SettlementAgreementMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_ConvertibleNoteMember" name="ConvertibleNoteMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_NotePayableToSMDMMFundingLLCMember" name="NotePayableToSMDMMFundingLLCMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_NotePayableToTrueWirelessLLCMember" name="NotePayableToTrueWirelessLLCMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_NotePayableToDirectorMember" name="NotePayableToDirectorMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_LongTermDebtTenMember" name="LongTermDebtTenMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_AprilTwentyEightTwoThousandSixteenToTwoThousandNineteenMember" name="AprilTwentyEightTwoThousandSixteenToTwoThousandNineteenMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_PromissoryNoteMember" name="PromissoryNoteMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_AmendedExchangeAgreementAndManagementAgreementMember" name="AmendedExchangeAgreementAndManagementAgreementMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_EquityClosingMember" name="EquityClosingMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_CarterMatzingersMember" name="CarterMatzingersMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_PostEquityClosingMember" name="PostEquityClosingMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_ManagementAgreementMember" name="ManagementAgreementMember" nillable="true" xbrli:periodType="duration" type="nonnum:domainItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_DocumentAndEntityInformationAbstract" name="DocumentAndEntityInformationAbstract" abstract="true" nillable="true" xbrli:periodType="duration" type="xbrli:stringItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_CashPaidForInterestAndIncomeTaxesAbstract" name="CashPaidForInterestAndIncomeTaxesAbstract" nillable="true" xbrli:periodType="duration" type="xbrli:stringItemType" substitutionGroup="xbrli:item" />
+    <element id="KSIX_PercentageOfIssuedAndOutstandingOfCommonStock" name="PercentageOfIssuedAndOutstandingOfCommonStock" nillable="true" xbrli:periodType="instant" type="num:percentItemType" substitutionGroup="xbrli:item" />
+</schema>

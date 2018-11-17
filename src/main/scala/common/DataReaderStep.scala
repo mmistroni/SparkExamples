@@ -56,4 +56,21 @@ class DebuggableDataReaderStep(input: String, formType: String, sampleSize: Floa
   }
 }
 
+abstract class BaseDataFrameReader extends Extractor[String, DataFrame] {
+  @transient
+  val logger: Logger = Logger.getLogger("MLPipeline.DataFrameReader")
+
+  def generateDataFrameWithSchema(inputDf:DataFrame):DataFrame
+  
+  def extract(sparkContext: SparkContext, inputData: String): DataFrame = {
+    logger.info(s"REading from $inputData")
+    val sqlCtx = new SQLContext(sparkContext)
+    import sqlCtx.implicits._
+
+    val baseDataFrame = sqlCtx.read.csv(inputData)
+    generateDataFrameWithSchema(baseDataFrame)
+
+  }
+}
+
 

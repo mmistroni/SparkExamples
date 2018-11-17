@@ -10,9 +10,10 @@ import scala.xml._
 import scala.util.Try
 import common.Pipeline
 import common.DataReaderStep
+import common.DebuggableDataReaderStep
 
 /**
- * Edgar task to Read a Form4 spark-stord file, and classify each
+ * Edgar task to Read a Form13HF spark-stord file, and classify each
  * company based on the number of transaction being executed
  * TODO: Add a decision tree in the mix
  * Hadoop 2.7.1 is needed for accessing s3a filesystem
@@ -34,16 +35,42 @@ import common.DataReaderStep
  * 
  */
 
+class StockPerformancePersister(fileName:String, coalesce:Boolean=true , sortDf:Boolean=true)  {
+  @transient
+  val logger: Logger = Logger.getLogger("StockPerformancePersister")
+  
+  
+  
+  def coalesceDs(inputDs:DataFrame):DataFrame = {
+    if (coalesce) {
+      inputDs.coalesce(1)
+    } else inputDs
+  } 
+  
+  def persistDataFrame(sc: SparkContext, inputDataSet:DataFrame, sortDf:Boolean=true): Unit = {
+    val sqlContext = new SQLContext(sc)
+    import sqlContext.implicits._
+    val sortedDf = sortDf match {
+      case true => inputDataSet.orderBy($"count".desc)
+      case _    => inputDataSet
+    }
+    logger.info(s"Persisting data to text file: $fileName.Coalescing?$coalesce")
+    coalesceDs(sortedDf).write.format("com.databricks.spark.csv")
+      .mode(SaveMode.Overwrite).option("header", "true").save(fileName) //rdd.saveAsTextFile(fileName)
+    
+  }
+}
+
+
 
 object EdgarFilingReaderForm13K {
 
-  val logger: Logger = Logger.getLogger("EdgarFilingReaderWithPipeline.Task")
+  val logger: Logger = Logger.getLogger("EdgarFilingReaderForm13K.Task")
 
   def configureContext(args: Array[String]): SparkContext = {
     val session = SparkSession
       .builder()
-      .master("local")
-      .appName("Spark Edgar Filing Reader task")
+      .appName("Spark Edgar Form13hf Filing Reader task")
       .getOrCreate()
     session.conf.set("spark.driver.memory", "4g")
     session.sparkContext.hadoopConfiguration.set("fs.s3a.impl", "org.apache.hadoop.fs.s3a.S3AFileSystem")
@@ -52,27 +79,55 @@ object EdgarFilingReaderForm13K {
     session.sparkContext
   }
 
+  def createForm13FileName(fileName:String):String = {
+    val suffix = fileName.substring(fileName.lastIndexOf("/")+1)
+    val dirName = suffix.replace("-","").replace(".txt","")
+    fileName.substring(0, fileName.lastIndexOf("/")) + "/" + dirName + "/" + suffix
+  }
+  
   def startComputation(sparkContext:SparkContext, args:Array[String]) = {
     
     val fileName = args(0)
-    val debug = args(2).toBoolean
-    val outputFile = args(3)
+    val debug = args(1).toFloat
+    val outputFile = args(2)
 
     logger.info("------------ Edgar Filing Reader Task -----------------")
     logger.info(s"FileName:$fileName")
     logger.info(s"debug:$debug")
     logger.info(s"Outputfile:$outputFile")
     logger.info("-------------------------------------------------------")
-
     logger.info(s"Fetching Data from Edgar file $fileName")
 
-    val dataReaderStep = new DataReaderStep(fileName, "13F-HR", debug)
-    val processor = new Form13KProcessor()
+    val sqlContext = new SQLContext(sparkContext)
+    import sqlContext.implicits._
+    val dataReaderStep = new DebuggableDataReaderStep(fileName, "13F-HR", debug)
+    
+    
+    val processor = new Form13KFileParser()
     val persister = new DebugPersister(s"$outputFile")    
     
-    val form4Pipeline = new Pipeline(dataReaderStep, processor, persister)
-    form4Pipeline.runPipeline(sparkContext, fileName)
+    val allForm13 = dataReaderStep.extract(sparkContext, fileName)
+    val form13Transformed = allForm13.map(createForm13FileName)
     
+    allForm13.take(10).foreach (println )
+    
+    logger.info("Now processing.....${allForm13.count}..");
+    val withContent = processor.transform(sparkContext, form13Transformed)
+    
+    val aggregated = withContent.flatMap(row => row.split(","))
+    
+    logger.info("AFter Aggregation...grouping..")
+                                 
+    val res = aggregated.groupByKey(identity).count
+                        .toDF("company", "count")
+                        
+    
+                        
+    logger.info("Now outputitting.")
+    //implicit val formEncoder = org.apache.spark.sql.Encoders.kryo[Form4Filing]
+    //val output = res.map(tpl => Form4Filing(tpl._1, tpl._2))
+    new StockPerformancePersister(outputFile).persistDataFrame(sparkContext, res   )
+                         
   }
   
   
@@ -82,9 +137,10 @@ object EdgarFilingReaderForm13K {
     logger.info(s"Input Args:" + args.mkString(","))
 
     if (args.size < 3) {
-      println("Usage: spark-submit --class edgar.spark.EdgarFilingReaaderTask <inputFileName>  <debug> <outputFileName>")
+      println("Usage: spark-submit --class edgar.EdgarFilingReaderForm13Task target/scala-2.11/sparkexamples.jar <inputFileName>  <debugPercentage> <outputFileName>")
       System.exit(0)
     }
+    // THIS IS THE FILE TO RUN TO FETCH FORM 13K
 
     val sparkContext = configureContext(args)
     startComputation(sparkContext, args)

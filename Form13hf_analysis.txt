@@ -1,0 +1,40 @@
+scala> val df16 = spark.read.format("csv").option("header", false).load("file:///c:/Users/marco/SparkExamples2/SparkExamples/FORM13f-ALL-2016-Results.csv")
+df16: org.apache.spark.sql.DataFrame = [_c0: string, _c1: string]
+
+scala> df16.count()
+res0: Long = 110035
+
+scala> val df17 = spark.read.format("csv").option("header", false).load("file:///c:/Users/marco/SparkExamples2/SparkExamples/FORM13f-ALL-2016-Results.csv")
+
+scala> val df16_renamed = df16.toDF(newNames: _*)
+df16_renamed: org.apache.spark.sql.DataFrame = [Company: string, Counts: string]
+
+scala> val df17_renamed = df17.toDF(newNames: _*)
+df17_renamed: org.apache.spark.sql.DataFrame = [Company: string, Counts: string]
+
+
+scala> val df16_renamed = df16.toDF(newNames: _*)
+df16_renamed: org.apache.spark.sql.DataFrame = [Company: string, Counts: string]
+
+scala> val df17_renamed = df17.toDF(newNames: _*)
+df17_renamed: org.apache.spark.sql.DataFrame = [Company: string, Counts: string]
+
+
+scala> val df17_int = df17_renamed.withColumn("Counts", $"Counts".cast(sql.types.IntegerType)).withColumn("Count17", $"Counts").drop("Counts")
+df17_int: org.apache.spark.sql.DataFrame = [Company: string, Count17: int]
+
+scala> val df16_int = df16_renamed.withColumn("Counts", $"Counts".cast(sql.types.IntegerType)).withColumn("Count16", $"Counts").drop("Counts")
+df16_int: org.apache.spark.sql.DataFrame = [Company: string, Count16: int]
+
+scala> val grouped16 = df16_renamed.groupBy("Company").agg(count("Count16"))
+grouped16: org.apache.spark.sql.DataFrame = [Company: string, count(Count16): bigint]
+
+scala> val grouped17 = df17_renamed.groupBy("Company").agg(count("Count17"))
+grouped17: org.apache.spark.sql.DataFrame = [Company: string, count(Count17): bigint]
+
+scala> val results = joined.withColumn("Diff", $"Count17" - $"Count16")
+scala> val grouped16 = df16_renamed.groupBy("Company").agg(count("Count16")).withColumn("Count16", $"count(Count16)").drop("count(Count16")
+grouped16: org.apache.spark.sql.DataFrame = [Company: string, count(Count16): bigint ... 1 more field]
+
+scala> val grouped17 = df17_renamed.groupBy("Company").agg(count("Count17")).withColumn("Count17", $"count(Count17)").drop("count(Count17")
+grouped17: org.apache.spark.sql.DataFrame = [Company: string, count(Count17): bigint ... 1 more field]

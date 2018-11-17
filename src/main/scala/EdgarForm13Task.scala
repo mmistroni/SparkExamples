@@ -2,7 +2,7 @@
 
 import org.apache.spark.rdd._
 import org.apache.spark._
-import org.apache.spark.sql.{ DataFrame, SparkSession }
+import org.apache.spark.sql.{ DataFrame, SparkSession, SaveMode }
 import org.apache.log4j.{ Level, Logger }
 import utils.SparkUtil._
 
@@ -13,7 +13,7 @@ case class Form13Tuple(companyName: String, count: Int)
  * Fund Manageres invest to
  * All these files have been stored in a S3 bucket
  * Run file like this
- * spark-submit --packages org.mongodb.spark:mongo-spark-connector_2.10:2.2.0,org.apache.hadoop:hadoop-aws:2.7.1 --class EdgarForm13Task target\scala-2.11\spark-examples.jar 2016*01*securit*txt,2016*02*securit*txt  q1out.result
+ * spark-submit --packages org.mongodb.spark:mongo-spark-connector_2.10:2.2.0,org.apache.hadoop:hadoop-aws:2.7.1 --class EdgarForm13Task target\scala-2.11\spark-examples.jar 2016*01*securit*txt,2016*02*securit*txt,2016*03*securit*txt,  Q117
  * 
  * 
  * */
@@ -37,7 +37,8 @@ class DataTransformer extends java.io.Serializable {
     def persist(inputData: DataFrame, tableName:String): Unit = {
       logger.info("Persisting DataFrame to $tableName")
       logger.info("DataFrame has:" + inputData.count() + " items");
-      inputData.coalesce(1).write.csv(s"$tableName")
+      inputData.write.format("com.databricks.spark.csv")
+      .mode(SaveMode.Overwrite).option("header", "true").save(s"$tableName")
       
     }
   }
@@ -71,9 +72,6 @@ object EdgarForm13Task {
     // Replace with SparkContext
     //logger.info(s"AccessKey:${args(1)}, secretKey:${args(2)}")
     logger.info(session.sparkContext.hadoopConfiguration)
-    //val accessKey = session.conf.get("spark.hadoop.fs.s3.access.key")
-    //val secretKey = session.conf.get("spark.hadoop.fs.s3.secret.key")
-    //val hadoopConf = session.conf.get("spark.hadoop.fs.s3.impl")
     session.sparkContext.hadoopConfiguration.set("fs.s3.impl", "org.apache.hadoop.fs.s3native.NativeS3FileSystem")
     session.sparkContext
 
@@ -129,7 +127,7 @@ object EdgarForm13Task {
     
     logger.info(s"Persisting..to $output ")
     
-    persister.persist(dataFrame, s"FORM13f-$output-Results.csv")
+    persister.persist(dataFrame, s"$output-Results.csv")
     
     logger.info("OUtta here..")
   }

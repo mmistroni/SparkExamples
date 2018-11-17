@@ -8,35 +8,31 @@ import org.apache.log4j.Logger
 import scala.util._
 import scala.xml._
 import common.Transformer
+import utils.EdgarDecoder._
 
 /**
  * Transformer to parse form4 filing
  */
 class Form13KFileParser extends EdgarFilingProcessor[String]  {
-  
   @transient
-  val logger: Logger = Logger.getLogger("EdgarFilingReader.Form13KFileParser")
+  override val logger = Logger.getLogger("Form13k file parser")
   
   override def edgarEncoder = org.apache.spark.sql.Encoders.kryo[String]
   override def parseXML = content => parseForm13k(content)
   
-  def parseForm13k(fileContent: String): String = {
-    if (fileContent.length() > 0 && fileContent.indexOf("<informationTable") >= 0) {
-      val informationTable = fileContent.substring(fileContent.indexOf("<informationTable"),
-        fileContent.indexOf("</informationTable>") + 20)
-      val infoTableXml = XML.loadString(informationTable)
-      val purchasedShares = infoTableXml \\ "nameOfIssuer"
-      val holdingSecurities = infoTableXml \\ "nameOfIssuer"
-      val resList = holdingSecurities.map(_.text.toUpperCase()).distinct 
-      
-      val result = resList.mkString(",")
-      // So this will return a list of companies included in the form 13k
-      // if instead we return a list of (name, count)
-      result
-    } else {
-      ""
-    }
+  def parseForm13k(fileContent: String): String = { // Change to use Try. and If we cant get it we just ignore.
+    parseForm13HF(fileContent.trim())
+    //fileContent
   }
+  
+  override def parseFile(sqlContext:SQLContext, inputDataSet:Dataset[String]) = {
+     // Standard parsing file. Should return
+    import sqlContext.implicits._
+    logger.info("Mapping to form 13k.")
+    inputDataSet.map(parseForm13k) 
+  }
+  
+  
 }
 
 class Form13KAggregator extends Transformer[Dataset[String], Dataset[Form4Filing]] {

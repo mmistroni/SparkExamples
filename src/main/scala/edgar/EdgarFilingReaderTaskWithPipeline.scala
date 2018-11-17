@@ -10,6 +10,7 @@ import scala.xml._
 import scala.util.Try
 import common.Pipeline
 import common.DataReaderStep
+import common.{PlainTextPersister, NoOpPersister}
 
 /**
  * Edgar task to Read a Form4 spark-stord file, and classify each
@@ -66,11 +67,15 @@ object EdgarFilingReaderTaskWithPipeline {
     logger.info(s"Fetching Data from Edgar file $fileName")
 
     val dataReaderStep = new DataReaderStep(fileName, formType, debug)
-    val processor = new Form4Processor()
-    val persister = new PlainTextPersister(s"$outputFile")    
     
-    val form4Pipeline = new Pipeline(dataReaderStep, processor, persister)
-    form4Pipeline.runPipeline(sparkContext, fileName)
+    val ds = dataReaderStep.extract(sparkContext, fileName)
+    
+    val processor = new Form4Processor()
+    
+    //val persister = new NoOpPersister(s"$outputFile")    
+    
+    //val form4Pipeline = new Pipeline(dataReaderStep, processor, persister)
+    //form4Pipeline.runPipeline(sparkContext, fileName)
     
   }
   

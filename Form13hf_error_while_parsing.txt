@@ -1,0 +1,16 @@
+edgar/data/1016972/0001016972-18-000001.txt
+edgar/data/1345929/0001085146-18-000537.txt
+edgar/data/1352864/0001085146-18-000160.txt
+edgar/data/1379119/0001379119-18-000001.txt
+edgar/data/1424878/0001085146-18-000388.txt
+edgar/data/1538773/0001172661-18-000652.txt
+edgar/data/1581465/0001581465-18-000001.txt
+edgar/data/1718982/0001606587-18-000045.txt
+edgar/data/859804/0000859804-18-000002.txt
+edgar/data/902367/0001144204-18-008336.txt
+[Stage 4:>                                                          (0 + 2) / 2]18/10/06 22:50:15 INFO HttpsFtpClient: Retrieving file:https://www.sec.gov/Archives//edgar/data/1718982/000160658718000045/0001606587-18-000045.txt
+18/10/06 22:50:15 INFO HttpsFtpClient: Retrieving file:https://www.sec.gov/Archives//edgar/data/1345929/000108514618000537/0001085146-18-000537.txt
+18/10/06 22:50:15 INFO HttpsFtpClient: Retrieving file:https://www.sec.gov/Archives//edgar/data/859804/000085980418000002/0000859804-18-000002.txt
+18/10/06 22:50:15 INFO HttpsFtpClient: Retrieving file:https://www.sec.gov/Archives//edgar/data/902367/000114420418008336/0001144204-18-008336.txt
+18/10/06 22:50:16 INFO HttpsFtpClient: Retrieving file:https://www.sec.gov/Archives//edgar/data/1352864/000108514618000160/0001085146-18-000160.txt
+[Stage 4:=============================>                             (1 + 1) / 2]18/10/06 22:50:17 INFO HttpsFtpClient: Retrieving file:https://www.sec.gov/Archives//edgar/data/1379119/000137911918000001/0001379119-18-000001.txt

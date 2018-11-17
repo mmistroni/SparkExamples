@@ -19,7 +19,57 @@ aws s3 cp s3://ec2-bucket-mm-spark/run_on_emr.sh .
 
 
 
-spark-submit --master yarn --deploy-mode cluster --packages org.mongodb.spark:mongo-spark-connector_2.10:2.2.0,org.apache.hadoop:hadoop-aws:2.7.1 --class edgar.EdgarFilingReaderTaskNoPipeline spark-examples.jar s3a://ec2-bucket-mm-spark/master.idx.2017.q1  4  0.003 form4-results-cluster28.4.results
+spark-submit --master yarn --deploy-mode cluster 
+
+spark submit options
+
+--packages org.apache.hadoop:hadoop-aws:2.7.1 
+--class edgar.EdgarFilingReaderTaskNoPipeline  
+
+-- application args
+
+s3a://ec2-bucket-mm-spark/master.idx.2017.q1  4  0.003 hdfs://ip-172-31-29-97.us-west-2.compute.internal:8020/tmp/form4-results-cluster3.9.results
+
+
+# save on hdfs. sa mple here https://stackoverflow.com/questions/40069264/how-can-i-save-an-rdd-into-hdfs-and-later-read-it-back
+
+## get the URL of the hadoop server using this command
+# https://stackoverflow.com/questions/26216876/find-port-number-where-hdfs-is-listening
+
+[hadoop@ip-172-31-29-97 ~]$ hdfs getconf -confKey fs.default.name
+18/09/03 20:42:03 INFO Configuration.deprecation: fs.default.name is deprecated. Instead, use fs.defaultFS
+hdfs://ip-172-31-29-97.us-west-2.compute.internal:8020
+
+hdfs://ip-172-31-29-97.us-west-2.compute.internal:8020/tmp/form4-results-cluster3.9.results
+
+
+S3Path:s3a://ec2-bucket-mm-spark/form4-results-cluster16.8.results.hdfs
+
+
+Step Type: Custom JAR
+Name: S3DistCP
+JAR Location: /usr/lib/hadoop/hadoop-distcp.jar
+DISTCP arguments
+s3-dist-cp –s3Endpoint=s3.amazonaws.com –dest=s3://edgar-ml-bucket –src=/tmp-res –srcPattern=.*[a-zA-Z,]+
+
+alternatively
+hadoop distcp hdfs://ip-172-31-29-97.us-west-2.compute.internal:8020/tmp/form4-results-cluster3.9.results  s3://edgar-ml-bucket ==> notworking. cannot find hdfs instance
+
+aws s3 cp /tmp/form4-results-cluster17.8.results s3://edgar-ml-bucket/tmp/form4-results-cluster17.8.results
+
+
+// here's link on how to copy
+https://myawsjourney.wordpress.com/2018/02/14/how-to-move-a-file-from-s3-to-hdfs-with-s3distcp/
+
+// here's a link on s3distcp 
+http://dmitrypukhov.pro/s3-dist-cp-is-missing-in-emr-4/#more-675
+--- To store on HDFS
+
+https://github.com/awsdocs/amazon-emr-release-guide/blob/master/doc_source/emr-3x-s3distcp.md
+
+use Path /tmp/form4-results.16.8.hdfs
+
+
 
 
 -- to try: 
@@ -32,50 +82,6 @@ spark-submit --master yarn --deploy-mode cluster --packages org.mongodb.spark:mo
 https://stackoverflow.com/questions/43424540/submit-a-spark-application-via-aws-emr
 
     
-    ---output from EMR
-    
-    18/04/06 22:09:59 INFO Client:
-         client token: N/A
-         diagnostics: Application application_1523051902495_0002 failed 2 times due to AM Container for appattempt_1523051902495_0002_000002 exited with  exitCode: 13
-Failing this attempt.Diagnostics: Exception from container-launch.
-Container id: container_1523051902495_0002_02_000001
-Exit code: 13
-Stack trace: ExitCodeException exitCode=13:
-        at org.apache.hadoop.util.Shell.runCommand(Shell.java:972)
-        at org.apache.hadoop.util.Shell.run(Shell.java:869)
-        at org.apache.hadoop.util.Shell$ShellCommandExecutor.execute(Shell.java:1170)
-        at org.apache.hadoop.yarn.server.nodemanager.DefaultContainerExecutor.launchContainer(DefaultContainerExecutor.java:236)
-        at org.apache.hadoop.yarn.server.nodemanager.containermanager.launcher.ContainerLaunch.call(ContainerLaunch.java:305)
-        at org.apache.hadoop.yarn.server.nodemanager.containermanager.launcher.ContainerLaunch.call(ContainerLaunch.java:84)
-        at java.util.concurrent.FutureTask.run(FutureTask.java:266)
-        at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1149)
-        at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:624)
-        at java.lang.Thread.run(Thread.java:748)
-
-
-Container exited with a non-zero exit code 13
-For more detailed output, check the application tracking page: http://ip-172-31-15-90.us-west-2.compute.internal:8088/cluster/app/application_1523051902495_0002 Then click on links to logs of each attempt.
-. Failing the application.
-         ApplicationMaster host: N/A
-         ApplicationMaster RPC port: -1
-         queue: default
-         start time: 1523052382838
-         final status: FAILED
-         tracking URL: http://ip-172-31-15-90.us-west-2.compute.internal:8088/cluster/app/application_1523051902495_0002
-         user: hadoop
-Exception in thread "main" org.apache.spark.SparkException: Application application_1523051902495_0002 finished with failed status
-        at org.apache.spark.deploy.yarn.Client.run(Client.scala:1159)
-        at org.apache.spark.deploy.yarn.YarnClusterApplication.start(Client.scala:1518)
-        at org.apache.spark.deploy.SparkSubmit$.org$apache$spark$deploy$SparkSubmit$$runMain(SparkSubmit.scala:879)
-        at org.apache.spark.deploy.SparkSubmit$.doRunMain$1(SparkSubmit.scala:197)
-        at org.apache.spark.deploy.SparkSubmit$.submit(SparkSubmit.scala:227)
-        at org.apache.spark.deploy.SparkSubmit$.main(SparkSubmit.scala:136)
-        at org.apache.spark.deploy.SparkSubmit.main(SparkSubmit.scala)
-        
-        
-        
-        
-- Ken 07915063766 - alan waltham forest
     
   
   

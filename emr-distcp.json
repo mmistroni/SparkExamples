@@ -1,0 +1,9 @@
+[
+    {
+        "Name":"S3DistCp step",
+        "Args":["s3-dist-cp","--s3Endpoint=s3.amazonaws.com","--dest=s3://ec2-bucket-mm-spark/","--src=hdfs:///tmp/","--srcPattern=.*[a-zA-Z,]+"],
+        "ActionOnFailure":"CONTINUE",
+        "Type":"CUSTOM_JAR",
+        "Jar":"command-runner.jar"        
+    }
+]
