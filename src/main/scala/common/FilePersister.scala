@@ -4,6 +4,7 @@ import org.apache.spark.rdd._
 import org.apache.spark._
 import org.apache.spark.sql._
 import org.apache.spark.sql.Dataset
+import org.apache.spark.sql.DataFrame
 import org.apache.log4j.Logger
 import utils.SparkUtil._
 import common.Loader
@@ -81,6 +82,34 @@ class ParquetPersister(fileName:String) extends PlainTextPersister(fileName) {
     mapped.write.parquet(fileName)
   }
 }
+
+
+class DataFrameToCsvPersister(fileName:String, coalesce:Boolean=false ) extends Loader[DataFrame] {
+  @transient
+  val logger: Logger = Logger.getLogger("EdgarFilingReader.Persiste")
+  
+  
+  override def load(sc:SparkContext, inputData:DataFrame):Unit = {
+    persistDataFrame(sc, inputData)
+  }
+  
+  def coalesceDs(inputDs:DataFrame):DataFrame = {
+    if (coalesce) {
+      inputDs.coalesce(1)
+    } else inputDs
+  }
+  
+  def persistDataFrame(sc: SparkContext, inputDataFrame:DataFrame): Unit = {
+    inputDataFrame.cache()
+    logger.info(s"Persisting data to $fileName.")
+    logger.info(s"Persisting data to text file: $fileName.Coalescing?$coalesce")
+      
+    coalesceDs(inputDataFrame).write.format("com.databricks.spark.csv")
+            .option("header", "true").save(fileName) //rdd.saveAsTextFile(fileName)
+    
+  }
+}
+
 
 
 

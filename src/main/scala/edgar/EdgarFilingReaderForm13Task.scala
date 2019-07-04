@@ -63,7 +63,7 @@ class StockPerformancePersister(fileName:String, coalesce:Boolean=true , sortDf:
 
 
 
-object EdgarFilingReaderForm13K {
+object EdgarFilingReaderForm13KTask {
 
   val logger: Logger = Logger.getLogger("EdgarFilingReaderForm13K.Task")
 
@@ -88,7 +88,7 @@ object EdgarFilingReaderForm13K {
   def startComputation(sparkContext:SparkContext, args:Array[String]) = {
     
     val fileName = args(0)
-    val debug = args(1).toFloat
+    val debug = args(1).toFloat 
     val outputFile = args(2)
 
     logger.info("------------ Edgar Filing Reader Task -----------------")
@@ -133,7 +133,7 @@ object EdgarFilingReaderForm13K {
   
   def main(args: Array[String]) {
     logger.info("Keeping only error logs..")
-    disableSparkLogging
+    //disableSparkLogging
     logger.info(s"Input Args:" + args.mkString(","))
 
     if (args.size < 3) {
