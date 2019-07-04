@@ -14,10 +14,10 @@ class StockTransformer(period: String) extends Transformer[DataFrame, DataFrame]
   @transient
   val logger: Logger = Logger.getLogger("ETLPipeline.StockTransformer")
 
-  def downloadIncrease(period: String, ticker: String): (Double, Double, Double) = {
+  def downloadIncrease(period: String, ticker: String): (Double, Double, Double, Double, Double) = {
     Try {
       JsonDownloader.fetchHistoricalStatistics(ticker, period)
-    }.toOption.getOrElse(0.0, 0.0, 0.0)
+    }.toOption.getOrElse(0.0, 0.0, 0.0, 0.0, 0.0)
   }
 
   def downloadCurrentPrice(ticker: String): Double = {
@@ -29,13 +29,15 @@ class StockTransformer(period: String) extends Transformer[DataFrame, DataFrame]
   override def transform(sc: SparkContext, inputDataSet: DataFrame): DataFrame = {
     //implicit val encoder = org.apache.spark.sql.Encoders.kryo[(StockData, Double)]
     inputDataSet.cache()
-    val performanceFunc: ((String, String) => (Double, Double,Double)) = (period, symbol) => downloadIncrease(period, symbol)
+    val performanceFunc: ((String, String) => (Double, Double,Double, Double, Double)) = (period, symbol) => downloadIncrease(period, symbol)
     val currentPriceFunc: (String => Double) = ticker => downloadCurrentPrice(ticker)
     
     val returnAndSharpeSchema =  StructType(Array(
                                     StructField(s"performance$period", DoubleType, false),
                                     StructField(s"sharpeRatio$period", DoubleType, false),
-                                    StructField(s"startPrice$period", DoubleType, false)))
+                                    StructField(s"startPrice$period", DoubleType, false),
+                                    StructField(s"latestPrice$period", DoubleType, false),
+                                    StructField(s"maxPrice$period", DoubleType, false)))
                                    
     
     val symbolToPerformanceFunc = udf(performanceFunc, returnAndSharpeSchema)
@@ -44,7 +46,8 @@ class StockTransformer(period: String) extends Transformer[DataFrame, DataFrame]
     inputDataSet.withColumn(s"stats", symbolToPerformanceFunc(lit(period), col("symbol")))
                 .withColumn(s"sharpeRatio$period", col(s"stats.sharpeRatio$period"))
                 .withColumn(s"performance$period", col(s"stats.performance$period"))
-                .withColumn(s"startPrice$period", col(s"stats.performance$period"))
+                .withColumn(s"startPrice$period", col(s"stats.startPrice$period"))
+                .withColumn(s"latestPrice$period", col(s"stats.latestPrice$period"))
                 .drop(col("stats"))
   }
 

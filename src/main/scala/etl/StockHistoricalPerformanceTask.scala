@@ -83,9 +83,9 @@ object StockHistoricalPerformanceTask {
     val sqlContext = new SQLContext(sparkContext)
     
     import sqlContext.implicits._
-    val inputDir = args(0)
-    val period = args(1)
-    val debugPcnt = args(2).toFloat
+    val inputDir = args(1)
+    val period = args(2)
+    val debugPcnt = args(3).toFloat
     
     val suffix = new java.text.SimpleDateFormat("yyyyMMddHHmm").format(new java.util.Date())
     logger.info("--------------")
@@ -99,18 +99,21 @@ object StockHistoricalPerformanceTask {
     logger.info()
     
     val statsDf = computeStats(sparkContext, sharesDf)
-    logger.info("Statsdf.schema" + statsDf.schema)
-    val histStats = computeHistStats(sparkContext, statsDf, period).drop("companyName")
-                            .drop("marketCap")
-    logger.info("HistStats has:" + histStats.count())
-    logger.info(histStats.schema)
+    statsDf.cache()
+    logger.info("Statsdf.columns" + statsDf.columns.toString)
+    //val histStats = computeHistStats(sparkContext, statsDf, period).drop("companyName")
+    //                        .drop("marketCap")
+    statsDf.cache()
+    //logger.info("HistStats cols:" + histStats.columns.toString)
     //val sectorDf = computeSectorResults(sparkContext, inputDir, period).withColumnRenamed("symbol", "sectorTicker")
        //               .drop($"currentStockPrice")
     
-    val joined = sharesDf.join(histStats, "symbol")
-    //joined.cache()
+    val joined = sharesDf.join(statsDf, "symbol")
+    joined.cache()
     
-    val loader = new StockPerformancePersister(s"Results\\Shares-$period-performance.results.$suffix")
+    
+    logger.info("Joined has:" + joined.count())
+    val loader = new StockPerformancePersister(s"Shares-$period-performance.results.$suffix", coalesce=false)
     loader.load(sparkContext, joined)
 
    }
@@ -118,11 +121,9 @@ object StockHistoricalPerformanceTask {
   
   def main(args: Array[String]) {
     logger.info("Keeping only error logs..")
-    disableSparkLogging
     logger.info(s"Input Args:" + args.mkString(","))
-
-    if (args.size < 3) {
-      println("Usage: spark-submit --class etl.StockHistoricalPerformanceTask target\\scala-2.11\\spark-examples.jar <inputDir> <period> <debugPcnt>")
+    if (args.size < 4) {
+      println("Usage: spark-submit --class etl.StockHistoricalPerformanceTask target\\scala-2.11\\spark-examples.jar <inputDir> <period> <pcnt> ")
       System.exit(0)
     }
     
